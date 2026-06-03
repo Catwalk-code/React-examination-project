@@ -1,38 +1,41 @@
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import './WelcomePage.css'
 
-function WelcomePage(){
-    return (
-      <div style={{ textAlign: 'center', padding: '50px' }}>
+function WelcomePage() {
+  return (
+    <div className="welcome-page">
+      <div className="welcome-hero">
         <h1>Добро пожаловать на findjob.by!</h1>
         <p>Найдите работу мечты или идеального сотрудника</p>
         
-        <div style={{ marginTop: '30px' }}>
-          <Link to="/login" style={{ marginRight: '20px' }}>
-            <button>Войти</button>
+        <div className="welcome-buttons">
+          <Link to="/login" className="btn btn-primary">
+            Войти
           </Link>
-          <Link to="/register">
-            <button>Регистрация</button>
+          <Link to="/register" className="btn btn-secondary">
+            Регистрация
           </Link>
         </div>
+      </div>
 
-        <div style={{ marginTop: '50px', display: 'flex', gap: '30px', justifyContent: 'center' }}>
-          <div style={{ border: '1px solid #ddd', padding: '20px', borderRadius: '8px', maxWidth: '300px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-            <h3>Для соискателей</h3>
-            <ul style={{ textAlign: 'left' }}>
-              <li>Разместите своё резюме</li>
-              <li>Откликайтесь на вакансии</li>
-              <li>Пишите отзывы о компаниях</li>
-            </ul>
-          </div>
+      <div className="welcome-features">
+        <div className="feature-card">
+          <h3>Для соискателей</h3>
+          <ul>
+            <li>Разместите своё резюме</li>
+            <li>Откликайтесь на вакансии</li>
+            <li>Пишите отзывы о компаниях</li>
+          </ul>
+        </div>
 
-          <div style={{ border: '1px solid #ddd', padding: '20px', borderRadius: '8px', maxWidth: '300px' }}>
-            <h3>Для компаний</h3>
-            <ul style={{ textAlign: 'left' }}>
-              <li>Публикуйте вакансии</li>
-              <li>Ищите кандидатов</li>
-              <li>Приглашайте на собеседование</li>
-            </ul>
-          </div>
+        <div className="feature-card">
+          <h3>Для компаний</h3>
+          <ul>
+            <li>Публикуйте вакансии</li>
+            <li>Ищите кандидатов по резюме</li>
+            <li>Приглашайте на собеседование</li>
+          </ul>
+        </div>
       </div>
     </div>
   )
