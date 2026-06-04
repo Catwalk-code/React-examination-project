@@ -1,7 +1,76 @@
 {
-  "users": [],
-  "vacancies": [],
-  "resumes": [],
-  "applications": [],
-  "reviews": []
+  "users": [
+    {
+      "id": 1,
+      "email": "company@example.com",
+      "password": "123456",
+      "name": "TechNova",
+      "role": "company"
+    },
+    {
+      "id": 2,
+      "email": "seeker@example.com",
+      "password": "123456",
+      "name": "Иван Петров",
+      "role": "seeker"
+    },
+    {
+      "email": "notreal@email.com",
+      "password": "$2a$10$AnUdtHhMmAStWEzVwvTRV.4Byt1e1OpfyMkU8PK6Hc9dIc2/v622q",
+      "name": "notreal",
+      "role": "company",
+      "id": 3
+    },
+    {
+      "email": "ivanpetrov@email.com",
+      "password": "$2a$10$5c5Z3TB7QyBXon0uGkayoObqDx6OI2qCkTkiBo7ijYeUJeHQWShDy",
+      "name": "Иван Петров",
+      "role": "seeker",
+      "id": 4
+    }
+  ],
+  "vacancies": [
+    {
+      "id": 1,
+      "title": "Frontend React Developer",
+      "description": "Разработка и поддержка интерфейсов на React.",
+      "salary": "3000-4500 BYN",
+      "location": "Минск",
+      "companyId": 1,
+      "createdAt": "2026-06-01T10:00:00.000Z"
+    }
+  ],
+  "resumes": [
+    {
+      "id": 1,
+      "title": "Junior Frontend Developer",
+      "skills": "JavaScript, React, HTML, CSS",
+      "experience": "Коммерческий опыт 1 год, pet-проекты 2 года.",
+      "userId": 2,
+      "createdAt": "2026-06-02T10:00:00.000Z",
+      "updatedAt": "2026-06-02T10:00:00.000Z"
+    }
+  ],
+  "applications": [
+    {
+      "id": 1,
+      "type": "vacancy_application",
+      "vacancyId": 1,
+      "resumeId": 1,
+      "seekerId": 2,
+      "companyId": 1,
+      "status": "new",
+      "createdAt": "2026-06-03T10:00:00.000Z"
+    }
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "companyId": 1,
+      "authorId": 2,
+      "rating": 5,
+      "text": "Хорошая коммуникация и понятное интервью.",
+      "createdAt": "2026-06-03T11:00:00.000Z"
+    }
+  ]
 }
