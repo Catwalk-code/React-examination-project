@@ -94,6 +94,87 @@
   border-color: #dc2626;
 }
 
+/* Контейнер для кнопок отзыва */
+.home-page__review-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.home-page__review-actions .home-page__button {
+  padding: 6px 12px;
+  font-size: 14px;
+}
+
+/* Рейтинг в форме отзыва */
+.home-page__rating {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.home-page__rating label {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.home-page__rating .ant-rate {
+  font-size: 20px;
+}
+
+/* Форма редактирования отзыва */
+.home-page__edit-form {
+  margin-top: 10px;
+  padding: 15px;
+  background-color: #f9fafb;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+/* Рейтинг в форме редактирования */
+.home-page__edit-rating {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.home-page__edit-rating label {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.home-page__edit-rating .ant-rate {
+  font-size: 20px;
+}
+
+/* Textarea в форме редактирования */
+.home-page__edit-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 15px;
+  resize: vertical;
+  max-height: 200px;
+  min-height: 80px;
+  box-sizing: border-box;
+  font-family: inherit;
+  resize: none;
+}
+
+/* Кнопки в форме редактирования */
+.home-page__edit-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.home-page__edit-actions .home-page__button {
+  padding: 8px 16px;
+}
+
 .home-page__form input,
 .home-page__form textarea,
 .home-page__form select {
