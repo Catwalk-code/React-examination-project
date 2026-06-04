@@ -1,0 +1,101 @@
+/* Контейнер страницы входа */
+.auth-page {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px;
+
+  background-color: var(--color-white);
+  color: var(--text);
+
+  border-radius: 20px;
+
+  box-shadow: 0 20px 40px rgba(43, 122, 120, 0.15);
+  border: 1px solid var(--border);
+}
+
+.auth-page h2 {
+  margin-top: 0;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+/* Группа полей формы */
+.form-group {
+  margin-bottom: 18px;
+}
+
+/* Поля ввода */
+.form-input {
+  width: 100%;
+  padding: 12px;
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  font-size: 15px;
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(58, 175, 169, 0.15);
+}
+
+.form-input::placeholder {
+  color: #999;
+}
+
+/* Кнопка отправки */
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+
+  border: 1px solid var(--color-secondary);
+  border-radius: 12px;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    opacity 0.2s ease;
+
+  margin-top: 10px;
+}
+
+.btn-primary:hover {
+  opacity: 0.95;
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+/* Ссылка на регистрацию */
+.auth-footer {
+  margin-top: 20px;
+  text-align: center;
+  color: var(--text);
+}
+
+.auth-footer a {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
