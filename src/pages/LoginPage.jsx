@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import toast from 'react-hot-toast'
 import useAuthStore from '../stores/authStore'
 import './LoginPage.css'
 
@@ -25,11 +26,11 @@ function LoginPage() {
         login(data.user, data.accessToken)
         navigate('/home')
       } else {
-        alert('Ошибка входа: ' + (data.message || data.error || 'Неизвестная ошибка'))
+        toast.error('Ошибка входа: ' + (data.message || data.error))
       }
     } catch (error) {
       console.error('Ошибка при входе:', error)
-      alert('Ошибка соединения с сервером: ' + error.message)
+      toast.error('Ошибка соединения с сервером: ' + error.message)
     }
   }
 

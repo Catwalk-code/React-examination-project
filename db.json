@@ -1,39 +1,32 @@
 {
   "users": [
     {
-      "id": 1,
-      "email": "company@example.com",
-      "password": "123456",
-      "name": "TechNova",
-      "role": "company"
-    },
-    {
-      "id": 2,
-      "email": "seeker@example.com",
-      "password": "123456",
-      "name": "Иван Петров",
-      "role": "seeker"
-    },
-    {
       "email": "notreal@email.com",
       "password": "$2a$10$AnUdtHhMmAStWEzVwvTRV.4Byt1e1OpfyMkU8PK6Hc9dIc2/v622q",
       "name": "notreal",
       "role": "company",
-      "id": 3
+      "id": 1
     },
     {
       "email": "ivanpetrov@email.com",
       "password": "$2a$10$5c5Z3TB7QyBXon0uGkayoObqDx6OI2qCkTkiBo7ijYeUJeHQWShDy",
       "name": "Иван Петров",
       "role": "seeker",
-      "id": 4
+      "id": 2
     },
     {
       "email": "example@example.com",
       "password": "$2a$10$.BtPR9SW6DcW6umdwJqlde/Bc8mc4mCAeXLJPliJQDa7HJiAK7TPy",
       "name": "example",
       "role": "company",
-      "id": 5
+      "id": 3
+    },
+    {
+      "email": "test@test.com",
+      "password": "$2a$10$NRFODIshyMJfzpm5WtNce.oW571EzpgF0U5ZQuzQQKpnOY0.VPOV6",
+      "name": "Test",
+      "role": "company",
+      "id": 4
     }
   ],
   "vacancies": [

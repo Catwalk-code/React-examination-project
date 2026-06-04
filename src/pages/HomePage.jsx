@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useAuthStore from '../stores/authStore'
+import toast from 'react-hot-toast'
 import './HomePage.css'
 
 const API_URL = 'http://localhost:4000'
@@ -388,7 +389,7 @@ function HomePage() {
       setVacancyForm({ title: '', description: '', salary: '', location: '' })
       await loadData()
     } catch (createError) {
-      alert(createError.message)
+      toast.error(createError.message)
     }
   }
 
@@ -422,7 +423,7 @@ function HomePage() {
 
       await loadData()
     } catch (saveError) {
-      alert(saveError.message)
+      toast.error(saveError.message)
     }
   }
 
@@ -435,7 +436,7 @@ function HomePage() {
     )
 
     if (alreadyApplied) {
-      alert('Вы уже откликались на эту вакансию')
+      toast.error('Вы уже откликались на эту вакансию')
       return
     }
 
@@ -453,9 +454,9 @@ function HomePage() {
         })
       })
       await loadData()
-      alert('Отклик отправлен')
+      toast.success('Отклик отправлен')
     } catch (applyError) {
-      alert(applyError.message)
+      toast.error(applyError.message)
     }
   }
 
@@ -468,7 +469,7 @@ function HomePage() {
     )
 
     if (alreadyInvited) {
-      alert('Вы уже приглашали этого кандидата')
+      toast.error('Вы уже приглашали этого кандидата')
       return
     }
 
@@ -485,9 +486,9 @@ function HomePage() {
         })
       })
       await loadData()
-      alert('Приглашение отправлено')
+      toast.success('Приглашение отправлено')
     } catch (inviteError) {
-      alert(inviteError.message)
+      toast.error(inviteError.message)
     }
   }
 
@@ -507,7 +508,7 @@ function HomePage() {
       setReviewForm((prev) => ({ ...prev, rating: 5, text: '' }))
       await loadData()
     } catch (reviewError) {
-      alert(reviewError.message)
+      toast.error(reviewError.message)
     }
   }
 

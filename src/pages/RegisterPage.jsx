@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import toast from 'react-hot-toast'
 import './RegisterPage.css'
 
 function RegisterPage() {
@@ -22,14 +23,14 @@ function RegisterPage() {
       const data = await response.json()
       
       if (response.ok) {
-        alert('Регистрация успешна! Теперь войдите.')
+        toast.success('Регистрация успешна! Теперь войдите.')
         navigate('/login')
       } else {
-        alert('Ошибка регистрации: ' + (data.message || data.error || 'Неизвестная ошибка'))
+        toast.error('Ошибка регистрации: ' + (data.message || data.error || 'Неизвестная ошибка'))
       }
     } catch (error) {
       console.error('Ошибка при регистрации:', error)
-      alert('Ошибка соединения с сервером: ' + error.message)
+      toast.error('Ошибка соединения с сервером: ' + error.message)
     }
   }
 
