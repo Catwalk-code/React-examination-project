@@ -65,6 +65,35 @@
   border-color: var(--color-accent);
 }
 
+.home-page__item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.home-page__form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.home-page__button--danger {
+  background-color: #ef4444;
+  border-color: #ef4444;
+  color: white;
+}
+
+.home-page__button--danger:hover {
+  background-color: #dc2626;
+  border-color: #dc2626;
+}
+
+.home-page__item .home-page__button {
+  padding: 6px 12px;
+  font-size: 14px;
+}
+
 .home-page__form input,
 .home-page__form textarea,
 .home-page__form select {
