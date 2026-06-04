@@ -197,6 +197,9 @@ function SeekerDashboard({
               value={reviewForm.companyId}
               onChange={(event) => setReviewForm((prev) => ({ ...prev, companyId: event.target.value }))}
             >
+              <option value="" disabled>
+                Выберите компанию
+              </option>
               {companyList.map((company) => (
                 <option key={company.id} value={company.id}>
                   {company.name}
