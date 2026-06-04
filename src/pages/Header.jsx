@@ -54,9 +54,9 @@ function Header() {
               onClick={handleLogout}
               style={{
                 padding: '8px 16px',
-                backgroundColor: 'var(--color-secondary)',
+                backgroundColor: 'var(--color-primary)',
                 color: 'var(--color-white)',
-                border: '1px solid var(--color-secondary)',
+                border: '1px solid var(--color-primary)',
                 borderRadius: '4px', 
                 cursor: 'pointer',
                 fontWeight: '500'

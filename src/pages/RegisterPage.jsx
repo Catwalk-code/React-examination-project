@@ -85,8 +85,8 @@ function RegisterPage() {
         </button>
       </form>
       
-      <p style={{ marginTop: '15px', color: 'var(--color-secondary)' }}>
-        Уже есть аккаунт? <Link to="/login" style={{ color: 'var(--color-secondary)' }}>Войти</Link>
+      <p style={{ marginTop: '15px', color: 'var(--text)' }}>
+        Уже есть аккаунт? <Link to="/login" style={{ color: 'var(--color-accent)', textDecoration: 'underline' }}>Войти</Link>
       </p>
     </div>
   )
