@@ -40,18 +40,21 @@ function CompanyDashboard({
         <h2>Разместить вакансию</h2>
         <form onSubmit={handleCreateVacancy} className="home-page__form">
           <input
+            className = "home-page__input"
             required
             placeholder="Название вакансии"
             value={vacancyForm.title}
             onChange={(event) => setVacancyForm((prev) => ({ ...prev, title: event.target.value }))}
           />
           <input
+            className = "home-page__input"
             required
             placeholder="Локация"
             value={vacancyForm.location}
             onChange={(event) => setVacancyForm((prev) => ({ ...prev, location: event.target.value }))}
           />
           <input
+            className = "home-page__input"
             required
             placeholder="Зарплата"
             value={vacancyForm.salary}
@@ -142,18 +145,21 @@ function SeekerDashboard({
         <h2>{ownResume ? 'Обновить резюме' : 'Создать резюме'}</h2>
         <form onSubmit={handleSaveResume} className="home-page__form">
           <input
+            className = "home-page__input"
             required
             placeholder="Желаемая должность"
             value={resumeForm.title}
             onChange={(event) => setResumeForm((prev) => ({ ...prev, title: event.target.value }))}
           />
           <input
+            className = "home-page__input"
             required
             placeholder="Навыки (через запятую)"
             value={resumeForm.skills}
             onChange={(event) => setResumeForm((prev) => ({ ...prev, skills: event.target.value }))}
           />
           <textarea
+            class = "home-page__input"
             required
             rows={3}
             placeholder="Опыт"
@@ -232,6 +238,7 @@ function SeekerDashboard({
               ))}
             </select>
             <input
+              className = "home-page__input"
               required
               type="number"
               min="1"
@@ -240,6 +247,7 @@ function SeekerDashboard({
               onChange={(event) => setReviewForm((prev) => ({ ...prev, rating: event.target.value }))}
             />
             <textarea
+              class = "home-page__input"
               required
               rows={3}
               placeholder="Напишите ваш отзыв"

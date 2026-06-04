@@ -24,10 +24,11 @@ function LoginPage() {
       
       if (response.ok) {
         login(data.user, data.accessToken)
+        toast.success('Добро пожаловать!')
         navigate('/home')
       } else {
-        toast.error('Ошибка входа: ' + (data.message || data.error))
-      }
+        toast.error('Введены неверные данные')
+    }
     } catch (error) {
       console.error('Ошибка при входе:', error)
       toast.error('Ошибка соединения с сервером: ' + error.message)
