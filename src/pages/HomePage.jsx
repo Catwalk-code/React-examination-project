@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useAuthStore from '../stores/authStore'
 import toast from 'react-hot-toast'
+import { Rate } from 'antd';
 import './HomePage.css'
 
 const API_URL = 'http://localhost:4000'
@@ -159,7 +160,7 @@ function SeekerDashboard({
             onChange={(event) => setResumeForm((prev) => ({ ...prev, skills: event.target.value }))}
           />
           <textarea
-            class = "home-page__input"
+            className = "home-page__input"
             required
             rows={3}
             placeholder="Опыт"
@@ -237,17 +238,15 @@ function SeekerDashboard({
                 </option>
               ))}
             </select>
-            <input
-              className = "home-page__input"
-              required
-              type="number"
-              min="1"
-              max="5"
-              value={reviewForm.rating}
-              onChange={(event) => setReviewForm((prev) => ({ ...prev, rating: event.target.value }))}
-            />
+            <div className="home-page__rating">
+              <label>Оценка:</label>
+              <Rate
+                value={Number(reviewForm.rating)}
+                onChange={(value) => setReviewForm((prev) => ({ ...prev, rating: value }))}
+              />
+          </div>
             <textarea
-              class = "home-page__input"
+              className = "home-page__input"
               required
               rows={3}
               placeholder="Напишите ваш отзыв"
@@ -262,7 +261,18 @@ function SeekerDashboard({
   )
 }
 
-function ReviewsSection({ reviews, usersById }) {
+function ReviewsSection({ 
+  reviews, 
+  usersById, 
+  userId, 
+  editingReviewId, 
+  editReviewForm, 
+  setEditReviewForm, 
+  startEditReview, 
+  cancelEditReview, 
+  saveEditReview,
+  handleDeleteReview
+}) {
   return (
     <Section>
       <h2>Отзывы о компаниях</h2>
@@ -270,10 +280,56 @@ function ReviewsSection({ reviews, usersById }) {
       {reviews.map((review) => (
         <article key={review.id} className="home-page__item">
           <p className="home-page__meta">
-            <strong>{usersById[review.companyId]?.name || 'Компания'}</strong> · {review.rating}/5
+            <strong>{usersById[review.companyId]?.name || 'Компания'}</strong>
+            <Rate value={review.rating} disabled style={{ fontSize: '14px', marginLeft: '8px' }} />
           </p>
-          <p className="home-page__meta">{review.text}</p>
-          <small>Автор: {usersById[review.authorId]?.name || 'Пользователь'}</small>
+          
+          {editingReviewId === review.id ? (
+          <div className="home-page__edit-form">
+            <div className="home-page__edit-rating">
+              <label>Оценка:</label>
+              <Rate
+                value={Number(editReviewForm.rating)}
+                onChange={(value) => setEditReviewForm((prev) => ({ ...prev, rating: value }))}
+              />
+            </div>
+            <textarea
+              rows={3}
+              value={editReviewForm.text}
+              onChange={(e) => setEditReviewForm((prev) => ({ ...prev, text: e.target.value }))}
+              className="home-page__edit-textarea"
+            />
+            <div className="home-page__edit-actions">
+              <button onClick={() => saveEditReview(review.id)} className="home-page__button">
+                Сохранить
+              </button>
+              <button onClick={cancelEditReview} className="home-page__button home-page__button--cancel">
+                Отмена
+              </button>
+            </div>
+          </div>
+        ) : (
+            <>
+              <p className="home-page__meta">{review.text}</p>
+              <small>Автор: {usersById[review.authorId]?.name || 'Пользователь'}</small>
+              {review.authorId === userId && (
+                <div className="home-page__review-actions">
+                  <button 
+                    onClick={() => startEditReview(review)} 
+                    className="home-page__button home-page__button--edit"
+                  >
+                    Редактировать
+                  </button>
+                  <button 
+                    onClick={() => handleDeleteReview(review.id)} 
+                    className="home-page__button home-page__button--danger"
+                  >
+                    Удалить
+                  </button>
+                </div>
+              )}
+            </>
+          )}
         </article>
       ))}
     </Section>
@@ -292,6 +348,14 @@ function HomePage() {
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+
+  const [editingReviewId, setEditingReviewId] = useState(null)
+  const [editReviewForm, setEditReviewForm] = useState({
+    rating: 5,
+    text: ''
+  })
+
+  
 
   const [vacancyForm, setVacancyForm] = useState({
     title: '',
@@ -425,6 +489,40 @@ function HomePage() {
     }
   }
 
+const startEditReview = (review) => {
+    setEditingReviewId(review.id)
+    setEditReviewForm({
+      rating: review.rating,
+      text: review.text
+    })
+  }
+
+  const cancelEditReview = () => {
+    setEditingReviewId(null)
+    setEditReviewForm({ rating: 5, text: '' })
+  }
+
+  const saveEditReview = async (reviewId) => {
+  const originalReview = reviews.find((r) => r.id === reviewId)
+  if (!originalReview) return
+
+  try {
+    await fetchWithAuth(`/reviews/${reviewId}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        ...originalReview,
+        rating: Number(editReviewForm.rating),
+        text: editReviewForm.text
+      })
+    })
+    await loadData()
+    setEditingReviewId(null)
+    toast.success('Отзыв обновлён')
+  } catch (error) {
+    toast.error(error.message)
+  }
+}
+
   const confirmAction = (message, onConfirm) => {
   toast(
     (t) => (
@@ -521,6 +619,18 @@ const handleDeleteResume = () => {
       setResumeForm({ title: '', skills: '', experience: '' })
       await loadData()
       toast.success('Резюме удалено')
+    } catch (err) {
+      toast.error(err.message)
+    }
+  })
+}
+
+const handleDeleteReview = (reviewId) => {
+  confirmAction('Удалить отзыв?', async () => {
+    try {
+      await fetchWithAuth(`/reviews/${reviewId}`, { method: 'DELETE' })
+      await loadData()
+      toast.success('Отзыв удалён')
     } catch (err) {
       toast.error(err.message)
     }
@@ -676,7 +786,18 @@ const handleDeleteResume = () => {
         />
       )}
 
-      <ReviewsSection reviews={reviews} usersById={usersById} />
+      <ReviewsSection 
+  reviews={reviews} 
+  usersById={usersById}
+  userId={userId}
+  editingReviewId={editingReviewId}
+  editReviewForm={editReviewForm}
+  setEditReviewForm={setEditReviewForm}
+  startEditReview={startEditReview}
+  cancelEditReview={cancelEditReview}
+  saveEditReview={saveEditReview}
+  handleDeleteReview={handleDeleteReview}
+/>
     </div>
   )
 }
