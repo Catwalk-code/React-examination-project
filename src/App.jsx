@@ -22,7 +22,7 @@ function App() {
         
         <Route 
         path="/home"
-        element={<HomePage />} 
+        element={user ? <HomePage /> : <Navigate to="/login" />} 
         />
 
         <Route 
