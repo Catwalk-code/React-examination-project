@@ -1,7 +1,248 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useAuthStore from '../stores/authStore'
+import './HomePage.css'
 
 const API_URL = 'http://localhost:4000'
+
+function MessageState({ children }) {
+  return <div className="home-page__state">{children}</div>
+}
+
+function ErrorState({ error, onRetry }) {
+  return (
+    <div className="home-page__state">
+      <p>Ошибка: {error}</p>
+      <button onClick={onRetry} className="home-page__button">Повторить</button>
+    </div>
+  )
+}
+
+function Section({ children }) {
+  return <section className="home-page__section">{children}</section>
+}
+
+function CompanyDashboard({
+  userId,
+  vacancyForm,
+  setVacancyForm,
+  handleCreateVacancy,
+  vacancies,
+  resumes,
+  usersById,
+  inviteCandidate,
+  incomingApplications
+}) {
+  return (
+    <>
+      <Section>
+        <h2>Разместить вакансию</h2>
+        <form onSubmit={handleCreateVacancy} className="home-page__form">
+          <input
+            required
+            placeholder="Название вакансии"
+            value={vacancyForm.title}
+            onChange={(event) => setVacancyForm((prev) => ({ ...prev, title: event.target.value }))}
+          />
+          <input
+            required
+            placeholder="Локация"
+            value={vacancyForm.location}
+            onChange={(event) => setVacancyForm((prev) => ({ ...prev, location: event.target.value }))}
+          />
+          <input
+            required
+            placeholder="Зарплата"
+            value={vacancyForm.salary}
+            onChange={(event) => setVacancyForm((prev) => ({ ...prev, salary: event.target.value }))}
+          />
+          <textarea
+            required
+            rows={3}
+            placeholder="Описание"
+            value={vacancyForm.description}
+            onChange={(event) => setVacancyForm((prev) => ({ ...prev, description: event.target.value }))}
+          />
+          <button type="submit" className="home-page__button">Опубликовать</button>
+        </form>
+      </Section>
+
+      <Section>
+        <h2>Мои вакансии</h2>
+        {vacancies.filter((vacancy) => vacancy.companyId === userId).map((vacancy) => (
+          <article key={vacancy.id} className="home-page__item">
+            <strong>{vacancy.title}</strong>
+            <p className="home-page__text">{vacancy.description}</p>
+            <small>{vacancy.location} · {vacancy.salary}</small>
+          </article>
+        ))}
+      </Section>
+
+      <Section>
+        <h2>Резюме кандидатов</h2>
+        {resumes.map((resume) => (
+          <article key={resume.id} className="home-page__item">
+            <strong>{resume.title}</strong> — {usersById[resume.userId]?.name || 'Кандидат'}
+            <p className="home-page__text">Навыки: {resume.skills}</p>
+            <p className="home-page__text">Опыт: {resume.experience}</p>
+            <button onClick={() => inviteCandidate(resume)} className="home-page__button">Пригласить</button>
+          </article>
+        ))}
+      </Section>
+
+      <Section>
+        <h2>Отклики на мои вакансии</h2>
+        {incomingApplications.length === 0 && <p>Пока нет откликов.</p>}
+        {incomingApplications.map((application) => (
+          <article key={application.id} className="home-page__item">
+            <p className="home-page__meta">
+              Вакансия: <strong>{vacancies.find((vacancy) => vacancy.id === application.vacancyId)?.title}</strong>
+            </p>
+            <p className="home-page__meta">
+              Кандидат: {usersById[application.seekerId]?.name || 'Соискатель'}
+            </p>
+          </article>
+        ))}
+      </Section>
+    </>
+  )
+}
+
+function SeekerDashboard({
+  ownResume,
+  resumeForm,
+  setResumeForm,
+  handleSaveResume,
+  vacancies,
+  usersById,
+  applyToVacancy,
+  applications,
+  userId,
+  companyList,
+  reviewForm,
+  setReviewForm,
+  submitReview
+}) {
+  return (
+    <>
+      <Section>
+        <h2>{ownResume ? 'Обновить резюме' : 'Создать резюме'}</h2>
+        <form onSubmit={handleSaveResume} className="home-page__form">
+          <input
+            required
+            placeholder="Желаемая должность"
+            value={resumeForm.title}
+            onChange={(event) => setResumeForm((prev) => ({ ...prev, title: event.target.value }))}
+          />
+          <input
+            required
+            placeholder="Навыки (через запятую)"
+            value={resumeForm.skills}
+            onChange={(event) => setResumeForm((prev) => ({ ...prev, skills: event.target.value }))}
+          />
+          <textarea
+            required
+            rows={3}
+            placeholder="Опыт"
+            value={resumeForm.experience}
+            onChange={(event) => setResumeForm((prev) => ({ ...prev, experience: event.target.value }))}
+          />
+          <button type="submit" className="home-page__button">
+            {ownResume ? 'Сохранить изменения' : 'Создать резюме'}
+          </button>
+        </form>
+      </Section>
+
+      <Section>
+        <h2>Доступные вакансии</h2>
+        {vacancies.map((vacancy) => (
+          <article key={vacancy.id} className="home-page__item">
+            <strong>{vacancy.title}</strong> — {usersById[vacancy.companyId]?.name || 'Компания'}
+            <p className="home-page__text">{vacancy.description}</p>
+            <small>{vacancy.location} · {vacancy.salary}</small>
+            <div className="home-page__actions">
+              <button onClick={() => applyToVacancy(vacancy)} className="home-page__button">Откликнуться</button>
+            </div>
+          </article>
+        ))}
+      </Section>
+
+      <Section>
+        <h2>Мои отклики и приглашения</h2>
+        {applications
+          .filter((application) => application.seekerId === userId)
+          .map((application) => (
+            <article key={application.id} className="home-page__item">
+              <p className="home-page__meta">
+                {application.type === 'vacancy_application' ? 'Отклик на вакансию' : 'Приглашение от компании'}
+              </p>
+              {application.vacancyId && (
+                <p className="home-page__meta">
+                  Вакансия: {vacancies.find((vacancy) => vacancy.id === application.vacancyId)?.title}
+                </p>
+              )}
+              <p className="home-page__meta">
+                Компания: {usersById[application.companyId]?.name || 'Компания'}
+              </p>
+            </article>
+          ))}
+      </Section>
+
+      <Section>
+        <h2>Оставить отзыв о компании</h2>
+        {companyList.length === 0 && <p>Нет доступных компаний для отзыва.</p>}
+        {companyList.length > 0 && (
+          <form onSubmit={submitReview} className="home-page__form">
+            <select
+              required
+              value={reviewForm.companyId}
+              onChange={(event) => setReviewForm((prev) => ({ ...prev, companyId: event.target.value }))}
+            >
+              {companyList.map((company) => (
+                <option key={company.id} value={company.id}>
+                  {company.name}
+                </option>
+              ))}
+            </select>
+            <input
+              required
+              type="number"
+              min="1"
+              max="5"
+              value={reviewForm.rating}
+              onChange={(event) => setReviewForm((prev) => ({ ...prev, rating: event.target.value }))}
+            />
+            <textarea
+              required
+              rows={3}
+              placeholder="Напишите ваш отзыв"
+              value={reviewForm.text}
+              onChange={(event) => setReviewForm((prev) => ({ ...prev, text: event.target.value }))}
+            />
+            <button type="submit" className="home-page__button">Опубликовать отзыв</button>
+          </form>
+        )}
+      </Section>
+    </>
+  )
+}
+
+function ReviewsSection({ reviews, usersById }) {
+  return (
+    <Section>
+      <h2>Отзывы о компаниях</h2>
+      {reviews.length === 0 && <p>Пока отзывов нет.</p>}
+      {reviews.map((review) => (
+        <article key={review.id} className="home-page__item">
+          <p className="home-page__meta">
+            <strong>{usersById[review.companyId]?.name || 'Компания'}</strong> · {review.rating}/5
+          </p>
+          <p className="home-page__meta">{review.text}</p>
+          <small>Автор: {usersById[review.authorId]?.name || 'Пользователь'}</small>
+        </article>
+      ))}
+    </Section>
+  )
+}
 
 function HomePage() {
   const { user, token } = useAuthStore()
@@ -282,218 +523,54 @@ function HomePage() {
   )
 
   if (!user) {
-    return <div style={{ padding: '20px' }}>Выполните вход, чтобы продолжить.</div>
+    return <MessageState>Выполните вход, чтобы продолжить.</MessageState>
   }
 
   if (loading) {
-    return <div style={{ padding: '20px' }}>Загрузка...</div>
+    return <MessageState>Загрузка...</MessageState>
   }
 
   if (error) {
-    return (
-      <div style={{ padding: '20px' }}>
-        <p>Ошибка: {error}</p>
-        <button onClick={loadData} style={{ padding: '8px 16px' }}>Повторить</button>
-      </div>
-    )
+    return <ErrorState error={error} onRetry={loadData} />
   }
 
   return (
-    <div style={{ padding: '20px', display: 'grid', gap: '24px' }}>
-      <h1 style={{ margin: 0 }}>Платформа вакансий</h1>
+    <div className="home-page">
+      <h1 className="home-page__title">Платформа вакансий</h1>
 
       {role === 'company' && (
-        <>
-          <section style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '16px' }}>
-            <h2>Разместить вакансию</h2>
-            <form onSubmit={handleCreateVacancy} style={{ display: 'grid', gap: '10px' }}>
-              <input
-                required
-                placeholder="Название вакансии"
-                value={vacancyForm.title}
-                onChange={(event) => setVacancyForm((prev) => ({ ...prev, title: event.target.value }))}
-              />
-              <input
-                required
-                placeholder="Локация"
-                value={vacancyForm.location}
-                onChange={(event) => setVacancyForm((prev) => ({ ...prev, location: event.target.value }))}
-              />
-              <input
-                required
-                placeholder="Зарплата"
-                value={vacancyForm.salary}
-                onChange={(event) => setVacancyForm((prev) => ({ ...prev, salary: event.target.value }))}
-              />
-              <textarea
-                required
-                rows={3}
-                placeholder="Описание"
-                value={vacancyForm.description}
-                onChange={(event) => setVacancyForm((prev) => ({ ...prev, description: event.target.value }))}
-              />
-              <button type="submit" style={{ width: 'fit-content' }}>Опубликовать</button>
-            </form>
-          </section>
-
-          <section style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '16px' }}>
-            <h2>Мои вакансии</h2>
-            {vacancies.filter((vacancy) => vacancy.companyId === userId).map((vacancy) => (
-              <article key={vacancy.id} style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>
-                <strong>{vacancy.title}</strong>
-                <p style={{ margin: '6px 0' }}>{vacancy.description}</p>
-                <small>{vacancy.location} · {vacancy.salary}</small>
-              </article>
-            ))}
-          </section>
-
-          <section style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '16px' }}>
-            <h2>Резюме кандидатов</h2>
-            {resumes.map((resume) => (
-              <article key={resume.id} style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>
-                <strong>{resume.title}</strong> — {usersById[resume.userId]?.name || 'Кандидат'}
-                <p style={{ margin: '6px 0' }}>Навыки: {resume.skills}</p>
-                <p style={{ margin: '6px 0' }}>Опыт: {resume.experience}</p>
-                <button onClick={() => inviteCandidate(resume)}>Пригласить</button>
-              </article>
-            ))}
-          </section>
-
-          <section style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '16px' }}>
-            <h2>Отклики на мои вакансии</h2>
-            {incomingApplications.length === 0 && <p>Пока нет откликов.</p>}
-            {incomingApplications.map((application) => (
-              <article key={application.id} style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>
-                <p style={{ margin: '4px 0' }}>
-                  Вакансия: <strong>{vacancies.find((vacancy) => vacancy.id === application.vacancyId)?.title}</strong>
-                </p>
-                <p style={{ margin: '4px 0' }}>
-                  Кандидат: {usersById[application.seekerId]?.name || 'Соискатель'}
-                </p>
-              </article>
-            ))}
-          </section>
-        </>
+        <CompanyDashboard
+          userId={userId}
+          vacancyForm={vacancyForm}
+          setVacancyForm={setVacancyForm}
+          handleCreateVacancy={handleCreateVacancy}
+          vacancies={vacancies}
+          resumes={resumes}
+          usersById={usersById}
+          inviteCandidate={inviteCandidate}
+          incomingApplications={incomingApplications}
+        />
       )}
 
       {role === 'seeker' && (
-        <>
-          <section style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '16px' }}>
-            <h2>{ownResume ? 'Обновить резюме' : 'Создать резюме'}</h2>
-            <form onSubmit={handleSaveResume} style={{ display: 'grid', gap: '10px' }}>
-              <input
-                required
-                placeholder="Желаемая должность"
-                value={resumeForm.title}
-                onChange={(event) => setResumeForm((prev) => ({ ...prev, title: event.target.value }))}
-              />
-              <input
-                required
-                placeholder="Навыки (через запятую)"
-                value={resumeForm.skills}
-                onChange={(event) => setResumeForm((prev) => ({ ...prev, skills: event.target.value }))}
-              />
-              <textarea
-                required
-                rows={3}
-                placeholder="Опыт"
-                value={resumeForm.experience}
-                onChange={(event) => setResumeForm((prev) => ({ ...prev, experience: event.target.value }))}
-              />
-              <button type="submit" style={{ width: 'fit-content' }}>
-                {ownResume ? 'Сохранить изменения' : 'Создать резюме'}
-              </button>
-            </form>
-          </section>
-
-          <section style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '16px' }}>
-            <h2>Доступные вакансии</h2>
-            {vacancies.map((vacancy) => (
-              <article key={vacancy.id} style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>
-                <strong>{vacancy.title}</strong> — {usersById[vacancy.companyId]?.name || 'Компания'}
-                <p style={{ margin: '6px 0' }}>{vacancy.description}</p>
-                <small>{vacancy.location} · {vacancy.salary}</small>
-                <div style={{ marginTop: '8px' }}>
-                  <button onClick={() => applyToVacancy(vacancy)}>Откликнуться</button>
-                </div>
-              </article>
-            ))}
-          </section>
-
-          <section style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '16px' }}>
-            <h2>Мои отклики и приглашения</h2>
-            {applications
-              .filter((application) => application.seekerId === userId)
-              .map((application) => (
-                <article key={application.id} style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>
-                  <p style={{ margin: '4px 0' }}>
-                    {application.type === 'vacancy_application' ? 'Отклик на вакансию' : 'Приглашение от компании'}
-                  </p>
-                  {application.vacancyId && (
-                    <p style={{ margin: '4px 0' }}>
-                      Вакансия: {vacancies.find((vacancy) => vacancy.id === application.vacancyId)?.title}
-                    </p>
-                  )}
-                  <p style={{ margin: '4px 0' }}>
-                    Компания: {usersById[application.companyId]?.name || 'Компания'}
-                  </p>
-                </article>
-              ))}
-          </section>
-
-          <section style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '16px' }}>
-            <h2>Оставить отзыв о компании</h2>
-            {companyList.length === 0 && <p>Нет доступных компаний для отзыва.</p>}
-            {companyList.length > 0 && (
-              <form onSubmit={submitReview} style={{ display: 'grid', gap: '10px' }}>
-                <select
-                  required
-                  value={reviewForm.companyId}
-                  onChange={(event) =>
-                    setReviewForm((prev) => ({ ...prev, companyId: event.target.value }))
-                  }
-                >
-                  {companyList.map((company) => (
-                    <option key={company.id} value={company.id}>
-                      {company.name}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  required
-                  type="number"
-                  min="1"
-                  max="5"
-                  value={reviewForm.rating}
-                  onChange={(event) => setReviewForm((prev) => ({ ...prev, rating: event.target.value }))}
-                />
-                <textarea
-                  required
-                  rows={3}
-                  placeholder="Напишите ваш отзыв"
-                  value={reviewForm.text}
-                  onChange={(event) => setReviewForm((prev) => ({ ...prev, text: event.target.value }))}
-                />
-                <button type="submit" style={{ width: 'fit-content' }}>Опубликовать отзыв</button>
-              </form>
-            )}
-          </section>
-        </>
+        <SeekerDashboard
+          ownResume={ownResume}
+          resumeForm={resumeForm}
+          setResumeForm={setResumeForm}
+          handleSaveResume={handleSaveResume}
+          vacancies={vacancies}
+          usersById={usersById}
+          applyToVacancy={applyToVacancy}
+          applications={applications}
+          userId={userId}
+          companyList={companyList}
+          reviewForm={reviewForm}
+          setReviewForm={setReviewForm}
+          submitReview={submitReview}
+        />
       )}
 
-      <section style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '16px' }}>
-        <h2>Отзывы о компаниях</h2>
-        {reviews.length === 0 && <p>Пока отзывов нет.</p>}
-        {reviews.map((review) => (
-          <article key={review.id} style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>
-            <p style={{ margin: '4px 0' }}>
-              <strong>{usersById[review.companyId]?.name || 'Компания'}</strong> · {review.rating}/5
-            </p>
-            <p style={{ margin: '4px 0' }}>{review.text}</p>
-            <small>Автор: {usersById[review.authorId]?.name || 'Пользователь'}</small>
-          </article>
-        ))}
-      </section>
+      <ReviewsSection reviews={reviews} usersById={usersById} />
     </div>
   )
 }
