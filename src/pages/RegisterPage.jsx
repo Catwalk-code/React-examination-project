@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import './RegisterPage.css'
 
 function RegisterPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
-  const [role, setRole] = useState('seeker') // seeker или company
+  const [role, setRole] = useState('seeker')
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -24,69 +25,70 @@ function RegisterPage() {
         alert('Регистрация успешна! Теперь войдите.')
         navigate('/login')
       } else {
-        alert('Ошибка регистрации: ' + data.error)
+        alert('Ошибка регистрации: ' + (data.message || data.error || 'Неизвестная ошибка'))
       }
     } catch (error) {
-      alert('Ошибка соединения с сервером' + error.message)
+      console.error('Ошибка при регистрации:', error)
+      alert('Ошибка соединения с сервером: ' + error.message)
     }
   }
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', backgroundColor: 'var(--color-white)', color: 'var(--text)' }}>
+    <div className="auth-page">
       <h2>Регистрация</h2>
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '15px' }}>
-          <label>Имя:</label>
+        <div className="form-group">
           <input
             type="text"
+            className="form-input"
+            placeholder="Имя"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px', marginTop: '5px', border: '1px solid var(--border)', borderRadius: '4px' }}
           />
         </div>
         
-        <div style={{ marginBottom: '15px' }}>
-          <label>Email:</label>
+        <div className="form-group">
           <input
             type="email"
+            className="form-input"
+            placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px', marginTop: '5px', border: '1px solid var(--border)', borderRadius: '4px' }}
           />
         </div>
         
-        <div style={{ marginBottom: '15px' }}>
-          <label>Пароль:</label>
+        <div className="form-group">
           <input
             type="password"
+            className="form-input"
+            placeholder="Пароль"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px', marginTop: '5px', border: '1px solid var(--border)', borderRadius: '4px' }}
           />
         </div>
         
-        <div style={{ marginBottom: '15px' }}>
-          <label>Тип аккаунта:</label>
+        <div className="form-group">
           <select
+            className="form-select"
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            style={{ width: '100%', padding: '8px', marginTop: '5px', border: '1px solid var(--border)', borderRadius: '4px' }}
+            required
           >
             <option value="seeker">Соискатель</option>
             <option value="company">Компания</option>
           </select>
         </div>
         
-        <button type="submit" style={{ width: '100%', padding: '10px', backgroundColor: 'var(--color-secondary)', color: 'var(--color-white)', border: '1px solid var(--color-secondary)', borderRadius: '4px' }}>
+        <button type="submit" className="btn-primary">
           Зарегистрироваться
         </button>
       </form>
       
-      <p style={{ marginTop: '15px', color: 'var(--text)' }}>
-        Уже есть аккаунт? <Link to="/login" style={{ color: 'var(--color-accent)', textDecoration: 'underline' }}>Войти</Link>
+      <p className="auth-footer">
+        Уже есть аккаунт? <Link to="/login">Войти</Link>
       </p>
     </div>
   )
