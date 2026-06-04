@@ -18,6 +18,7 @@ function Header() {
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
+      borderRadius: '0 0 6px 6px', // Внешний радиус снизу
       boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
     }}>
       {/* Лого */}
@@ -37,7 +38,6 @@ function Header() {
         alignItems: 'center'
       }}>
         {user ? (
-          //если пользователь залогинен
           <>
             <Link to="/home" style={{
               color: '#374151',
@@ -66,7 +66,7 @@ function Header() {
                 backgroundColor: '#ef4444',
                 color: 'white',
                 border: 'none',
-                borderRadius: '6px',
+                borderRadius: '4px', 
                 cursor: 'pointer',
                 fontWeight: '500'
               }}
@@ -75,14 +75,13 @@ function Header() {
             </button>
           </>
         ) : (
-          //если пользователь не залогинен
           <>
             <Link to="/login" style={{
               padding: '8px 16px',
               color: '#2563eb',
               textDecoration: 'none',
               border: '2px solid #2563eb',
-              borderRadius: '6px',
+              borderRadius: '4px', 
               fontWeight: '500'
             }}>
               Войти
@@ -93,7 +92,7 @@ function Header() {
               backgroundColor: '#2563eb',
               color: 'white',
               textDecoration: 'none',
-              borderRadius: '6px',
+              borderRadius: '4px', 
               fontWeight: '500'
             }}>
               Регистрация
