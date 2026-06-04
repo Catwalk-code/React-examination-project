@@ -34,7 +34,7 @@ function LoginPage() {
   }
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px' }}>
+    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', backgroundColor: 'var(--color-white)', color: 'var(--text)' }}>
       <h2>Вход</h2>
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '15px' }}>
@@ -44,7 +44,7 @@ function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            style={{ width: '100%', padding: '8px', marginTop: '5px', border: '1px solid var(--border)', borderRadius: '4px' }}
           />
         </div>
         
@@ -55,17 +55,17 @@ function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            style={{ width: '100%', padding: '8px', marginTop: '5px', border: '1px solid var(--border)', borderRadius: '4px' }}
           />
         </div>
         
-        <button type="submit" style={{ width: '100%', padding: '10px' }}>
+        <button type="submit" style={{ width: '100%', padding: '10px', backgroundColor: 'var(--color-secondary)', color: 'var(--color-white)', border: '1px solid var(--color-secondary)', borderRadius: '4px' }}>
           Войти
         </button>
       </form>
       
-      <p style={{ marginTop: '15px' }}>
-        Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
+      <p style={{ marginTop: '15px', color: 'var(--color-secondary)' }}>
+        Нет аккаунта? <Link to="/register" style={{ color: 'var(--color-secondary)' }}>Зарегистрироваться</Link>
       </p>
     </div>
   )
