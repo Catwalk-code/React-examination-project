@@ -27,6 +27,13 @@
       "name": "Иван Петров",
       "role": "seeker",
       "id": 4
+    },
+    {
+      "email": "example@example.com",
+      "password": "$2a$10$.BtPR9SW6DcW6umdwJqlde/Bc8mc4mCAeXLJPliJQDa7HJiAK7TPy",
+      "name": "example",
+      "role": "company",
+      "id": 5
     }
   ],
   "vacancies": [
@@ -61,6 +68,25 @@
       "companyId": 1,
       "status": "new",
       "createdAt": "2026-06-03T10:00:00.000Z"
+    },
+    {
+      "type": "resume_invite",
+      "resumeId": 1,
+      "seekerId": 2,
+      "companyId": 3,
+      "status": "sent",
+      "createdAt": "2026-06-04T13:32:34.807Z",
+      "id": 2
+    },
+    {
+      "type": "vacancy_application",
+      "vacancyId": 1,
+      "resumeId": null,
+      "seekerId": 4,
+      "companyId": 1,
+      "status": "new",
+      "createdAt": "2026-06-04T13:42:04.118Z",
+      "id": 3
     }
   ],
   "reviews": [

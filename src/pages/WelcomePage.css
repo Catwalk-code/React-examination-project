@@ -27,29 +27,6 @@
   justify-content: center;
 }
 
-.btn {
-  padding: 12px 30px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: bold;
-}
-
-.btn-primary {
-  background: var(--color-secondary);
-  color: var(--color-white);
-}
-
-.btn-primary:hover {
-  background: var(--color-accent);
-}
-
-.btn-secondary {
-  background: var(--color-white);
-  color: var(--color-secondary);
-  border: 2px solid var(--color-secondary);
-}
-
 .welcome-features {
   display: flex;
   gap: 30px;

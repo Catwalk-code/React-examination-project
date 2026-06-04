@@ -1,12 +1,12 @@
 .header {
   background-color: #FEFFFF;
-  border-bottom: 1px solid rgba(43, 122, 120, 0.15);
+  border-bottom: 2px solid var(--border);
   padding: 15px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-radius: 0 0 6px 6px;
-  box-shadow: 0 4px 8px rgba(23, 37, 42, 0.1);
+  box-shadow: 0 20px 40px rgba(43, 122, 120, 0.15);
 }
 
 .header-logo {
