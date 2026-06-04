@@ -2,6 +2,8 @@
   padding: 20px;
   display: grid;
   gap: 24px;
+  background: var(--color-white);
+  color: var(--text);
 }
 
 .home-page__title {
@@ -10,12 +12,16 @@
 
 .home-page__state {
   padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--color-surface);
 }
 
 .home-page__section {
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 16px;
+  background: var(--color-white);
 }
 
 .home-page__form {
@@ -25,7 +31,7 @@
 
 .home-page__item {
   padding: 10px 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border);
 }
 
 .home-page__item:last-child {
@@ -46,4 +52,32 @@
 
 .home-page__button {
   width: fit-content;
+  border: 1px solid var(--color-secondary);
+  background: var(--color-secondary);
+  color: var(--color-white);
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.home-page__button:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.home-page__form input,
+.home-page__form textarea,
+.home-page__form select {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--color-white);
+  color: var(--text);
+}
+
+.home-page__form input:focus,
+.home-page__form textarea:focus,
+.home-page__form select:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
 }
