@@ -7,7 +7,7 @@
 }
 
 .home-page__title {
-  margin: 0;
+  margin: 20px;
 }
 
 .home-page__state {
@@ -73,6 +73,13 @@
   border-radius: 6px;
   background: var(--color-white);
   color: var(--text);
+}
+
+.home-page__form textarea{
+  resize: none;
+  box-sizing: border-box;
+  max-width: 100%;
+  min-height: 190px;
 }
 
 .home-page__form input:focus,
