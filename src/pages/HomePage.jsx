@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import useAuthStore from '../stores/authStore'
 
 const API_URL = 'http://localhost:4000'
@@ -6,6 +6,7 @@ const API_URL = 'http://localhost:4000'
 function HomePage() {
   const { user, token } = useAuthStore()
   const role = user?.role || 'seeker'
+  const userId = user?.id ?? null
 
   const [vacancies, setVacancies] = useState([])
   const [resumes, setResumes] = useState([])
@@ -41,8 +42,8 @@ function HomePage() {
     [users]
   )
   const ownResume = useMemo(
-    () => resumes.find((resume) => resume.userId === user?.id),
-    [resumes, user?.id]
+    () => resumes.find((resume) => resume.userId === userId),
+    [resumes, userId]
   )
 
   const fetchWithAuth = async (path, options = {}) => {
@@ -65,7 +66,7 @@ function HomePage() {
     return response
   }
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     setLoading(true)
     setError('')
     try {
@@ -102,6 +103,12 @@ function HomePage() {
       setApplications(applicationsData)
       setReviews(reviewsData)
       setUsers(usersData)
+      const currentOwnResume = resumesData.find((resume) => resume.userId === userId)
+      setResumeForm({
+        title: currentOwnResume?.title || '',
+        skills: currentOwnResume?.skills || '',
+        experience: currentOwnResume?.experience || ''
+      })
       setReviewForm((prev) => ({
         ...prev,
         companyId:
@@ -112,21 +119,15 @@ function HomePage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [userId])
 
   useEffect(() => {
-    loadData()
-  }, [])
+    const timeoutId = setTimeout(() => {
+      loadData()
+    }, 0)
 
-  useEffect(() => {
-    if (ownResume) {
-      setResumeForm({
-        title: ownResume.title || '',
-        skills: ownResume.skills || '',
-        experience: ownResume.experience || ''
-      })
-    }
-  }, [ownResume])
+    return () => clearTimeout(timeoutId)
+  }, [loadData])
 
   const handleCreateVacancy = async (event) => {
     event.preventDefault()
@@ -135,7 +136,7 @@ function HomePage() {
         method: 'POST',
         body: JSON.stringify({
           ...vacancyForm,
-          companyId: user.id,
+          companyId: userId,
           createdAt: new Date().toISOString()
         })
       })
@@ -152,7 +153,7 @@ function HomePage() {
 
     const payload = {
       ...resumeForm,
-      userId: user.id,
+      userId,
       updatedAt: new Date().toISOString()
     }
 
@@ -186,7 +187,7 @@ function HomePage() {
       (application) =>
         application.type === 'vacancy_application' &&
         application.vacancyId === vacancy.id &&
-        application.seekerId === user.id
+        application.seekerId === userId
     )
 
     if (alreadyApplied) {
@@ -201,7 +202,7 @@ function HomePage() {
           type: 'vacancy_application',
           vacancyId: vacancy.id,
           resumeId: ownResume?.id || null,
-          seekerId: user.id,
+          seekerId: userId,
           companyId: vacancy.companyId,
           status: 'new',
           createdAt: new Date().toISOString()
@@ -219,7 +220,7 @@ function HomePage() {
       (application) =>
         application.type === 'resume_invite' &&
         application.resumeId === resume.id &&
-        application.companyId === user.id
+        application.companyId === userId
     )
 
     if (alreadyInvited) {
@@ -234,7 +235,7 @@ function HomePage() {
           type: 'resume_invite',
           resumeId: resume.id,
           seekerId: resume.userId,
-          companyId: user.id,
+          companyId: userId,
           status: 'sent',
           createdAt: new Date().toISOString()
         })
@@ -253,7 +254,7 @@ function HomePage() {
         method: 'POST',
         body: JSON.stringify({
           companyId: Number(reviewForm.companyId),
-          authorId: user.id,
+          authorId: userId,
           rating: Number(reviewForm.rating),
           text: reviewForm.text,
           createdAt: new Date().toISOString()
@@ -267,8 +268,8 @@ function HomePage() {
   }
 
   const companyVacancyIds = useMemo(
-    () => vacancies.filter((vacancy) => vacancy.companyId === user?.id).map((vacancy) => vacancy.id),
-    [vacancies, user?.id]
+    () => vacancies.filter((vacancy) => vacancy.companyId === userId).map((vacancy) => vacancy.id),
+    [vacancies, userId]
   )
 
   const incomingApplications = useMemo(
@@ -337,7 +338,7 @@ function HomePage() {
 
           <section style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '16px' }}>
             <h2>Мои вакансии</h2>
-            {vacancies.filter((vacancy) => vacancy.companyId === user.id).map((vacancy) => (
+            {vacancies.filter((vacancy) => vacancy.companyId === userId).map((vacancy) => (
               <article key={vacancy.id} style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>
                 <strong>{vacancy.title}</strong>
                 <p style={{ margin: '6px 0' }}>{vacancy.description}</p>
@@ -422,7 +423,7 @@ function HomePage() {
           <section style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '16px' }}>
             <h2>Мои отклики и приглашения</h2>
             {applications
-              .filter((application) => application.seekerId === user.id)
+              .filter((application) => application.seekerId === userId)
               .map((application) => (
                 <article key={application.id} style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>
                   <p style={{ margin: '4px 0' }}>
