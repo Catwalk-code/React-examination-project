@@ -3,6 +3,13 @@ import { useNavigate, Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import './RegisterPage.css'
 
+const capitalizeWords = (str) => {
+  return str
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ')
+}
+
 function RegisterPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -34,6 +41,11 @@ function RegisterPage() {
     }
   }
 
+  const handleNameChange = (e) => {
+    const value = e.target.value
+    setName(capitalizeWords(value))
+  }
+
   return (
     <div className="auth-page">
       <h2>Регистрация</h2>
@@ -42,9 +54,9 @@ function RegisterPage() {
           <input
             type="text"
             className="form-input"
-            placeholder="Имя"
+            placeholder="ФИО"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={handleNameChange}
             required
           />
         </div>
