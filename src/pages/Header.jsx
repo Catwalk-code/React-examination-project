@@ -12,20 +12,20 @@ function Header() {
 
   return (
     <header style={{
-      backgroundColor: '#fff',
-      borderBottom: '1px solid #e5e7eb',
+      backgroundColor: 'var(--color-white)',
+      borderBottom: '1px solid var(--border)',
       padding: '15px 30px',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
       borderRadius: '0 0 6px 6px', // Внешний радиус снизу
-      boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+      boxShadow: '0 2px 4px rgba(23, 37, 42, 0.1)'
     }}>
       {/* Лого */}
       <Link to="/" style={{
         fontSize: '24px',
         fontWeight: 'bold',
-        color: '#2563eb',
+        color: 'var(--color-secondary)',
         textDecoration: 'none'
       }}>
         findjob.by
@@ -40,23 +40,23 @@ function Header() {
         {user ? (
           <>
             <Link to="/home" style={{
-              color: '#374151',
+              color: 'var(--text)',
               textDecoration: 'none',
               fontWeight: '500'
             }}>
               Вакансии
             </Link>
             
-            <span style={{ color: '#6b7280' }}>
+            <span style={{ color: 'var(--color-secondary)' }}>
               Привет, <strong>{user.name}</strong>!
             </span>
             <button
               onClick={handleLogout}
               style={{
                 padding: '8px 16px',
-                backgroundColor: '#ef4444',
-                color: 'white',
-                border: 'none',
+                backgroundColor: 'var(--color-primary)',
+                color: 'var(--color-white)',
+                border: '1px solid var(--color-primary)',
                 borderRadius: '4px', 
                 cursor: 'pointer',
                 fontWeight: '500'
@@ -69,9 +69,9 @@ function Header() {
           <>
             <Link to="/login" style={{
               padding: '8px 16px',
-              color: '#2563eb',
+              color: 'var(--color-secondary)',
               textDecoration: 'none',
-              border: '2px solid #2563eb',
+              border: '2px solid var(--color-secondary)',
               borderRadius: '4px', 
               fontWeight: '500'
             }}>
@@ -80,8 +80,8 @@ function Header() {
             
             <Link to="/register" style={{
               padding: '8px 16px',
-              backgroundColor: '#2563eb',
-              color: 'white',
+              backgroundColor: 'var(--color-secondary)',
+              color: 'var(--color-white)',
               textDecoration: 'none',
               borderRadius: '4px', 
               fontWeight: '500'
