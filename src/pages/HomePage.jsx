@@ -27,6 +27,7 @@ function CompanyDashboard({
   vacancyForm,
   setVacancyForm,
   handleCreateVacancy,
+  handleDeleteVacancy,
   vacancies,
   resumes,
   usersById,
@@ -69,9 +70,20 @@ function CompanyDashboard({
 
       <Section>
         <h2>Мои вакансии</h2>
+        {vacancies.filter((vacancy) => vacancy.companyId === userId).length === 0 && (
+          <p>У вас пока нет вакансий.</p>
+        )}
         {vacancies.filter((vacancy) => vacancy.companyId === userId).map((vacancy) => (
           <article key={vacancy.id} className="home-page__item">
-            <strong>{vacancy.title}</strong>
+            <div className="home-page__item-header">
+              <strong>{vacancy.title}</strong>
+              <button 
+                onClick={() => handleDeleteVacancy(vacancy.id)} 
+                className="home-page__button home-page__button--danger"
+              >
+                Удалить
+              </button>
+            </div>
             <p className="home-page__text">{vacancy.description}</p>
             <small>{vacancy.location} · {vacancy.salary}</small>
           </article>
@@ -113,6 +125,7 @@ function SeekerDashboard({
   resumeForm,
   setResumeForm,
   handleSaveResume,
+  handleDeleteResume,
   vacancies,
   usersById,
   applyToVacancy,
@@ -147,9 +160,20 @@ function SeekerDashboard({
             value={resumeForm.experience}
             onChange={(event) => setResumeForm((prev) => ({ ...prev, experience: event.target.value }))}
           />
-          <button type="submit" className="home-page__button">
-            {ownResume ? 'Сохранить изменения' : 'Создать резюме'}
-          </button>
+          <div className="home-page__form-actions">
+            <button type="submit" className="home-page__button">
+              {ownResume ? 'Сохранить изменения' : 'Создать резюме'}
+            </button>
+            {ownResume && (
+              <button 
+                type="button" 
+                onClick={handleDeleteResume}
+                className="home-page__button home-page__button--danger"
+              >
+                Удалить резюме
+              </button>
+            )}
+          </div>
         </form>
       </Section>
 
@@ -393,6 +417,60 @@ function HomePage() {
     }
   }
 
+  const confirmAction = (message, onConfirm) => {
+  toast(
+    (t) => (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <span>{message}</span>
+        <button
+          onClick={() => {
+            toast.dismiss(t.id)
+            onConfirm()
+          }}
+          style={{
+            padding: '6px 12px',
+            backgroundColor: '#ef4444',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '13px'
+          }}
+        >
+          Подтвердить
+        </button>
+        <button
+          onClick={() => toast.dismiss(t.id)}
+          style={{
+            padding: '6px 12px',
+            backgroundColor: '#e5e7eb',
+            color: '#374151',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '13px'
+          }}
+        >
+          Отмена
+        </button>
+      </div>
+    ),
+    { duration: 5000 }
+  )
+}
+
+const handleDeleteVacancy = (vacancyId) => {
+  confirmAction('Удалить вакансию?', async () => {
+    try {
+      await fetchWithAuth(`/vacancies/${vacancyId}`, { method: 'DELETE' })
+      await loadData()
+      toast.success('Вакансия удалена')
+    } catch (err) {
+      toast.error(err.message)
+    }
+  })
+}
+
   const handleSaveResume = async (event) => {
     event.preventDefault()
 
@@ -426,6 +504,20 @@ function HomePage() {
       toast.error(saveError.message)
     }
   }
+
+const handleDeleteResume = () => {
+  if (!ownResume) return
+  confirmAction('Удалить резюме?', async () => {
+    try {
+      await fetchWithAuth(`/resumes/${ownResume.id}`, { method: 'DELETE' })
+      setResumeForm({ title: '', skills: '', experience: '' })
+      await loadData()
+      toast.success('Резюме удалено')
+    } catch (err) {
+      toast.error(err.message)
+    }
+  })
+}
 
   const applyToVacancy = async (vacancy) => {
     const alreadyApplied = applications.some(
@@ -548,6 +640,7 @@ function HomePage() {
           vacancyForm={vacancyForm}
           setVacancyForm={setVacancyForm}
           handleCreateVacancy={handleCreateVacancy}
+          handleDeleteVacancy={handleDeleteVacancy}
           vacancies={vacancies}
           resumes={resumes}
           usersById={usersById}
@@ -562,6 +655,7 @@ function HomePage() {
           resumeForm={resumeForm}
           setResumeForm={setResumeForm}
           handleSaveResume={handleSaveResume}
+          handleDeleteResume={handleDeleteResume}
           vacancies={vacancies}
           usersById={usersById}
           applyToVacancy={applyToVacancy}
