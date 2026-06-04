@@ -50,15 +50,6 @@ function Header() {
             <span style={{ color: '#6b7280' }}>
               Привет, <strong>{user.name}</strong>!
             </span>
-            
-            <Link to="/profile" style={{
-              color: '#374151',
-              textDecoration: 'none',
-              fontWeight: '500'
-            }}>
-              Профиль
-            </Link>
-            
             <button
               onClick={handleLogout}
               style={{
