@@ -1,28 +1,240 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useAuthStore from '../stores/authStore'
 import toast from 'react-hot-toast'
-import { Rate } from 'antd';
+import { Rate } from 'antd'
 import './HomePage.css'
 
 const API_URL = 'http://localhost:4000'
 
+//компонент для отображения состояний загрузки и ошибок
 function MessageState({ children }) {
-  return <div className="home-page__state">{children}</div>
+  return <div className="dashboard-state">{children}</div>
 }
 
 function ErrorState({ error, onRetry }) {
   return (
-    <div className="home-page__state">
+    <div className="dashboard-state">
       <p>Ошибка: {error}</p>
-      <button onClick={onRetry} className="home-page__button">Повторить</button>
+      <button onClick={onRetry} className="btn-primary">Повторить</button>
     </div>
   )
 }
 
-function Section({ children }) {
-  return <section className="home-page__section">{children}</section>
+//боковая панель навигации для соискателя
+function SeekerSidebar({ user, ownResume, applicationsCount, invitationsCount }) {
+  return (
+    <aside className="dashboard-sidebar">
+      <div className="sidebar-nav">
+        <a className="nav-item nav-item--active">
+          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>dashboard</span>
+          Панель управления
+        </a>
+        <a className="nav-item">
+          <span className="material-symbols-outlined">description</span>
+          Мои резюме
+        </a>
+        <a className="nav-item">
+          <span className="material-symbols-outlined">assignment_turned_in</span>
+          Отклики ({applicationsCount})
+        </a>
+        <a className="nav-item">
+          <span className="material-symbols-outlined">mail</span>
+          Приглашения ({invitationsCount})
+        </a>
+        <a className="nav-item">
+          <span className="material-symbols-outlined">settings</span>
+          Настройки
+        </a>
+      </div>
+
+      {/*мини-карточка профиля соискателя*/}
+      <div className="profile-mini-card">
+        <div className="profile-mini-header">
+          <div className="profile-avatar">
+            {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+          </div>
+          <div>
+            <p className="profile-name">{user?.name || 'Пользователь'}</p>
+            <p className="profile-title">{ownResume?.title || 'Соискатель'}</p>
+          </div>
+        </div>
+        <div className="profile-progress">
+          <div className="profile-progress-header">
+            <span className="text-label-sm">Заполненность профиля</span>
+            <span className="text-label-sm text-primary">
+              {ownResume ? '85%' : '0%'}
+            </span>
+          </div>
+          <div className="progress-bar">
+            <div className="progress-bar-fill" style={{ width: ownResume ? '85%' : '0%' }}></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  )
 }
 
+//боковая панель навигации для компании
+function CompanySidebar({ user, vacanciesCount, applicationsCount }) {
+  return (
+    <aside className="dashboard-sidebar">
+      <div className="sidebar-nav">
+        <a className="nav-item nav-item--active">
+          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>dashboard</span>
+          Панель управления
+        </a>
+        <a className="nav-item">
+          <span className="material-symbols-outlined">work</span>
+          Мои вакансии ({vacanciesCount})
+        </a>
+        <a className="nav-item">
+          <span className="material-symbols-outlined">assignment_turned_in</span>
+          Отклики ({applicationsCount})
+        </a>
+        <a className="nav-item">
+          <span className="material-symbols-outlined">group</span>
+          Кандидаты
+        </a>
+        <a className="nav-item">
+          <span className="material-symbols-outlined">settings</span>
+          Настройки
+        </a>
+      </div>
+
+      {/*мини-карточка профиля компании*/}
+      <div className="profile-mini-card">
+        <div className="profile-mini-header">
+          <div className="profile-avatar profile-avatar--company">
+            {user?.name?.charAt(0)?.toUpperCase() || 'C'}
+          </div>
+          <div>
+            <p className="profile-name">{user?.name || 'Компания'}</p>
+            <p className="profile-title">Работодатель</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+  )
+}
+
+//карточка статуса резюме для соискателя
+function ResumeStatusCard({ ownResume, onEdit }) {
+  return (
+    <div className="stat-card stat-card--resume">
+      <div className="stat-card-content">
+        <div className="stat-card-icon stat-card-icon--secondary">
+          <span className="material-symbols-outlined">article</span>
+        </div>
+        <div>
+          <h3 className="stat-card-title">
+            {ownResume ? 'Основное резюме' : 'Резюме не создано'}
+          </h3>
+          <p className="stat-card-subtitle">
+            {ownResume 
+              ? `Активно • Обновлено недавно` 
+              : 'Создайте резюме, чтобы откликаться на вакансии'}
+          </p>
+        </div>
+      </div>
+      <div className="stat-card-actions">
+        {ownResume && (
+          <button className="btn-outline" onClick={onEdit}>
+            Предпросмотр
+          </button>
+        )}
+        <button className="btn-primary">
+          {ownResume ? 'Редактировать' : 'Создать резюме'}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+//карточка статистики приглашений
+function InvitationsCard({ count, delta }) {
+  return (
+    <div className="stat-card stat-card--primary">
+      <p className="stat-card-label">Всего приглашений</p>
+      <p className="stat-card-number">{count}</p>
+      <p className="stat-card-delta">
+        <span className="material-symbols-outlined">trending_up</span>
+        +{delta} на этой неделе
+      </p>
+    </div>
+  )
+}
+
+//карточка статистики вакансий для компании
+function VacanciesCard({ count }) {
+  return (
+    <div className="stat-card stat-card--primary">
+      <p className="stat-card-label">Активных вакансий</p>
+      <p className="stat-card-number">{count}</p>
+      <p className="stat-card-delta">
+        <span className="material-symbols-outlined">work</span>
+        Опубликованных
+      </p>
+    </div>
+  )
+}
+
+//карточка отклика с статусом
+function ApplicationCard({ application, vacancy, company }) {
+  const statusClass = application.status === 'new' 
+    ? 'status-badge--new' 
+    : 'status-badge--interview'
+  
+  const statusText = application.status === 'new' 
+    ? 'На рассмотрении' 
+    : 'Интервью'
+
+  return (
+    <div className="application-card">
+      <div className="application-card-icon">
+        {vacancy?.title?.charAt(0)?.toUpperCase() || '?'}
+      </div>
+      <div className="application-card-content">
+        <h4 className="application-card-title">{vacancy?.title || 'Вакансия'}</h4>
+        <p className="application-card-subtitle">
+          {company?.name || 'Компания'} • Отклик отправлен
+        </p>
+      </div>
+      <span className={`status-badge ${statusClass}`}>{statusText}</span>
+      <button className="icon-button">
+        <span className="material-symbols-outlined">more_vert</span>
+      </button>
+    </div>
+  )
+}
+
+//карточка вакансии для списка доступных
+function VacancyCard({ vacancy, company, onApply }) {
+  return (
+    <div className="vacancy-card">
+      <div className="vacancy-card-header">
+        <div className="vacancy-card-icon">
+          <span className="material-symbols-outlined">work</span>
+        </div>
+        <button className="icon-button">
+          <span className="material-symbols-outlined">bookmark</span>
+        </button>
+      </div>
+      <h3 className="vacancy-card-title">{vacancy.title}</h3>
+      <p className="vacancy-card-company">{company?.name || 'Компания'}</p>
+      <div className="vacancy-card-tags">
+        <span className="vacancy-tag">{vacancy.location || 'Не указано'}</span>
+        <span className="vacancy-tag vacancy-tag--salary">
+          {vacancy.salary || 'Зарплата не указана'}
+        </span>
+      </div>
+      <button className="btn-outline btn-full" onClick={() => onApply(vacancy)}>
+        Быстрый отклик
+      </button>
+    </div>
+  )
+}
+
+//панель компании с формами и списками
 function CompanyDashboard({
   userId,
   vacancyForm,
@@ -35,95 +247,162 @@ function CompanyDashboard({
   inviteCandidate,
   incomingApplications
 }) {
-  return (
-    <>
-      <Section>
-        <h2>Разместить вакансию</h2>
-        <form onSubmit={handleCreateVacancy} className="home-page__form">
-          <input
-            className = "home-page__input"
-            required
-            placeholder="Название вакансии"
-            value={vacancyForm.title}
-            onChange={(event) => setVacancyForm((prev) => ({ ...prev, title: event.target.value }))}
-          />
-          <input
-            className = "home-page__input"
-            required
-            placeholder="Локация"
-            value={vacancyForm.location}
-            onChange={(event) => setVacancyForm((prev) => ({ ...prev, location: event.target.value }))}
-          />
-          <input
-            className = "home-page__input"
-            required
-            placeholder="Зарплата"
-            value={vacancyForm.salary}
-            onChange={(event) => setVacancyForm((prev) => ({ ...prev, salary: event.target.value }))}
-          />
-          <textarea
-            required
-            rows={3}
-            placeholder="Описание"
-            value={vacancyForm.description}
-            onChange={(event) => setVacancyForm((prev) => ({ ...prev, description: event.target.value }))}
-          />
-          <button type="submit" className="home-page__button">Опубликовать</button>
-        </form>
-      </Section>
+  const myVacancies = vacancies.filter((v) => v.companyId === userId)
 
-      <Section>
-        <h2>Мои вакансии</h2>
-        {vacancies.filter((vacancy) => vacancy.companyId === userId).length === 0 && (
-          <p>У вас пока нет вакансий.</p>
-        )}
-        {vacancies.filter((vacancy) => vacancy.companyId === userId).map((vacancy) => (
-          <article key={vacancy.id} className="home-page__item">
-            <div className="home-page__item-header">
-              <strong>{vacancy.title}</strong>
-              <button 
-                onClick={() => handleDeleteVacancy(vacancy.id)} 
-                className="home-page__button home-page__button--danger"
+  return (
+    <div className="dashboard-grid">
+      <div className="dashboard-main">
+        {/*форма создания вакансии*/}
+        <section className="dashboard-section">
+          <div className="section-header">
+            <h2 className="section-title">Разместить вакансию</h2>
+            <span className="material-symbols-outlined text-primary">add_circle</span>
+          </div>
+          <form onSubmit={handleCreateVacancy} className="dashboard-form">
+            <input
+              className="form-input"
+              required
+              placeholder="Название вакансии"
+              value={vacancyForm.title}
+              onChange={(e) => setVacancyForm((prev) => ({ ...prev, title: e.target.value }))}
+            />
+            <div className="form-row">
+              <input
+                className="form-input"
+                required
+                placeholder="Локация"
+                value={vacancyForm.location}
+                onChange={(e) => setVacancyForm((prev) => ({ ...prev, location: e.target.value }))}
+              />
+              <input
+                className="form-input"
+                required
+                placeholder="Зарплата"
+                value={vacancyForm.salary}
+                onChange={(e) => setVacancyForm((prev) => ({ ...prev, salary: e.target.value }))}
+              />
+            </div>
+            <textarea
+              className="form-input"
+              required
+              rows={3}
+              placeholder="Описание вакансии"
+              value={vacancyForm.description}
+              onChange={(e) => setVacancyForm((prev) => ({ ...prev, description: e.target.value }))}
+            />
+            <button type="submit" className="btn-primary">
+              <span className="material-symbols-outlined">publish</span>
+              Опубликовать
+            </button>
+          </form>
+        </section>
+
+        {/*список моих вакансий*/}
+        <section className="dashboard-section">
+          <div className="section-header">
+            <h2 className="section-title">Мои вакансии</h2>
+            <span className="section-count">{myVacancies.length}</span>
+          </div>
+          {myVacancies.length === 0 && (
+            <div className="empty-state">
+              <span className="material-symbols-outlined">work_off</span>
+              <p>У вас пока нет вакансий</p>
+            </div>
+          )}
+          {myVacancies.map((vacancy) => (
+            <article key={vacancy.id} className="list-item">
+              <div className="list-item-icon">
+                {vacancy.title.charAt(0).toUpperCase()}
+              </div>
+              <div className="list-item-content">
+                <h4 className="list-item-title">{vacancy.title}</h4>
+                <p className="list-item-text">{vacancy.description}</p>
+                <div className="list-item-meta">
+                  <span className="material-symbols-outlined">location_on</span>
+                  {vacancy.location}
+                  <span className="material-symbols-outlined">payments</span>
+                  {vacancy.salary}
+                </div>
+              </div>
+              <button
+                onClick={() => handleDeleteVacancy(vacancy.id)}
+                className="btn-danger btn-sm"
               >
+                <span className="material-symbols-outlined">delete</span>
                 Удалить
               </button>
+            </article>
+          ))}
+        </section>
+      </div>
+
+      <div className="dashboard-aside">
+        {/*резюме кандидатов*/}
+        <section className="dashboard-section">
+          <div className="section-header">
+            <h2 className="section-title">Резюме кандидатов</h2>
+            <span className="section-count">{resumes.length}</span>
+          </div>
+          {resumes.length === 0 && (
+            <div className="empty-state">
+              <span className="material-symbols-outlined">description</span>
+              <p>Пока нет резюме</p>
             </div>
-            <p className="home-page__text">{vacancy.description}</p>
-            <small>{vacancy.location} · {vacancy.salary}</small>
-          </article>
-        ))}
-      </Section>
+          )}
+          {resumes.map((resume) => (
+            <article key={resume.id} className="list-item">
+              <div className="list-item-icon list-item-icon--accent">
+                {resume.title.charAt(0).toUpperCase()}
+              </div>
+              <div className="list-item-content">
+                <h4 className="list-item-title">{resume.title}</h4>
+                <p className="list-item-subtitle">
+                  {usersById[resume.userId]?.name || 'Кандидат'}
+                </p>
+                <p className="list-item-text">Навыки: {resume.skills}</p>
+              </div>
+              <button
+                onClick={() => inviteCandidate(resume)}
+                className="btn-primary btn-sm"
+              >
+                Пригласить
+              </button>
+            </article>
+          ))}
+        </section>
 
-      <Section>
-        <h2>Резюме кандидатов</h2>
-        {resumes.map((resume) => (
-          <article key={resume.id} className="home-page__item">
-            <strong>{resume.title}</strong> — {usersById[resume.userId]?.name || 'Кандидат'}
-            <p className="home-page__text">Навыки: {resume.skills}</p>
-            <p className="home-page__text">Опыт: {resume.experience}</p>
-            <button onClick={() => inviteCandidate(resume)} className="home-page__button">Пригласить</button>
-          </article>
-        ))}
-      </Section>
-
-      <Section>
-        <h2>Отклики на мои вакансии</h2>
-        {incomingApplications.length === 0 && <p>Пока нет откликов.</p>}
-        {incomingApplications.map((application) => (
-          <article key={application.id} className="home-page__item">
-            <p className="home-page__meta">
-              Вакансия: <strong>{vacancies.find((vacancy) => vacancy.id === application.vacancyId)?.title}</strong>
-            </p>
-            <p className="home-page__meta">
-              Кандидат: {usersById[application.seekerId]?.name || 'Соискатель'}
-            </p>
-          </article>
-        ))}
-      </Section>
-    </>
+        {/*отклики на мои вакансии*/}
+        <section className="dashboard-section">
+          <div className="section-header">
+            <h2 className="section-title">Отклики</h2>
+            <span className="section-count">{incomingApplications.length}</span>
+          </div>
+          {incomingApplications.length === 0 && (
+            <div className="empty-state">
+              <span className="material-symbols-outlined">inbox</span>
+              <p>Пока нет откликов</p>
+            </div>
+          )}
+          {incomingApplications.map((app) => (
+            <article key={app.id} className="list-item">
+              <div className="list-item-content">
+                <h4 className="list-item-title">
+                  {vacancies.find((v) => v.id === app.vacancyId)?.title}
+                </h4>
+                <p className="list-item-subtitle">
+                  {usersById[app.seekerId]?.name || 'Соискатель'}
+                </p>
+              </div>
+              <span className="status-badge status-badge--new">Новый</span>
+            </article>
+          ))}
+        </section>
+      </div>
+    </div>
   )
 }
 
+//панель соискателя с формами и списками
 function SeekerDashboard({
   ownResume,
   resumeForm,
@@ -142,224 +421,261 @@ function SeekerDashboard({
   hasAppliedToCompany,
   reviews
 }) {
-  return (
-    <>
-      <Section>
-        <h2>{ownResume ? 'Обновить резюме' : 'Создать резюме'}</h2>
-        <form onSubmit={handleSaveResume} className="home-page__form">
-          <input
-            className = "home-page__input"
-            required
-            placeholder="Желаемая должность"
-            value={resumeForm.title}
-            onChange={(event) => setResumeForm((prev) => ({ ...prev, title: event.target.value }))}
-          />
-          <input
-            className = "home-page__input"
-            required
-            placeholder="Навыки (через запятую)"
-            value={resumeForm.skills}
-            onChange={(event) => setResumeForm((prev) => ({ ...prev, skills: event.target.value }))}
-          />
-          <textarea
-            className = "home-page__input"
-            required
-            rows={3}
-            placeholder="Опыт"
-            value={resumeForm.experience}
-            onChange={(event) => setResumeForm((prev) => ({ ...prev, experience: event.target.value }))}
-          />
-          <div className="home-page__form-actions">
-            <button type="submit" className="home-page__button">
-              {ownResume ? 'Сохранить изменения' : 'Создать резюме'}
-            </button>
-            {ownResume && (
-              <button 
-                type="button" 
-                onClick={handleDeleteResume}
-                className="home-page__button home-page__button--danger"
-              >
-                Удалить резюме
-              </button>
-            )}
-          </div>
-        </form>
-      </Section>
-
-      <Section>
-        <h2>Доступные вакансии</h2>
-        {vacancies.map((vacancy) => (
-          <article key={vacancy.id} className="home-page__item">
-            <strong>{vacancy.title}</strong> — {usersById[vacancy.companyId]?.name || 'Компания'}
-            <p className="home-page__text">{vacancy.description}</p>
-            <small>{vacancy.location} · {vacancy.salary}</small>
-            <div className="home-page__actions">
-              <button onClick={() => applyToVacancy(vacancy)} className="home-page__button">Откликнуться</button>
-            </div>
-          </article>
-        ))}
-      </Section>
-
-      <Section>
-        <h2>Мои отклики и приглашения</h2>
-        {applications
-          .filter((application) => application.seekerId === userId)
-          .map((application) => (
-            <article key={application.id} className="home-page__item">
-              <p className="home-page__meta">
-                {application.type === 'vacancy_application' ? 'Отклик на вакансию' : 'Приглашение от компании'}
-              </p>
-              {application.vacancyId && (
-                <p className="home-page__meta">
-                  Вакансия: {vacancies.find((vacancy) => vacancy.id === application.vacancyId)?.title}
-                </p>
-              )}
-              <p className="home-page__meta">
-                Компания: {usersById[application.companyId]?.name || 'Компания'}
-              </p>
-            </article>
-          ))}
-      </Section>
-
-      <Section>
-        <h2>Оставить отзыв о компании</h2>
-        {companyList.length === 0 && <p>Нет доступных компаний для отзыва.</p>}
-        {companyList.length > 0 && (
-          <>
-            <select
-              required
-              value={reviewForm.companyId}
-              onChange={(event) => setReviewForm((prev) => ({ ...prev, companyId: event.target.value }))}
-              className="home-page__input"
-            >
-              <option value="" disabled>
-                Выберите компанию
-              </option>
-              {companyList.map((company) => (
-                <option key={company.id} value={company.id}>
-                  {company.name}
-                </option>
-              ))}
-            </select>
-            
-            {reviewForm.companyId && !hasAppliedToCompany(Number(reviewForm.companyId)) && (
-              <div className="home-page__warning">
-                <p>Чтобы оставить отзыв, сначала откликнитесь на вакансию этой компании.</p>
-              </div>
-            )}
-            
-            {reviewForm.companyId && hasAppliedToCompany(Number(reviewForm.companyId)) && (
-              <>
-                {reviews.some(
-                  (r) => r.authorId === userId && r.companyId === Number(reviewForm.companyId)
-                ) ? (
-                  <div className="home-page__warning">
-                    <p>Вы уже оставили отзыв на эту компанию. Вы можете отредактировать его в списке ниже.</p>
-                  </div>
-                ) : (
-                  <form onSubmit={submitReview} className="home-page__form">
-                    <div className="home-page__rating">
-                      <label>Оценка:</label>
-                      <Rate
-                        value={Number(reviewForm.rating)}
-                        onChange={(value) => setReviewForm((prev) => ({ ...prev, rating: value }))}
-                      />
-                    </div>
-                    <textarea
-                      className="home-page__input"
-                      required
-                      rows={3}
-                      placeholder="Напишите ваш отзыв"
-                      value={reviewForm.text}
-                      onChange={(event) => setReviewForm((prev) => ({ ...prev, text: event.target.value }))}
-                    />
-                    <button type="submit" className="home-page__button">Опубликовать отзыв</button>
-                  </form>
-                )}
-              </>
-            )}
-          </>
-        )}
-</Section>
-    </>
+  //фильтруем отклики и приглашения текущего пользователя
+  const myApplications = applications.filter(
+    (app) => app.seekerId === userId && app.type === 'vacancy_application'
   )
-}
+  const myInvitations = applications.filter(
+    (app) => app.seekerId === userId && app.type === 'resume_invite'
+  )
 
-function ReviewsSection({ 
-  reviews, 
-  usersById, 
-  userId, 
-  editingReviewId, 
-  editReviewForm, 
-  setEditReviewForm, 
-  startEditReview, 
-  cancelEditReview, 
-  saveEditReview,
-  handleDeleteReview
-}) {
   return (
-    <Section>
-      <h2>Отзывы о компаниях</h2>
-      {reviews.length === 0 && <p>Пока отзывов нет.</p>}
-      {reviews.map((review) => (
-        <article key={review.id} className="home-page__item">
-          <p className="home-page__meta">
-            <strong>{usersById[review.companyId]?.name || 'Компания'}</strong>
-            <Rate value={review.rating} disabled style={{ fontSize: '14px', marginLeft: '8px' }} />
-          </p>
-          
-          {editingReviewId === review.id ? (
-          <div className="home-page__edit-form">
-            <div className="home-page__edit-rating">
-              <label>Оценка:</label>
-              <Rate
-                value={Number(editReviewForm.rating)}
-                onChange={(value) => setEditReviewForm((prev) => ({ ...prev, rating: value }))}
-              />
-            </div>
-            <textarea
-              rows={3}
-              value={editReviewForm.text}
-              onChange={(e) => setEditReviewForm((prev) => ({ ...prev, text: e.target.value }))}
-              className="home-page__edit-textarea"
-            />
-            <div className="home-page__edit-actions">
-              <button onClick={() => saveEditReview(review.id)} className="home-page__button">
-                Сохранить
-              </button>
-              <button onClick={cancelEditReview} className="home-page__button home-page__button--cancel">
-                Отмена
-              </button>
-            </div>
+    <div className="dashboard-grid">
+      <div className="dashboard-main">
+        {/*форма резюме*/}
+        <section className="dashboard-section">
+          <div className="section-header">
+            <h2 className="section-title">
+              {ownResume ? 'Обновить резюме' : 'Создать резюме'}
+            </h2>
+            <span className="material-symbols-outlined text-primary">description</span>
           </div>
-        ) : (
+          <form onSubmit={handleSaveResume} className="dashboard-form">
+            <input
+              className="form-input"
+              required
+              placeholder="Желаемая должность"
+              value={resumeForm.title}
+              onChange={(e) => setResumeForm((prev) => ({ ...prev, title: e.target.value }))}
+            />
+            <input
+              className="form-input"
+              required
+              placeholder="Навыки (через запятую)"
+              value={resumeForm.skills}
+              onChange={(e) => setResumeForm((prev) => ({ ...prev, skills: e.target.value }))}
+            />
+            <textarea
+              className="form-input"
+              required
+              rows={3}
+              placeholder="Опыт работы"
+              value={resumeForm.experience}
+              onChange={(e) => setResumeForm((prev) => ({ ...prev, experience: e.target.value }))}
+            />
+            <div className="form-actions">
+              <button type="submit" className="btn-primary">
+                <span className="material-symbols-outlined">save</span>
+                {ownResume ? 'Сохранить изменения' : 'Создать резюме'}
+              </button>
+              {ownResume && (
+                <button
+                  type="button"
+                  onClick={handleDeleteResume}
+                  className="btn-danger"
+                >
+                  <span className="material-symbols-outlined">delete</span>
+                  Удалить
+                </button>
+              )}
+            </div>
+          </form>
+        </section>
+
+        {/*отклики и приглашения с табами*/}
+        <section className="dashboard-section">
+          <div className="tabs">
+            <button className="tab tab--active">
+              Отклики ({myApplications.length})
+            </button>
+            <button className="tab">
+              Приглашения ({myInvitations.length})
+            </button>
+            <button className="tab">Архив</button>
+          </div>
+          
+          {myApplications.length === 0 && myInvitations.length === 0 ? (
+            <div className="empty-state">
+              <span className="material-symbols-outlined">inbox</span>
+              <p>У вас пока нет откликов или приглашений</p>
+            </div>
+          ) : (
+            <div className="applications-list">
+              {myApplications.map((app) => (
+                <ApplicationCard
+                  key={app.id}
+                  application={app}
+                  vacancy={vacancies.find((v) => v.id === app.vacancyId)}
+                  company={usersById[app.companyId]}
+                />
+              ))}
+              {myInvitations.map((app) => (
+                <ApplicationCard
+                  key={app.id}
+                  application={{ ...app, status: 'interview' }}
+                  vacancy={vacancies.find((v) => v.id === app.vacancyId)}
+                  company={usersById[app.companyId]}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/*рекомендованные вакансии*/}
+        <section className="dashboard-section">
+          <div className="section-header">
+            <h2 className="section-title">Рекомендовано вам</h2>
+            <a href="#" className="section-link">
+              Смотреть все
+              <span className="material-symbols-outlined">arrow_forward</span>
+            </a>
+          </div>
+          <div className="vacancies-grid">
+            {vacancies.slice(0, 4).map((vacancy) => (
+              <VacancyCard
+                key={vacancy.id}
+                vacancy={vacancy}
+                company={usersById[vacancy.companyId]}
+                onApply={applyToVacancy}
+              />
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <div className="dashboard-aside">
+        {/*форма отзыва*/}
+        <section className="dashboard-section">
+          <div className="section-header">
+            <h2 className="section-title">Оставить отзыв</h2>
+            <span className="material-symbols-outlined text-primary">rate_review</span>
+          </div>
+          
+          {companyList.length === 0 ? (
+            <div className="empty-state">
+              <p>Нет доступных компаний для отзыва</p>
+            </div>
+          ) : (
             <>
-              <p className="home-page__meta">{review.text}</p>
-              <small>Автор: {usersById[review.authorId]?.name || 'Пользователь'}</small>
-              {review.authorId === userId && (
-                <div className="home-page__review-actions">
-                  <button 
-                    onClick={() => startEditReview(review)} 
-                    className="home-page__button home-page__button--edit"
-                  >
-                    Редактировать
-                  </button>
-                  <button 
-                    onClick={() => handleDeleteReview(review.id)} 
-                    className="home-page__button home-page__button--danger"
-                  >
-                    Удалить
-                  </button>
+              <select
+                className="form-input"
+                value={reviewForm.companyId}
+                onChange={(e) => setReviewForm((prev) => ({ ...prev, companyId: e.target.value }))}
+              >
+                <option value="" disabled>Выберите компанию</option>
+                {companyList.map((company) => (
+                  <option key={company.id} value={company.id}>
+                    {company.name}
+                  </option>
+                ))}
+              </select>
+              
+              {reviewForm.companyId && !hasAppliedToCompany(Number(reviewForm.companyId)) && (
+                <div className="warning-box">
+                  <span className="material-symbols-outlined">info</span>
+                  <p>Чтобы оставить отзыв, сначала откликнитесь на вакансию этой компании</p>
                 </div>
+              )}
+              
+              {reviewForm.companyId && hasAppliedToCompany(Number(reviewForm.companyId)) && (
+                <>
+                  {reviews.some(
+                    (r) => r.authorId === userId && r.companyId === Number(reviewForm.companyId)
+                  ) ? (
+                    <div className="warning-box">
+                      <span className="material-symbols-outlined">check_circle</span>
+                      <p>Вы уже оставили отзыв. Отредактируйте его в списке ниже</p>
+                    </div>
+                  ) : (
+                    <form onSubmit={submitReview} className="dashboard-form">
+                      <div className="rating-input">
+                        <label>Оценка:</label>
+                        <Rate
+                          value={Number(reviewForm.rating)}
+                          onChange={(value) => setReviewForm((prev) => ({ ...prev, rating: value }))}
+                        />
+                      </div>
+                      <textarea
+                        className="form-input"
+                        required
+                        rows={3}
+                        placeholder="Напишите ваш отзыв"
+                        value={reviewForm.text}
+                        onChange={(e) => setReviewForm((prev) => ({ ...prev, text: e.target.value }))}
+                      />
+                      <button type="submit" className="btn-primary btn-full">
+                        Опубликовать отзыв
+                      </button>
+                    </form>
+                  )}
+                </>
               )}
             </>
           )}
-        </article>
-      ))}
-    </Section>
+        </section>
+
+        {/*последние отзывы*/}
+        <section className="dashboard-section">
+          <div className="section-header">
+            <h2 className="section-title">Последние отзывы</h2>
+          </div>
+          {reviews.length === 0 ? (
+            <div className="empty-state">
+              <p>Пока отзывов нет</p>
+            </div>
+          ) : (
+            <div className="reviews-list">
+              {reviews.slice(0, 3).map((review) => (
+                <article key={review.id} className="review-card">
+                  <div className="review-card-header">
+                    <h4 className="review-card-company">
+                      {usersById[review.companyId]?.name || 'Компания'}
+                    </h4>
+                    <Rate value={review.rating} disabled style={{ fontSize: '14px' }} />
+                  </div>
+                  <p className="review-card-text">"{review.text}"</p>
+                  <div className="review-card-footer">
+                    <small className="review-card-author">
+                      — {usersById[review.authorId]?.name || 'Пользователь'}
+                    </small>
+                    {review.authorId === userId && (
+                      <ReviewActions 
+                        review={review}
+                      />
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
+    </div>
   )
 }
 
+//компонент действий с отзывом (редактирование/удаление)
+function ReviewActions({ review }) {
+  //используем кастомное событие для связи с родительским компонентом
+  return (
+    <div className="review-actions">
+      <button 
+        className="btn-sm btn-outline"
+        onClick={() => window.dispatchEvent(new CustomEvent('editReview', { detail: review }))}
+      >
+        <span className="material-symbols-outlined">edit</span>
+      </button>
+      <button 
+        className="btn-sm btn-danger"
+        onClick={() => window.dispatchEvent(new CustomEvent('deleteReview', { detail: review.id }))}
+      >
+        <span className="material-symbols-outlined">delete</span>
+      </button>
+    </div>
+  )
+}
+
+//главный компонент страницы
 function HomePage() {
   const { user, token } = useAuthStore()
   const role = user?.role || 'seeker'
@@ -397,18 +713,44 @@ function HomePage() {
   })
 
   const companyList = useMemo(
-    () => users.filter((currentUser) => currentUser.role === 'company'),
+    () => users.filter((u) => u.role === 'company'),
     [users]
   )
   const usersById = useMemo(
-    () => Object.fromEntries(users.map((currentUser) => [currentUser.id, currentUser])),
+    () => Object.fromEntries(users.map((u) => [u.id, u])),
     [users]
   )
   const ownResume = useMemo(
-    () => resumes.find((resume) => resume.userId === userId),
+    () => resumes.find((r) => r.userId === userId),
     [resumes, userId]
   )
 
+  //подсчёт откликов и приглашений для сайдбара
+  const myApplicationsCount = useMemo(
+    () => applications.filter((a) => a.seekerId === userId && a.type === 'vacancy_application').length,
+    [applications, userId]
+  )
+  const myInvitationsCount = useMemo(
+    () => applications.filter((a) => a.seekerId === userId && a.type === 'resume_invite').length,
+    [applications, userId]
+  )
+  const myVacanciesCount = useMemo(
+    () => vacancies.filter((v) => v.companyId === userId).length,
+    [vacancies, userId]
+  )
+  const incomingApplicationsCount = useMemo(
+    () => {
+      const companyVacancyIds = vacancies
+        .filter((v) => v.companyId === userId)
+        .map((v) => v.id)
+      return applications.filter(
+        (a) => a.type === 'vacancy_application' && companyVacancyIds.includes(a.vacancyId)
+      ).length
+    },
+    [applications, vacancies, userId]
+  )
+
+  //функция для запросов с авторизацией через токен
   const fetchWithAuth = async (path, options = {}) => {
     const headers = {
       ...(options.body ? { 'Content-Type': 'application/json' } : {}),
@@ -429,11 +771,12 @@ function HomePage() {
     return response
   }
 
+  //загрузка всех данных с сервера одним запросом
   const loadData = useCallback(async () => {
     setLoading(true)
     setError('')
     try {
-      const [vacanciesResponse, resumesResponse, applicationsResponse, reviewsResponse, usersResponse] =
+      const [vacanciesRes, resumesRes, appsRes, reviewsRes, usersRes] =
         await Promise.all([
           fetch(`${API_URL}/vacancies`),
           fetch(`${API_URL}/resumes`),
@@ -442,31 +785,26 @@ function HomePage() {
           fetch(`${API_URL}/users`)
         ])
 
-      const hasFailed =
-        !vacanciesResponse.ok ||
-        !resumesResponse.ok ||
-        !applicationsResponse.ok ||
-        !reviewsResponse.ok ||
-        !usersResponse.ok
-
-      if (hasFailed) {
+      if (!vacanciesRes.ok || !resumesRes.ok || !appsRes.ok || !reviewsRes.ok || !usersRes.ok) {
         throw new Error('Не удалось загрузить данные')
       }
 
-      const [vacanciesData, resumesData, applicationsData, reviewsData, usersData] = await Promise.all([
-        vacanciesResponse.json(),
-        resumesResponse.json(),
-        applicationsResponse.json(),
-        reviewsResponse.json(),
-        usersResponse.json()
+      const [vacanciesData, resumesData, appsData, reviewsData, usersData] = await Promise.all([
+        vacanciesRes.json(),
+        resumesRes.json(),
+        appsRes.json(),
+        reviewsRes.json(),
+        usersRes.json()
       ])
 
       setVacancies(vacanciesData)
       setResumes(resumesData)
-      setApplications(applicationsData)
+      setApplications(appsData)
       setReviews(reviewsData)
       setUsers(usersData)
-      const currentOwnResume = resumesData.find((resume) => resume.userId === userId)
+      
+      //синхронизируем форму резюме с текущим резюме пользователя
+      const currentOwnResume = resumesData.find((r) => r.userId === userId)
       setResumeForm({
         title: currentOwnResume?.title || '',
         skills: currentOwnResume?.skills || '',
@@ -475,7 +813,7 @@ function HomePage() {
       setReviewForm((prev) => ({
         ...prev,
         companyId:
-          prev.companyId || String(usersData.find((currentUser) => currentUser.role === 'company')?.id || '')
+          prev.companyId || String(usersData.find((u) => u.role === 'company')?.id || '')
       }))
     } catch (loadError) {
       setError(loadError.message)
@@ -485,13 +823,14 @@ function HomePage() {
   }, [userId])
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      loadData()
-    }, 0)
+  //откладываем вызов на следующий тик event loop, чтобы избежать каскадных рендеров
+  const timeoutId = setTimeout(() => {
+    loadData()
+  }, 0)
 
-    return () => clearTimeout(timeoutId)
-  }, [loadData])
-
+  return () => clearTimeout(timeoutId)
+}, [loadData])
+  //обработчик создания вакансии
   const handleCreateVacancy = async (event) => {
     event.preventDefault()
     try {
@@ -503,106 +842,17 @@ function HomePage() {
           createdAt: new Date().toISOString()
         })
       })
-
       setVacancyForm({ title: '', description: '', salary: '', location: '' })
       await loadData()
-    } catch (createError) {
-      toast.error(createError.message)
-    }
-  }
-
-const startEditReview = (review) => {
-    setEditingReviewId(review.id)
-    setEditReviewForm({
-      rating: review.rating,
-      text: review.text
-    })
-  }
-
-  const cancelEditReview = () => {
-    setEditingReviewId(null)
-    setEditReviewForm({ rating: 5, text: '' })
-  }
-
-  const saveEditReview = async (reviewId) => {
-  const originalReview = reviews.find((r) => r.id === reviewId)
-  if (!originalReview) return
-
-  try {
-    await fetchWithAuth(`/reviews/${reviewId}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        ...originalReview,
-        rating: Number(editReviewForm.rating),
-        text: editReviewForm.text,
-        userId: userId
-      })
-    })
-    await loadData()
-    setEditingReviewId(null)
-    toast.success('Отзыв обновлён')
-  } catch (error) {
-    toast.error(error.message)
-  }
-}
-
-  const confirmAction = (message, onConfirm) => {
-  toast(
-    (t) => (
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <span>{message}</span>
-        <button
-          onClick={() => {
-            toast.dismiss(t.id)
-            onConfirm()
-          }}
-          style={{
-            padding: '6px 12px',
-            backgroundColor: '#ef4444',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '13px'
-          }}
-        >
-          Подтвердить
-        </button>
-        <button
-          onClick={() => toast.dismiss(t.id)}
-          style={{
-            padding: '6px 12px',
-            backgroundColor: '#e5e7eb',
-            color: '#374151',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '13px'
-          }}
-        >
-          Отмена
-        </button>
-      </div>
-    ),
-    { duration: 5000 }
-  )
-}
-
-const handleDeleteVacancy = (vacancyId) => {
-  confirmAction('Удалить вакансию?', async () => {
-    try {
-      await fetchWithAuth(`/vacancies/${vacancyId}`, { method: 'DELETE' })
-      await loadData()
-      toast.success('Вакансия удалена')
+      toast.success('Вакансия опубликована')
     } catch (err) {
       toast.error(err.message)
     }
-  })
-}
+  }
 
+  //обработчик сохранения/обновления резюме
   const handleSaveResume = async (event) => {
     event.preventDefault()
-
     const payload = {
       ...resumeForm,
       userId,
@@ -613,10 +863,7 @@ const handleDeleteVacancy = (vacancyId) => {
       if (ownResume) {
         await fetchWithAuth(`/resumes/${ownResume.id}`, {
           method: 'PUT',
-          body: JSON.stringify({
-            ...ownResume,
-            ...payload
-          })
+          body: JSON.stringify({ ...ownResume, ...payload })
         })
       } else {
         await fetchWithAuth('/resumes', {
@@ -627,55 +874,20 @@ const handleDeleteVacancy = (vacancyId) => {
           })
         })
       }
-
       await loadData()
-    } catch (saveError) {
-      toast.error(saveError.message)
+      toast.success(ownResume ? 'Резюме обновлено' : 'Резюме создано')
+    } catch (err) {
+      toast.error(err.message)
     }
   }
 
-const handleDeleteResume = () => {
-  if (!ownResume) return
-  confirmAction('Удалить резюме?', async () => {
-    try {
-      await fetchWithAuth(`/resumes/${ownResume.id}`, { method: 'DELETE' })
-      setResumeForm({ title: '', skills: '', experience: '' })
-      await loadData()
-      toast.success('Резюме удалено')
-    } catch (err) {
-      toast.error(err.message)
-    }
-  })
-}
-
-const handleDeleteReview = (reviewId) => {
-  confirmAction('Удалить отзыв?', async () => {
-    try {
-      const response = await fetch(`${API_URL}/reviews/${reviewId}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: 'Bearer ' + token
-        }
-      })
-      
-      if (!response.ok) {
-        throw new Error('Не удалось удалить отзыв')
-      }
-      
-      await loadData()
-      toast.success('Отзыв удалён')
-    } catch (err) {
-      toast.error(err.message)
-    }
-  })
-}
-
+  //обработчик отклика на вакансию
   const applyToVacancy = async (vacancy) => {
     const alreadyApplied = applications.some(
-      (application) =>
-        application.type === 'vacancy_application' &&
-        application.vacancyId === vacancy.id &&
-        application.seekerId === userId
+      (app) =>
+        app.type === 'vacancy_application' &&
+        app.vacancyId === vacancy.id &&
+        app.seekerId === userId
     )
 
     if (alreadyApplied) {
@@ -698,30 +910,32 @@ const handleDeleteReview = (reviewId) => {
       })
       await loadData()
       toast.success('Отклик отправлен')
-    } catch (applyError) {
-      toast.error(applyError.message)
+    } catch (err) {
+      toast.error(err.message)
     }
   }
 
+  //проверка, откликался ли пользователь на вакансии компании
   const hasAppliedToCompany = (companyId) => {
-  const companyVacancyIds = vacancies
-    .filter((v) => v.companyId === companyId)
-    .map((v) => v.id)
-  
-  return applications.some(
-    (app) =>
-      app.type === 'vacancy_application' &&
-      app.seekerId === userId &&
-      companyVacancyIds.includes(app.vacancyId)
-  )
-}
+    const companyVacancyIds = vacancies
+      .filter((v) => v.companyId === companyId)
+      .map((v) => v.id)
+    
+    return applications.some(
+      (app) =>
+        app.type === 'vacancy_application' &&
+        app.seekerId === userId &&
+        companyVacancyIds.includes(app.vacancyId)
+    )
+  }
 
+  //обработчик приглашения кандидата
   const inviteCandidate = async (resume) => {
     const alreadyInvited = applications.some(
-      (application) =>
-        application.type === 'resume_invite' &&
-        application.resumeId === resume.id &&
-        application.companyId === userId
+      (app) =>
+        app.type === 'resume_invite' &&
+        app.resumeId === resume.id &&
+        app.companyId === userId
     )
 
     if (alreadyInvited) {
@@ -743,60 +957,175 @@ const handleDeleteReview = (reviewId) => {
       })
       await loadData()
       toast.success('Приглашение отправлено')
-    } catch (inviteError) {
-      toast.error(inviteError.message)
+    } catch (err) {
+      toast.error(err.message)
     }
   }
 
+  //обработчик публикации отзыва с проверкой дубликатов
   const submitReview = async (event) => {
-  event.preventDefault()
-  
-  //проверяем, есть ли уже отзыв от этого пользователя на эту компанию
-  const existingReview = reviews.find(
-    (review) => review.authorId === userId && review.companyId === Number(reviewForm.companyId)
-  )
-  
-  if (existingReview) {
-    toast.error('Вы уже оставили отзыв на эту компанию')
-    return
-  }
-  
-  try {
-    await fetchWithAuth('/reviews', {
-      method: 'POST',
-      body: JSON.stringify({
-        companyId: Number(reviewForm.companyId),
-        authorId: userId,
-        userId: userId,
-        rating: Number(reviewForm.rating),
-        text: reviewForm.text,
-        createdAt: new Date().toISOString()
+    event.preventDefault()
+    
+    const existingReview = reviews.find(
+      (review) => review.authorId === userId && review.companyId === Number(reviewForm.companyId)
+    )
+    
+    if (existingReview) {
+      toast.error('Вы уже оставили отзыв на эту компанию')
+      return
+    }
+    
+    try {
+      await fetchWithAuth('/reviews', {
+        method: 'POST',
+        body: JSON.stringify({
+          companyId: Number(reviewForm.companyId),
+          authorId: userId,
+          userId: userId,
+          rating: Number(reviewForm.rating),
+          text: reviewForm.text,
+          createdAt: new Date().toISOString()
+        })
       })
-    })
-    setReviewForm((prev) => ({ ...prev, rating: 5, text: '' }))
-    await loadData()
-    toast.success('Отзыв опубликован')
-  } catch (reviewError) {
-    toast.error(reviewError.message)
+      setReviewForm((prev) => ({ ...prev, rating: 5, text: '' }))
+      await loadData()
+      toast.success('Отзыв опубликован')
+    } catch (err) {
+      toast.error(err.message)
+    }
   }
-}
 
-  const companyVacancyIds = useMemo(
-    () => vacancies.filter((vacancy) => vacancy.companyId === userId).map((vacancy) => vacancy.id),
-    [vacancies, userId]
-  )
-
-  const incomingApplications = useMemo(
-    () =>
-      applications.filter(
-        (application) =>
-          application.type === 'vacancy_application' && companyVacancyIds.includes(application.vacancyId)
+  //универсальное модальное окно подтверждения через toast
+  const confirmAction = (message, onConfirm) => {
+    toast(
+      (t) => (
+        <div className="confirm-toast">
+          <span>{message}</span>
+          <div className="confirm-toast-actions">
+            <button
+              onClick={() => {
+                toast.dismiss(t.id)
+                onConfirm()
+              }}
+              className="btn-danger btn-sm"
+            >
+              Подтвердить
+            </button>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="btn-outline btn-sm"
+            >
+              Отмена
+            </button>
+          </div>
+        </div>
       ),
-    [applications, companyVacancyIds]
-  )
+      { duration: 5000 }
+    )
+  }
+
+  //обработчик удаления вакансии
+  const handleDeleteVacancy = (vacancyId) => {
+    confirmAction('Удалить вакансию?', async () => {
+      try {
+        await fetchWithAuth(`/vacancies/${vacancyId}`, { method: 'DELETE' })
+        await loadData()
+        toast.success('Вакансия удалена')
+      } catch (err) {
+        toast.error(err.message)
+      }
+    })
+  }
+
+  //обработчик удаления резюме
+  const handleDeleteResume = () => {
+    if (!ownResume) return
+    confirmAction('Удалить резюме?', async () => {
+      try {
+        await fetchWithAuth(`/resumes/${ownResume.id}`, { method: 'DELETE' })
+        setResumeForm({ title: '', skills: '', experience: '' })
+        await loadData()
+        toast.success('Резюме удалено')
+      } catch (err) {
+        toast.error(err.message)
+      }
+    })
+  }
+
+  //обработчик удаления отзыва
+  const handleDeleteReview = (reviewId) => {
+    confirmAction('Удалить отзыв?', async () => {
+      try {
+        const response = await fetch(`${API_URL}/reviews/${reviewId}`, {
+          method: 'DELETE',
+          headers: { Authorization: 'Bearer ' + token }
+        })
+        
+        if (!response.ok) {
+          throw new Error('Не удалось удалить отзыв')
+        }
+        
+        await loadData()
+        toast.success('Отзыв удалён')
+      } catch (err) {
+        toast.error(err.message)
+      }
+    })
+  }
+
+  //обработчики редактирования отзыва
+  const startEditReview = (review) => {
+    setEditingReviewId(review.id)
+    setEditReviewForm({
+      rating: review.rating,
+      text: review.text
+    })
+  }
+
+  const cancelEditReview = () => {
+    setEditingReviewId(null)
+    setEditReviewForm({ rating: 5, text: '' })
+  }
+
+  //сохранение отредактированного отзыва с полным объектом
+  const saveEditReview = async (reviewId) => {
+    const originalReview = reviews.find((r) => r.id === reviewId)
+    if (!originalReview) return
+
+    try {
+      await fetchWithAuth(`/reviews/${reviewId}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          ...originalReview,
+          rating: Number(editReviewForm.rating),
+          text: editReviewForm.text,
+          userId: userId
+        })
+      })
+      await loadData()
+      setEditingReviewId(null)
+      toast.success('Отзыв обновлён')
+    } catch (err) {
+      toast.error(err.message)
+    }
+  }
+
+  //подписка на кастомные события от компонента ReviewActions
+  useEffect(() => {
+    const handleEdit = (e) => startEditReview(e.detail)
+    const handleDelete = (e) => handleDeleteReview(e.detail)
+    
+    window.addEventListener('editReview', handleEdit)
+    window.addEventListener('deleteReview', handleDelete)
+    
+    return () => {
+      window.removeEventListener('editReview', handleEdit)
+      window.removeEventListener('deleteReview', handleDelete)
+    }
+  }, [reviews, token])
 
   if (!user) {
-    return <MessageState>Выполните вход, чтобы продолжить.</MessageState>
+    return <MessageState>Выполните вход, чтобы продолжить</MessageState>
   }
 
   if (loading) {
@@ -808,57 +1137,122 @@ const handleDeleteReview = (reviewId) => {
   }
 
   return (
-    <div className="home-page">
-      <h1 className="home-page__title">Платформа вакансий</h1>
-
-      {role === 'company' && (
-        <CompanyDashboard
-          userId={userId}
-          vacancyForm={vacancyForm}
-          setVacancyForm={setVacancyForm}
-          handleCreateVacancy={handleCreateVacancy}
-          handleDeleteVacancy={handleDeleteVacancy}
-          vacancies={vacancies}
-          resumes={resumes}
-          usersById={usersById}
-          inviteCandidate={inviteCandidate}
-          incomingApplications={incomingApplications}
-        />
-      )}
-
+    <div className="dashboard-layout">
+      {/*боковая панель в зависимости от роли*/}
       {role === 'seeker' && (
-        <SeekerDashboard
+        <SeekerSidebar
+          user={user}
           ownResume={ownResume}
-          resumeForm={resumeForm}
-          setResumeForm={setResumeForm}
-          handleSaveResume={handleSaveResume}
-          handleDeleteResume={handleDeleteResume}
-          vacancies={vacancies}
-          usersById={usersById}
-          applyToVacancy={applyToVacancy}
-          applications={applications}
-          userId={userId}
-          companyList={companyList}
-          reviewForm={reviewForm}
-          setReviewForm={setReviewForm}
-          submitReview={submitReview}
-          hasAppliedToCompany={hasAppliedToCompany}
-          reviews={reviews}
+          applicationsCount={myApplicationsCount}
+          invitationsCount={myInvitationsCount}
+        />
+      )}
+      {role === 'company' && (
+        <CompanySidebar
+          user={user}
+          vacanciesCount={myVacanciesCount}
+          applicationsCount={incomingApplicationsCount}
         />
       )}
 
-      <ReviewsSection 
-        reviews={reviews} 
-        usersById={usersById}
-        userId={userId}
-        editingReviewId={editingReviewId}
-        editReviewForm={editReviewForm}
-        setEditReviewForm={setEditReviewForm}
-        startEditReview={startEditReview}
-        cancelEditReview={cancelEditReview}
-        saveEditReview={saveEditReview}
-        handleDeleteReview={handleDeleteReview}
-    />
+      {/*основной контент дашборда*/}
+      <main className="dashboard-content">
+        {/*верхняя статистика в виде bento-grid*/}
+        <section className="stats-grid">
+          {role === 'seeker' ? (
+            <>
+              <div className="stats-grid-main">
+                <ResumeStatusCard ownResume={ownResume} />
+              </div>
+              <div className="stats-grid-side">
+                <InvitationsCard count={myInvitationsCount} delta={0} />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="stats-grid-main">
+                <VacanciesCard count={myVacanciesCount} />
+              </div>
+              <div className="stats-grid-side">
+                <InvitationsCard count={incomingApplicationsCount} delta={0} />
+              </div>
+            </>
+          )}
+        </section>
+
+        {/*форма редактирования отзыва (появляется при редактировании)*/}
+        {editingReviewId && (
+          <section className="edit-review-modal">
+            <div className="edit-review-header">
+              <h3>Редактирование отзыва</h3>
+              <button onClick={cancelEditReview} className="icon-button">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <div className="rating-input">
+              <label>Оценка:</label>
+              <Rate
+                value={Number(editReviewForm.rating)}
+                onChange={(value) => setEditReviewForm((prev) => ({ ...prev, rating: value }))}
+              />
+            </div>
+            <textarea
+              className="form-input"
+              rows={3}
+              value={editReviewForm.text}
+              onChange={(e) => setEditReviewForm((prev) => ({ ...prev, text: e.target.value }))}
+            />
+            <div className="form-actions">
+              <button onClick={() => saveEditReview(editingReviewId)} className="btn-primary">
+                Сохранить
+              </button>
+              <button onClick={cancelEditReview} className="btn-outline">
+                Отмена
+              </button>
+            </div>
+          </section>
+        )}
+
+        {/*основной контент в зависимости от роли*/}
+        {role === 'company' && (
+          <CompanyDashboard
+            userId={userId}
+            vacancyForm={vacancyForm}
+            setVacancyForm={setVacancyForm}
+            handleCreateVacancy={handleCreateVacancy}
+            handleDeleteVacancy={handleDeleteVacancy}
+            vacancies={vacancies}
+            resumes={resumes}
+            usersById={usersById}
+            inviteCandidate={inviteCandidate}
+            incomingApplications={applications.filter(
+              (app) => app.type === 'vacancy_application' && 
+              vacancies.filter((v) => v.companyId === userId).map((v) => v.id).includes(app.vacancyId)
+            )}
+          />
+        )}
+
+        {role === 'seeker' && (
+          <SeekerDashboard
+            ownResume={ownResume}
+            resumeForm={resumeForm}
+            setResumeForm={setResumeForm}
+            handleSaveResume={handleSaveResume}
+            handleDeleteResume={handleDeleteResume}
+            vacancies={vacancies}
+            usersById={usersById}
+            applyToVacancy={applyToVacancy}
+            applications={applications}
+            userId={userId}
+            companyList={companyList}
+            reviewForm={reviewForm}
+            setReviewForm={setReviewForm}
+            submitReview={submitReview}
+            hasAppliedToCompany={hasAppliedToCompany}
+            reviews={reviews}
+          />
+        )}
+      </main>
     </div>
   )
 }
