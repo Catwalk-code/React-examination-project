@@ -6,7 +6,8 @@
   justify-content: space-between;
   align-items: center;
   border-radius: 0 0 6px 6px;
-  box-shadow: 0 20px 40px rgba(43, 122, 120, 0.15);
+  box-shadow: 0 20px 14px rgba(43, 122, 120, 0.15);
+  z-index: 1000
 }
 
 .header-logo {
@@ -60,6 +61,7 @@
 
 .btn-logout:hover {
   opacity: 0.9;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .btn-outline {
@@ -70,12 +72,17 @@
   border-radius: 18px;
   font-weight: 500;
   font-size: 14px;
-  transition: background-color 0.2s, color 0.2s;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
 
 .btn-outline:hover {
   background-color: var(--color-secondary);
-  color: var(--color-white);
+  color: var(--color-secondary);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.btn-outline:active {
+  transform: translateY(1px);
 }
 
 .btn-filled {
@@ -83,12 +90,17 @@
   background-color: var(--color-secondary);
   color: var(--color-white);
   text-decoration: none;
-  border-radius: 18px;
+  border-radius: 8px;
   font-weight: 500;
   font-size: 14px;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, box-shadow 0.2s;
 }
 
 .btn-filled:hover {
   opacity: 0.9;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.btn-filled:active {
+  transform: translateY(1px);
 }
