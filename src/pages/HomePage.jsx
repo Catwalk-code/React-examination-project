@@ -138,7 +138,9 @@ function SeekerDashboard({
   companyList,
   reviewForm,
   setReviewForm,
-  submitReview
+  submitReview,
+  hasAppliedToCompany,
+  reviews
 }) {
   return (
     <>
@@ -223,11 +225,12 @@ function SeekerDashboard({
         <h2>Оставить отзыв о компании</h2>
         {companyList.length === 0 && <p>Нет доступных компаний для отзыва.</p>}
         {companyList.length > 0 && (
-          <form onSubmit={submitReview} className="home-page__form">
+          <>
             <select
               required
               value={reviewForm.companyId}
               onChange={(event) => setReviewForm((prev) => ({ ...prev, companyId: event.target.value }))}
+              className="home-page__input"
             >
               <option value="" disabled>
                 Выберите компанию
@@ -238,25 +241,46 @@ function SeekerDashboard({
                 </option>
               ))}
             </select>
-            <div className="home-page__rating">
-              <label>Оценка:</label>
-              <Rate
-                value={Number(reviewForm.rating)}
-                onChange={(value) => setReviewForm((prev) => ({ ...prev, rating: value }))}
-              />
-          </div>
-            <textarea
-              className = "home-page__input"
-              required
-              rows={3}
-              placeholder="Напишите ваш отзыв"
-              value={reviewForm.text}
-              onChange={(event) => setReviewForm((prev) => ({ ...prev, text: event.target.value }))}
-            />
-            <button type="submit" className="home-page__button">Опубликовать отзыв</button>
-          </form>
+            
+            {reviewForm.companyId && !hasAppliedToCompany(Number(reviewForm.companyId)) && (
+              <div className="home-page__warning">
+                <p>Чтобы оставить отзыв, сначала откликнитесь на вакансию этой компании.</p>
+              </div>
+            )}
+            
+            {reviewForm.companyId && hasAppliedToCompany(Number(reviewForm.companyId)) && (
+              <>
+                {reviews.some(
+                  (r) => r.authorId === userId && r.companyId === Number(reviewForm.companyId)
+                ) ? (
+                  <div className="home-page__warning">
+                    <p>Вы уже оставили отзыв на эту компанию. Вы можете отредактировать его в списке ниже.</p>
+                  </div>
+                ) : (
+                  <form onSubmit={submitReview} className="home-page__form">
+                    <div className="home-page__rating">
+                      <label>Оценка:</label>
+                      <Rate
+                        value={Number(reviewForm.rating)}
+                        onChange={(value) => setReviewForm((prev) => ({ ...prev, rating: value }))}
+                      />
+                    </div>
+                    <textarea
+                      className="home-page__input"
+                      required
+                      rows={3}
+                      placeholder="Напишите ваш отзыв"
+                      value={reviewForm.text}
+                      onChange={(event) => setReviewForm((prev) => ({ ...prev, text: event.target.value }))}
+                    />
+                    <button type="submit" className="home-page__button">Опубликовать отзыв</button>
+                  </form>
+                )}
+              </>
+            )}
+          </>
         )}
-      </Section>
+</Section>
     </>
   )
 }
@@ -354,8 +378,6 @@ function HomePage() {
     rating: 5,
     text: ''
   })
-
-  
 
   const [vacancyForm, setVacancyForm] = useState({
     title: '',
@@ -512,7 +534,8 @@ const startEditReview = (review) => {
       body: JSON.stringify({
         ...originalReview,
         rating: Number(editReviewForm.rating),
-        text: editReviewForm.text
+        text: editReviewForm.text,
+        userId: userId
       })
     })
     await loadData()
@@ -628,7 +651,17 @@ const handleDeleteResume = () => {
 const handleDeleteReview = (reviewId) => {
   confirmAction('Удалить отзыв?', async () => {
     try {
-      await fetchWithAuth(`/reviews/${reviewId}`, { method: 'DELETE' })
+      const response = await fetch(`${API_URL}/reviews/${reviewId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      })
+      
+      if (!response.ok) {
+        throw new Error('Не удалось удалить отзыв')
+      }
+      
       await loadData()
       toast.success('Отзыв удалён')
     } catch (err) {
@@ -670,6 +703,19 @@ const handleDeleteReview = (reviewId) => {
     }
   }
 
+  const hasAppliedToCompany = (companyId) => {
+  const companyVacancyIds = vacancies
+    .filter((v) => v.companyId === companyId)
+    .map((v) => v.id)
+  
+  return applications.some(
+    (app) =>
+      app.type === 'vacancy_application' &&
+      app.seekerId === userId &&
+      companyVacancyIds.includes(app.vacancyId)
+  )
+}
+
   const inviteCandidate = async (resume) => {
     const alreadyInvited = applications.some(
       (application) =>
@@ -703,24 +749,37 @@ const handleDeleteReview = (reviewId) => {
   }
 
   const submitReview = async (event) => {
-    event.preventDefault()
-    try {
-      await fetchWithAuth('/reviews', {
-        method: 'POST',
-        body: JSON.stringify({
-          companyId: Number(reviewForm.companyId),
-          authorId: userId,
-          rating: Number(reviewForm.rating),
-          text: reviewForm.text,
-          createdAt: new Date().toISOString()
-        })
-      })
-      setReviewForm((prev) => ({ ...prev, rating: 5, text: '' }))
-      await loadData()
-    } catch (reviewError) {
-      toast.error(reviewError.message)
-    }
+  event.preventDefault()
+  
+  //проверяем, есть ли уже отзыв от этого пользователя на эту компанию
+  const existingReview = reviews.find(
+    (review) => review.authorId === userId && review.companyId === Number(reviewForm.companyId)
+  )
+  
+  if (existingReview) {
+    toast.error('Вы уже оставили отзыв на эту компанию')
+    return
   }
+  
+  try {
+    await fetchWithAuth('/reviews', {
+      method: 'POST',
+      body: JSON.stringify({
+        companyId: Number(reviewForm.companyId),
+        authorId: userId,
+        userId: userId,
+        rating: Number(reviewForm.rating),
+        text: reviewForm.text,
+        createdAt: new Date().toISOString()
+      })
+    })
+    setReviewForm((prev) => ({ ...prev, rating: 5, text: '' }))
+    await loadData()
+    toast.success('Отзыв опубликован')
+  } catch (reviewError) {
+    toast.error(reviewError.message)
+  }
+}
 
   const companyVacancyIds = useMemo(
     () => vacancies.filter((vacancy) => vacancy.companyId === userId).map((vacancy) => vacancy.id),
@@ -783,21 +842,23 @@ const handleDeleteReview = (reviewId) => {
           reviewForm={reviewForm}
           setReviewForm={setReviewForm}
           submitReview={submitReview}
+          hasAppliedToCompany={hasAppliedToCompany}
+          reviews={reviews}
         />
       )}
 
       <ReviewsSection 
-  reviews={reviews} 
-  usersById={usersById}
-  userId={userId}
-  editingReviewId={editingReviewId}
-  editReviewForm={editReviewForm}
-  setEditReviewForm={setEditReviewForm}
-  startEditReview={startEditReview}
-  cancelEditReview={cancelEditReview}
-  saveEditReview={saveEditReview}
-  handleDeleteReview={handleDeleteReview}
-/>
+        reviews={reviews} 
+        usersById={usersById}
+        userId={userId}
+        editingReviewId={editingReviewId}
+        editReviewForm={editReviewForm}
+        setEditReviewForm={setEditReviewForm}
+        startEditReview={startEditReview}
+        cancelEditReview={cancelEditReview}
+        saveEditReview={saveEditReview}
+        handleDeleteReview={handleDeleteReview}
+    />
     </div>
   )
 }
