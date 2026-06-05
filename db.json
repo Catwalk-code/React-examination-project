@@ -1,95 +1,72 @@
 {
   "users": [
     {
-      "email": "notreal@email.com",
-      "password": "$2a$10$AnUdtHhMmAStWEzVwvTRV.4Byt1e1OpfyMkU8PK6Hc9dIc2/v622q",
-      "name": "notreal",
-      "role": "company",
+      "email": "ivanov@email.com",
+      "password": "$2a$10$mx7K1NAopBbdWKKRtqP94OyPz.uq2oQbNaibTqCp7lY4UfrsiLZEC",
+      "name": "Иванов Иван Иванович",
+      "role": "seeker",
       "id": 1
     },
     {
-      "email": "ivanpetrov@email.com",
-      "password": "$2a$10$5c5Z3TB7QyBXon0uGkayoObqDx6OI2qCkTkiBo7ijYeUJeHQWShDy",
-      "name": "Иван Петров",
-      "role": "seeker",
-      "id": 2
-    },
-    {
       "email": "example@example.com",
-      "password": "$2a$10$.BtPR9SW6DcW6umdwJqlde/Bc8mc4mCAeXLJPliJQDa7HJiAK7TPy",
-      "name": "example",
+      "password": "$2a$10$yLdtE9axtaDiPuGMe3zj3.wkc3AW1UiSNpEfoY8WF5ns9e6cCuYhC",
+      "name": "Example",
       "role": "company",
-      "id": 3
-    },
-    {
-      "email": "test@test.com",
-      "password": "$2a$10$NRFODIshyMJfzpm5WtNce.oW571EzpgF0U5ZQuzQQKpnOY0.VPOV6",
-      "name": "Test",
-      "role": "company",
-      "id": 4
+      "id": 2
     }
   ],
   "vacancies": [
     {
-      "id": 1,
-      "title": "Frontend React Developer",
-      "description": "Разработка и поддержка интерфейсов на React.",
-      "salary": "3000-4500 BYN",
-      "location": "Минск",
-      "companyId": 1,
-      "createdAt": "2026-06-01T10:00:00.000Z"
+      "title": "Junior React Developer",
+      "description": "Требования: знать JS, React, HTML, css. Иметь полгода коммерческого опыта или портфолио, заполненное пет-проектами.",
+      "salary": "900 BYN",
+      "location": "Vitebsk",
+      "companyId": 2,
+      "createdAt": "2026-06-05T10:54:29.626Z",
+      "id": 1
     }
   ],
   "resumes": [
     {
-      "id": 1,
-      "title": "Junior Frontend Developer",
-      "skills": "JavaScript, React, HTML, CSS",
-      "experience": "Коммерческий опыт 1 год, pet-проекты 2 года.",
-      "userId": 2,
-      "createdAt": "2026-06-02T10:00:00.000Z",
-      "updatedAt": "2026-06-02T10:00:00.000Z"
+      "title": "xcv",
+      "skills": "vzsdfv",
+      "experience": "sadv",
+      "userId": 1,
+      "updatedAt": "2026-06-05T13:54:07.544Z",
+      "createdAt": "2026-06-05T13:49:59.307Z",
+      "id": 1
     }
   ],
   "applications": [
     {
-      "id": 1,
       "type": "vacancy_application",
       "vacancyId": 1,
       "resumeId": 1,
-      "seekerId": 2,
-      "companyId": 1,
+      "seekerId": 1,
+      "companyId": 2,
       "status": "new",
-      "createdAt": "2026-06-03T10:00:00.000Z"
+      "createdAt": "2026-06-05T13:54:04.075Z",
+      "id": 1
     },
     {
       "type": "resume_invite",
       "resumeId": 1,
-      "seekerId": 2,
-      "companyId": 3,
+      "seekerId": 1,
+      "companyId": 2,
       "status": "sent",
-      "createdAt": "2026-06-04T13:32:34.807Z",
+      "createdAt": "2026-06-05T13:54:38.568Z",
       "id": 2
-    },
-    {
-      "type": "vacancy_application",
-      "vacancyId": 1,
-      "resumeId": null,
-      "seekerId": 4,
-      "companyId": 1,
-      "status": "new",
-      "createdAt": "2026-06-04T13:42:04.118Z",
-      "id": 3
     }
   ],
   "reviews": [
     {
-      "id": 1,
-      "companyId": 1,
-      "authorId": 2,
-      "rating": 5,
-      "text": "Хорошая коммуникация и понятное интервью.",
-      "createdAt": "2026-06-03T11:00:00.000Z"
+      "companyId": 2,
+      "authorId": 1,
+      "userId": 1,
+      "rating": 1,
+      "text": "Такой список вопросов я видел на записях интервью на позицию Middle. Хотят слишком много от Junior-кандидата. ",
+      "createdAt": "2026-06-05T10:56:06.742Z",
+      "id": 1
     }
   ]
 }
