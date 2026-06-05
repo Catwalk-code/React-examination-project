@@ -54,7 +54,7 @@ function RegisterPage() {
           <input
             type="text"
             className="form-input"
-            placeholder="ФИО"
+            placeholder={role === 'company' ? 'Название компании' : 'ФИО'}
             value={name}
             onChange={handleNameChange}
             required
