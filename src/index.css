@@ -39,6 +39,9 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
+  font-family: 'Hanken Grotesk', sans-serif;
+  background-color: #FEFFFF;
+  color: #0f1e22;
 }
 
 #root {
