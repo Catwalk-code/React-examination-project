@@ -76,7 +76,7 @@ function WelcomePage() {
                   <span>Отслеживайте статус ваших откликов в режиме реального времени.</span>
                 </li>
               </ul>
-              <button className="btn-primary">Загрузить резюме</button>
+              <Link to="/login" className="btn-primary btn-full">Загрузить резюме</Link>
             </div>
 
             {/*карточка для работодателей*/}
@@ -99,7 +99,7 @@ function WelcomePage() {
                   <span>Инструменты бренда работодателя для демонстрации культуры компании.</span>
                 </li>
               </ul>
-              <button className="btn-outline btn-center">Разместить вакансию</button>
+              <Link to="/login" className="btn-outline btn-full">Разместить вакансию</Link>
             </div>
           </div>
         </section>
@@ -109,7 +109,7 @@ function WelcomePage() {
           <div className="vacancies-header">
             <div>
               <h2>Последние вакансии</h2>
-              <p>Новые возможности, опубликованные за последние 24 часа.</p>
+              <p>Новые возможности, опубликованные за последние 24 часа</p>
             </div>
           </div>
 
@@ -128,7 +128,9 @@ function WelcomePage() {
                 <span className="material-symbols-outlined">payments</span>
                 3.5k - 5k
               </div>
+              <Link to="/login">
               <button className="btn-outline btn-full">Откликнуться</button>
+              </Link>
             </div>
 
             {/*вакансия 2*/}
@@ -145,7 +147,9 @@ function WelcomePage() {
                 <span className="material-symbols-outlined">payments</span>
                 4k - 6.5k
               </div>
+              <Link to="/login">
               <button className="btn-outline btn-full">Откликнуться</button>
+              </Link>
             </div>
 
             {/*вакансия 3*/}
@@ -162,7 +166,9 @@ function WelcomePage() {
                 <span className="material-symbols-outlined">payments</span>
                 1.2k - 2k
               </div>
+              <Link to="/login">
               <button className="btn-outline btn-full">Откликнуться</button>
+              </Link>
             </div>
           </div>
         </section>
@@ -175,7 +181,9 @@ function WelcomePage() {
             <p>Присоединяйтесь к тысячам профессионалов, которые нашли работу своей мечты на findjob.by. Ваша следующая возможность — всего в одном клике.</p>
             <div className="cta-buttons">
               <Link to="/register" className="btn-white">Создать аккаунт</Link>
-              <button className="btn-outline-white">Войти</button>
+              <Link to="/login">
+                <button className="btn-outline-white">Войти</button>
+              </Link>
             </div>
           </div>
         </section>
@@ -187,37 +195,27 @@ function WelcomePage() {
           <div className="footer-grid">
             <div className="footer-brand">
               <h2>findjob.by</h2>
-              <p>Ведущая платформа по подбору персонала в Беларуси, соединяющая таланты с возможностями через инновации и доверие.</p>
+              <p>Ведущая платформа по подбору персонала в Беларуси, соединяющая таланты с возможностями.</p>
             </div>
             <div className="footer-column">
               <h4>Платформа</h4>
-              <h6>Поиск вакансий</h6>
-              <h6>Компании</h6>
-              <h6>Цены</h6>
+              <Link to="/">Поиск вакансий</Link>
+              <Link to="/">Компании</Link>
+              <Link to="/">Цены</Link>
             </div>
             <div className="footer-column">
               <h4>Поддержка</h4>
-              <h6>О нас</h6>
-              <h6>Контакты</h6>
-              <h6>Карта сайта</h6>
+              <Link to="/">О нас</Link>
+              <Link to="/">Контакты</Link>
+              <Link to="/">Карта сайта</Link>
             </div>
-            <div className="footer-column footer-social">
-              <h4>Мы в соцсетях</h4>
-              <div className="social-icons">
-                <a href="#" className="social-icon">
-                  <span className="material-symbols-outlined">public</span>
-                </a>
-                <a href="#" className="social-icon">
-                  <span className="material-symbols-outlined">rss_feed</span>
-                </a>
-              </div>
-            </div>
+            
           </div>
           <div className="footer-bottom">
             <p>© 2026 findjob.by. Все права защищены.</p>
             <div className="footer-links">
-              <Link to="/privacy">Политика конфиденциальности</Link>
-              <Link to="/terms">Условия использования</Link>
+              <Link to="/">Политика конфиденциальности</Link>
+              <Link to="/">Условия использования</Link>
             </div>
           </div>
         </div>
