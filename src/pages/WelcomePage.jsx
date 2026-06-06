@@ -126,7 +126,7 @@ function WelcomePage() {
                 <span className="material-symbols-outlined">location_on</span>
                 Минск
                 <span className="material-symbols-outlined">payments</span>
-                3.5k - 5k
+                3.5к - 5к
               </div>
               <Link to="/login">
               <button className="btn-outline btn-full">Откликнуться</button>
@@ -145,7 +145,7 @@ function WelcomePage() {
                 <span className="material-symbols-outlined">location_on</span>
                 Удаленно
                 <span className="material-symbols-outlined">payments</span>
-                4k - 6.5k
+                4к - 6.5к
               </div>
               <Link to="/login">
               <button className="btn-outline btn-full">Откликнуться</button>
@@ -164,7 +164,7 @@ function WelcomePage() {
                 <span className="material-symbols-outlined">location_on</span>
                 Гомель
                 <span className="material-symbols-outlined">payments</span>
-                1.2k - 2k
+                1.2к - 2к
               </div>
               <Link to="/login">
               <button className="btn-outline btn-full">Откликнуться</button>

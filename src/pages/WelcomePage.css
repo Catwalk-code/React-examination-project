@@ -439,6 +439,7 @@
 }
 
 .cta-content h2 {
+  color: var(--color-white);
   font-size: 32px;
   font-weight: 700;
   margin: 0 0 16px 0;

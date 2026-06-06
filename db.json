@@ -13,6 +13,27 @@
       "name": "Example",
       "role": "company",
       "id": 2
+    },
+    {
+      "email": "techsolutionsinc@email.com",
+      "password": "$2a$10$Vimzmbjyk274o881kyoyjOP8U.030ubLWcJxipvfY2tK7DtkyTIgW",
+      "name": "Techsolutions Inc.",
+      "role": "company",
+      "id": 3
+    },
+    {
+      "email": "dataflowsystems@email.com",
+      "password": "$2a$10$Mgr6DQm8VY55mJ5XL7/hHuPSq6N8JuETeERcqSUPj3GSWXS3saFT6",
+      "name": "Dataflow Systems",
+      "role": "company",
+      "id": 4
+    },
+    {
+      "email": "greenglobal@email.com",
+      "password": "$2a$10$K8VVlPmk/diJ2fCbePcHc.c8JdX03tDSSFVnXRpcTACm.og8QscoG",
+      "name": "Greenglobal",
+      "role": "company",
+      "id": 5
     }
   ],
   "vacancies": [
@@ -24,38 +45,46 @@
       "companyId": 2,
       "createdAt": "2026-06-05T10:54:29.626Z",
       "id": 1
-    }
-  ],
-  "resumes": [
+    },
     {
-      "title": "xcv",
-      "skills": "vzsdfv",
-      "experience": "sadv",
-      "userId": 1,
-      "updatedAt": "2026-06-05T13:54:07.544Z",
-      "createdAt": "2026-06-05T13:49:59.307Z",
-      "id": 1
+      "title": "Специалист по маркетингу",
+      "description": "Мы ищем человека, который умеет настраивать рекламу в интернете и для поиска новых клиентов. Главное - уметь придумывать интересные идеи для продвижения и понимать, принесла ли эта реклама реальные продажи.",
+      "salary": "1.2к - 2к",
+      "location": "Гомель",
+      "companyId": 3,
+      "createdAt": "2026-06-06T14:12:14.351Z",
+      "id": 2
+    },
+    {
+      "title": "Ведущий бэкенд-разработчик",
+      "description": "Нужен опытный разработчик, который умеет создавать надежные и быстрые серверные системы и писать понятный код. Также важно, чтобы ты мог направлять команду, проверять работу коллег и принимать ключевые технические решения.",
+      "salary": "4к - 6.5к",
+      "location": "Удаленно",
+      "companyId": 4,
+      "createdAt": "2026-06-06T14:16:31.237Z",
+      "id": 3
+    },
+    {
+      "title": "Старший продуктовый дизайнер",
+      "description": "Ищем опытного дизайнера, который умеет создавать удобные интерфейсы, опираясь на исследования и реальные потребности пользователей. Также важно уметь вести проекты от идеи до запуска.",
+      "salary": "1.2к - 2к",
+      "location": "Гомель",
+      "companyId": 5,
+      "createdAt": "2026-06-06T14:26:33.246Z",
+      "id": 4
     }
   ],
+  "resumes": [],
   "applications": [
     {
       "type": "vacancy_application",
-      "vacancyId": 1,
-      "resumeId": 1,
+      "vacancyId": 2,
+      "resumeId": null,
       "seekerId": 1,
-      "companyId": 2,
+      "companyId": 3,
       "status": "new",
-      "createdAt": "2026-06-05T13:54:04.075Z",
+      "createdAt": "2026-06-06T14:48:25.115Z",
       "id": 1
-    },
-    {
-      "type": "resume_invite",
-      "resumeId": 1,
-      "seekerId": 1,
-      "companyId": 2,
-      "status": "sent",
-      "createdAt": "2026-06-05T13:54:38.568Z",
-      "id": 2
     }
   ],
   "reviews": [
