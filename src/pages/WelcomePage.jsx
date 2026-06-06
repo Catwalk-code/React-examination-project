@@ -9,7 +9,7 @@ function WelcomePage() {
         <section className="hero-section">
           <div className="hero-content">
             <h1 className="hero-title">
-              Найдите свою{' '}
+              Найдите новую{' '}
               <span className="text-primary">профессию</span>{' '}
               с лёгкостью
             </h1>
