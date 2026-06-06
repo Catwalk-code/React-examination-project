@@ -36,7 +36,7 @@ function Header() {
           </>
         ) : (
           <>
-            <Link to="/login" className="btn-outline">
+            <Link to="/login" className="btn-outline__header">
               Войти
             </Link>
             

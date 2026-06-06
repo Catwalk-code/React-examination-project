@@ -64,12 +64,12 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.btn-outline {
+.btn-outline__header {
   padding: 8px 16px;
   color: var(--color-secondary);
   text-decoration: none;
   border: 2px solid var(--color-secondary);
-  border-radius: 18px;
+  border-radius: 8px;
   font-weight: 500;
   font-size: 14px;
   transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
