@@ -15,7 +15,7 @@ function ErrorState({ error, onRetry }) {
   return (
     <div className="dashboard-state">
       <p>Ошибка: {error}</p>
-      <button onClick={onRetry} className="btn-primary">Повторить</button>
+      <button onClick={onRetry} className="btn-primary--home-page">Повторить</button>
     </div>
   )
 }
@@ -66,6 +66,14 @@ function SeekerSidebar({ user, ownResume, applicationsCount, invitationsCount })
           </div>
         </div>
       </div>
+      <div className="stat-card stat-card--primary">
+        <p className="stat-card-label">Всего приглашений</p>
+        <p className="stat-card-number">{invitationsCount}</p>
+        <p className="stat-card-delta">
+          <span className="material-symbols-outlined">trending_up</span>
+          на этой неделе
+        </p>
+      </div>
     </aside>
   )
 }
@@ -105,35 +113,26 @@ function CompanySidebar({ user, vacanciesCount, applicationsCount }) {
           </div>
         </div>
       </div>
+
+      {/*блоки статистики*/}
+      <div className="stat-card stat-card--primary">
+        <p className="stat-card-label">Активных вакансий</p>
+        <p className="stat-card-number">{vacanciesCount}</p>
+        <p className="stat-card-delta">
+          <span className="material-symbols-outlined">work</span>
+          Опубликованных
+        </p>
+      </div>
+
+      <div className="stat-card stat-card--primary">
+        <p className="stat-card-label">Всего приглашений</p>
+        <p className="stat-card-number">{applicationsCount}</p>
+        <p className="stat-card-delta">
+          <span className="material-symbols-outlined">trending_up</span>
+          на этой неделе
+        </p>
+      </div>
     </aside>
-  )
-}
-
-//карточка статистики приглашений
-function InvitationsCard({ count, delta }) {
-  return (
-    <div className="stat-card stat-card--primary">
-      <p className="stat-card-label">Всего приглашений</p>
-      <p className="stat-card-number">{count}</p>
-      <p className="stat-card-delta">
-        <span className="material-symbols-outlined">trending_up</span>
-        +{delta} на этой неделе
-      </p>
-    </div>
-  )
-}
-
-//карточка статистики вакансий для компании
-function VacanciesCard({ count }) {
-  return (
-    <div className="stat-card stat-card--primary">
-      <p className="stat-card-label">Активных вакансий</p>
-      <p className="stat-card-number">{count}</p>
-      <p className="stat-card-delta">
-        <span className="material-symbols-outlined">work</span>
-        Опубликованных
-      </p>
-    </div>
   )
 }
 
@@ -249,7 +248,7 @@ function CompanyDashboard({
               value={vacancyForm.description}
               onChange={(e) => setVacancyForm((prev) => ({ ...prev, description: e.target.value }))}
             />
-            <button type="submit" className="btn-primary">
+            <button type="submit" className="btn-primary--home-page">
               <span className="material-symbols-outlined">publish</span>
               Опубликовать
             </button>
@@ -322,7 +321,7 @@ function CompanyDashboard({
               </div>
               <button
                 onClick={() => inviteCandidate(resume)}
-                className="btn-primary btn-sm"
+                className="btn-primary--home-page btn-sm"
               >
                 Пригласить
               </button>
@@ -423,7 +422,7 @@ function SeekerDashboard({
               onChange={(e) => setResumeForm((prev) => ({ ...prev, experience: e.target.value }))}
             />
             <div className="form-actions">
-              <button type="submit" className="btn-primary">
+              <button type="submit" className="btn-primary--home-page">
                 <span className="material-symbols-outlined">save</span>
                 {ownResume ? 'Сохранить изменения' : 'Создать резюме'}
               </button>
@@ -557,7 +556,7 @@ function SeekerDashboard({
                         value={reviewForm.text}
                         onChange={(e) => setReviewForm((prev) => ({ ...prev, text: e.target.value }))}
                       />
-                      <button type="submit" className="btn-primary btn-full">
+                      <button type="submit" className="btn-primary--home-page btn-full">
                         Опубликовать отзыв
                       </button>
                     </form>
@@ -1111,25 +1110,7 @@ function HomePage() {
 
       {/*основной контент дашборда*/}
       <main className="dashboard-content">
-        {/*верхняя статистика в виде bento-grid*/}
-        <section className="stats-grid">
-          {role === 'seeker' ? (
-            <>
-              <div className="stats-grid-side">
-                <InvitationsCard count={myInvitationsCount} delta={0} />
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="stats-grid-main">
-                <VacanciesCard count={myVacanciesCount} />
-              </div>
-              <div className="stats-grid-side">
-                <InvitationsCard count={incomingApplicationsCount} delta={0} />
-              </div>
-            </>
-          )}
-        </section>
+        
 
         {/*форма редактирования отзыва (появляется при редактировании)*/}
         {editingReviewId && (

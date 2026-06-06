@@ -61,7 +61,7 @@ function LoginPage() {
           />
         </div>
         
-        <button type="submit" className="btn-primary">
+        <button type="submit" className="btn-primary--login">
           Войти
         </button>
       </form>

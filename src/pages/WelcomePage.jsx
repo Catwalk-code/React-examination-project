@@ -16,9 +16,6 @@ function WelcomePage() {
             <p className="hero-subtitle">
               Связывайтесь с лучшими работодателями через платформу, созданную для увеличения скорости поиска работы
             </p>
-            
-            {/*поисковая строка*/}
-            
           </div>
 
           <div className="hero-image">
@@ -76,7 +73,7 @@ function WelcomePage() {
                   <span>Отслеживайте статус ваших откликов в режиме реального времени.</span>
                 </li>
               </ul>
-              <Link to="/login" className="btn-primary btn-full">Загрузить резюме</Link>
+              <Link to="/login" className="btn-primary--welcome btn-full">Загрузить резюме</Link>
             </div>
 
             {/*карточка для работодателей*/}
@@ -128,8 +125,8 @@ function WelcomePage() {
                 <span className="material-symbols-outlined">payments</span>
                 3.5к - 5к
               </div>
-              <Link to="/login">
-              <button className="btn-outline btn-full">Откликнуться</button>
+              <Link to="/login" className="btn-outline btn-full vacancy-apply-btn">
+                Откликнуться
               </Link>
             </div>
 
@@ -147,8 +144,8 @@ function WelcomePage() {
                 <span className="material-symbols-outlined">payments</span>
                 4к - 6.5к
               </div>
-              <Link to="/login">
-              <button className="btn-outline btn-full">Откликнуться</button>
+              <Link to="/login" className="btn-outline btn-full vacancy-apply-btn">
+                Откликнуться
               </Link>
             </div>
 
@@ -166,8 +163,8 @@ function WelcomePage() {
                 <span className="material-symbols-outlined">payments</span>
                 1.2к - 2к
               </div>
-              <Link to="/login">
-              <button className="btn-outline btn-full">Откликнуться</button>
+              <Link to="/login" className="btn-outline btn-full vacancy-apply-btn">
+                Откликнуться
               </Link>
             </div>
           </div>
@@ -181,9 +178,7 @@ function WelcomePage() {
             <p>Присоединяйтесь к тысячам профессионалов, которые нашли работу своей мечты на findjob.by. Ваша следующая возможность — всего в одном клике.</p>
             <div className="cta-buttons">
               <Link to="/register" className="btn-white">Создать аккаунт</Link>
-              <Link to="/login">
-                <button className="btn-outline-white">Войти</button>
-              </Link>
+              <Link to="/login" className="btn-outline-white">Войти</Link>
             </div>
           </div>
         </section>

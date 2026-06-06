@@ -339,6 +339,10 @@
   margin-top: 8px;
 }
 
+.form-actions button {
+  flex: 1; 
+}
+
 /*табы для откликов/приглашений*/
 .tabs {
   display: flex;
@@ -442,12 +446,17 @@
 }
 
 .vacancy-card {
-  padding: 20px;
+  padding: 24px;
   background: var(--surface-main);
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
   transition: all 0.3s;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center; 
+  min-height: 300px; 
 }
 
 .vacancy-card:hover {
@@ -458,6 +467,8 @@
 .vacancy-card-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  width: 100%; /* растягивает на всю ширину */
   margin-bottom: 16px;
 }
 
@@ -476,36 +487,49 @@
 }
 
 .vacancy-card-title {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
-  margin: 0 0 4px 0;
+  margin: 0 0 8px 0;
+  text-align: center;
+  line-height: 1.3;
 }
 
 .vacancy-card-company {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--on-surface-variant);
   margin: 0 0 16px 0;
+  text-align: center;
 }
 
 .vacancy-card-tags {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center; /* центрирует теги */
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+  width: 100%;
 }
 
 .vacancy-tag {
-  padding: 4px 8px;
+  padding: 6px 12px;
   background: var(--surface-soft);
   color: var(--on-secondary-container);
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 12px;
+  text-align: center;
 }
 
 .vacancy-tag--salary {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+/*кнопка отклика - прижата к низу и центрирована*/
+.vacancy-card .btn-outline.btn-full {
+  width: 100%;
+  max-width: 200px;
+  margin-top: auto; /* прижимает кнопку к низу карточки */
 }
 
 /*списковые элементы*/
@@ -577,7 +601,7 @@
 }
 
 /*кнопки*/
-.btn-primary {
+.btn-primary--home-page {
   background: var(--primary);
   color: white;
   border: none;
@@ -591,10 +615,15 @@
   justify-content: center;
   gap: 8px;
   transition: all 0.2s;
+  text-decoration: none;
 }
 
-.btn-primary:hover {
-  background: var(--primary-container);
+.btn-primary--home-page:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary--home-page:active{
+  transform: translateY(1px);
 }
 
 .btn-outline {
@@ -610,31 +639,53 @@
 }
 
 .btn-outline:hover {
-  background: var(--surface-soft);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.btn-outline:active{
+    transform: translateY(1px);
 }
 
 .btn-danger {
-  background: var(--error);
+  background: #1a1a1a;
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 12px 20px;
   border-radius: 8px;
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   transition: all 0.2s;
 }
 
 .btn-danger:hover {
-  opacity: 0.9;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.btn-danger:active{
+    transform: translateY(1px);
 }
 
 .btn-sm {
   padding: 6px 12px;
   font-size: 13px;
+}
+
+.confirm-toast .btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 0;
 }
 
 .btn-full {

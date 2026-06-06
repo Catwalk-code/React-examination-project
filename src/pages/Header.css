@@ -7,7 +7,8 @@
   align-items: center;
   border-radius: 0 0 6px 6px;
   box-shadow: 0 20px 14px rgba(43, 122, 120, 0.15);
-  z-index: 1000
+  z-index: 1000;
+  height: 74px;
 }
 
 .header-logo {
@@ -64,7 +65,7 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.btn-outline__header {
+.btn-outline--header {
   padding: 8px 16px;
   color: var(--color-secondary);
   text-decoration: none;
@@ -76,11 +77,11 @@
   height: 42.1px;
 }
 
-.btn-outline__header:hover {
+.btn-outline--header:hover {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.btn-outline__header:active {
+.btn-outline--header:active {
   transform: translateY(1px);
 }
 
