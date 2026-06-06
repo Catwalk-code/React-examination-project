@@ -41,10 +41,6 @@ function SeekerSidebar({ user, ownResume, applicationsCount, invitationsCount })
           <span className="material-symbols-outlined">mail</span>
           Приглашения ({invitationsCount})
         </a>
-        <a className="nav-item">
-          <span className="material-symbols-outlined">settings</span>
-          Настройки
-        </a>
       </div>
 
       {/*мини-карточка профиля соискателя*/}
@@ -95,10 +91,6 @@ function CompanySidebar({ user, vacanciesCount, applicationsCount }) {
           <span className="material-symbols-outlined">group</span>
           Кандидаты
         </a>
-        <a className="nav-item">
-          <span className="material-symbols-outlined">settings</span>
-          Настройки
-        </a>
       </div>
 
       {/*мини-карточка профиля компании*/}
@@ -114,39 +106,6 @@ function CompanySidebar({ user, vacanciesCount, applicationsCount }) {
         </div>
       </div>
     </aside>
-  )
-}
-
-//карточка статуса резюме для соискателя
-function ResumeStatusCard({ ownResume, onEdit }) {
-  return (
-    <div className="stat-card stat-card--resume">
-      <div className="stat-card-content">
-        <div className="stat-card-icon stat-card-icon--secondary">
-          <span className="material-symbols-outlined">article</span>
-        </div>
-        <div>
-          <h3 className="stat-card-title">
-            {ownResume ? 'Основное резюме' : 'Резюме не создано'}
-          </h3>
-          <p className="stat-card-subtitle">
-            {ownResume 
-              ? `Активно • Обновлено недавно` 
-              : 'Создайте резюме, чтобы откликаться на вакансии'}
-          </p>
-        </div>
-      </div>
-      <div className="stat-card-actions">
-        {ownResume && (
-          <button className="btn-outline" onClick={onEdit}>
-            Предпросмотр
-          </button>
-        )}
-        <button className="btn-primary">
-          {ownResume ? 'Редактировать' : 'Создать резюме'}
-        </button>
-      </div>
-    </div>
   )
 }
 
@@ -491,7 +450,6 @@ function SeekerDashboard({
             <button className="tab">
               Приглашения ({myInvitations.length})
             </button>
-            <button className="tab">Архив</button>
           </div>
           
           {myApplications.length === 0 && myInvitations.length === 0 ? (
@@ -525,10 +483,6 @@ function SeekerDashboard({
         <section className="dashboard-section">
           <div className="section-header">
             <h2 className="section-title">Рекомендовано вам</h2>
-            <a href="#" className="section-link">
-              Смотреть все
-              <span className="material-symbols-outlined">arrow_forward</span>
-            </a>
           </div>
           <div className="vacancies-grid">
             {vacancies.slice(0, 4).map((vacancy) => (
@@ -1161,9 +1115,6 @@ function HomePage() {
         <section className="stats-grid">
           {role === 'seeker' ? (
             <>
-              <div className="stats-grid-main">
-                <ResumeStatusCard ownResume={ownResume} />
-              </div>
               <div className="stats-grid-side">
                 <InvitationsCard count={myInvitationsCount} delta={0} />
               </div>
