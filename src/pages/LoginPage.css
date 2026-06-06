@@ -52,7 +52,7 @@
 }
 
 /* Кнопка отправки */
-.btn-primary {
+.btn-primary--login {
   width: 100%;
   padding: 12px;
 
@@ -68,18 +68,19 @@
   cursor: pointer;
 
   transition:
+    box-shadow 0.2s,
     background-color 0.2s ease,
     transform 0.15s ease,
     opacity 0.2s ease;
-
-  margin-top: 10px;
+    height: 46px;
+    margin-top: 0;
 }
 
-.btn-primary:hover {
-  opacity: 0.95;
+.btn-primary--login:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.btn-primary:active {
+.btn-primary--login:active {
   transform: translateY(1px);
 }
 

@@ -95,7 +95,7 @@ function RegisterPage() {
           </select>
         </div>
         
-        <button type="submit" className="btn-primary">
+        <button type="submit" className="btn-primary--registr">
           Зарегистрироваться
         </button>
       </form>

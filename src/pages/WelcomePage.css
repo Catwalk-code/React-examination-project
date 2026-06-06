@@ -56,7 +56,7 @@
   color: var(--primary);
 }
 
-.btn-primary {
+.btn-primary--welcome {
   background: var(--primary-container);
   color: var(--on-primary);
   border: none;
@@ -69,9 +69,10 @@
   transition: background 0.2s;
   display: inline-block;
   height: 52.1px !important;
+  margin-top:10px;
 }
 
-.btn-primary:hover {
+.btn-primary--welcome:hover {
   background: var(--secondary);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
@@ -98,6 +99,23 @@
 
 .btn-full {
   width: 100%;
+}
+
+.vacancy-apply-btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 12px 24px;
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-sizing: border-box;
+  margin-top: 8px;
 }
 
 .hero-section {
@@ -297,7 +315,7 @@
   flex-shrink: 0;
 }
 
-.feature-card .btn-primary,
+.feature-card .btn-primary--welcome,
 .feature-card .btn-outline {
   padding: 12px 32px;
 }
@@ -498,6 +516,7 @@
   transition: all 0.2s;
   height: 58.1px;
   width: 200px;
+  text-decoration: none;
 }
 
 .btn-outline-white:hover {
