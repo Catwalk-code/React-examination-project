@@ -187,10 +187,10 @@
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 2fr) !important; 
   gap: 24px;
   max-width: var(--container-max);
-  margin: 0 auto;
+  margin: auto auto;
 }
 
 .stat-number {
@@ -568,6 +568,7 @@
 .social-icons {
   display: flex;
   gap: 16px;
+  margin-left: 24px;
 }
 
 .social-icon {
