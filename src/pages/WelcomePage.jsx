@@ -119,12 +119,12 @@ function WelcomePage() {
                 <span className="vacancy-badge">Полная занятость</span>
               </div>
               <h3>Старший продуктовый дизайнер</h3>
-              <p className="vacancy-company">TechSolutions Inc.</p>
+              <p className="vacancy-company">Fresh Design</p>
               <div className="vacancy-meta">
                 <span className="material-symbols-outlined">location_on</span>
                 Минск
                 <span className="material-symbols-outlined">payments</span>
-                3.5к - 5к
+                от 2500 BYN
               </div>
               <Link to="/login" className="btn-outline btn-full vacancy-apply-btn">
                 Откликнуться
@@ -143,7 +143,7 @@ function WelcomePage() {
                 <span className="material-symbols-outlined">location_on</span>
                 Удаленно
                 <span className="material-symbols-outlined">payments</span>
-                4к - 6.5к
+                от 6500 BYN
               </div>
               <Link to="/login" className="btn-outline btn-full vacancy-apply-btn">
                 Откликнуться
@@ -162,7 +162,7 @@ function WelcomePage() {
                 <span className="material-symbols-outlined">location_on</span>
                 Гомель
                 <span className="material-symbols-outlined">payments</span>
-                1.2к - 2к
+                от 1200 BYN
               </div>
               <Link to="/login" className="btn-outline btn-full vacancy-apply-btn">
                 Откликнуться
