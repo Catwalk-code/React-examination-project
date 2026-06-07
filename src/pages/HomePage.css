@@ -61,11 +61,18 @@
   border: 1px solid var(--border-subtle);
 }
 
-.profile-mini-header {
+.profile-mini-header--user {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 9px;
+  margin-bottom: auto;
+}
+
+.profile-mini-header--company{
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: auto;
 }
 
 .profile-avatar {
@@ -233,7 +240,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  margin: 0;
+  margin: auto;
 }
 
 .stat-card-delta .material-symbols-outlined {
@@ -436,6 +443,7 @@
 .status-badge--interview {
   background: var(--secondary-container);
   color: var(--on-secondary-container);
+  width: 130.183px;
 }
 
 /*сетка вакансий*/
@@ -525,11 +533,11 @@
   gap: 4px;
 }
 
-/*кнопка отклика - прижата к низу и центрирована*/
+/*кнопка отклика*/
 .vacancy-card .btn-outline.btn-full {
   width: 100%;
-  max-width: 200px;
-  margin-top: auto; /* прижимает кнопку к низу карточки */
+  max-width: 400px;
+  margin-top: auto;
 }
 
 /*списковые элементы*/
@@ -805,12 +813,69 @@
   gap: 4px;
 }
 
-/*рейтинг*/
+/*кнопка удаления отзыва */
+.review-actions .btn-danger,
+.home-page__item .btn-danger {
+  background: #1a1a1a;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.review-actions .btn-danger:hover,
+.home-page__item .btn-danger:hover {
+  background: #333;
+}
+
+.review-actions .btn-danger .material-symbols-outlined,
+.home-page__item .btn-danger .material-symbols-outlined {
+  font-size: 20px;
+  color: white;
+}
+
+/*кнопка редактирования отзыва*/
+.review-actions .btn-outline,
+.home-page__item .btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+  margin-top: 0;
+}
+
+.review-actions .btn-outline:hover,
+.home-page__item .btn-outline:hover {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 8px 30px rgba(23, 37, 42, 0.1);
+}
+
+.review-actions .btn-outline .material-symbols-outlined,
+.home-page__item .btn-outline .material-symbols-outlined {
+  font-size: 20px;
+}
+
 .rating-input {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 12px;
+  margin: 2px auto 0 auto;
 }
 
 .rating-input label {
@@ -885,4 +950,108 @@
   .vacancies-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/*форма редактирования отзыва на месте карточки*/
+.review-edit-form {
+  padding: 16px;
+  background: var(--surface-soft);
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review-edit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.review-edit-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.review-edit-form .rating-input {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.review-edit-form .form-input {
+  width: 100%;
+  resize: none;
+}
+
+/*кнопки в форме редактирования отзыва - одинаковый размер*/
+.review-edit-form .form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+}
+
+
+.review-edit-form .btn-primary--home-page,
+.review-edit-form .btn-outline--reviews {
+  flex: 1; /* обе кнопки занимают равную ширину */
+  min-width: 140px;
+  height: 48px;
+  padding: 12px 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.review-edit-form button {
+  height: 48px;
+}
+
+.btn-outline--reviews {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+.btn-outline--reviews:hover {
+  background: var(--surface-soft);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.btn-outline--reviews:active {
+    transform: translateY(1px);
+  }
+
+/*кнопки действий в списке вакансий*/
+.list-item-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.list-item-actions .btn-outline,
+.list-item-actions .btn-danger {
+  margin-top: 0;
+  padding: 8px;
+  min-width: 40px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*форма редактирования - подсветка*/
+.dashboard-section:has(.section-title) .dashboard-form {
+  transition: all 0.3s;
 }
