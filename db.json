@@ -41,18 +41,16 @@
       "name": "Жирафов Геннадий Петрович",
       "role": "seeker",
       "id": 6
+    },
+    {
+      "email": "empty@email.com",
+      "password": "$2a$10$3K9NHRiSO7tdUm47vYoyi.1BcaAeovgiRffMU83VN0AA/laFoidbm",
+      "name": "Пустов Пуст Пустович",
+      "role": "seeker",
+      "id": 7
     }
   ],
   "vacancies": [
-    {
-      "title": "Специалист по маркетингу",
-      "description": "Мы ищем человека, который умеет настраивать рекламу в интернете и для поиска новых клиентов. Главное - уметь придумывать интересные идеи для продвижения и понимать, принесла ли эта реклама реальные продажи.",
-      "salary": "от 2000 BYN",
-      "location": "Гомель",
-      "companyId": 3,
-      "createdAt": "2026-06-06T14:12:14.351Z",
-      "id": 1
-    },
     {
       "title": "Ведущий бэкенд-разработчик",
       "description": "Нужен опытный разработчик, который умеет создавать надежные и быстрые серверные системы и писать понятный код. Также важно, чтобы ты мог направлять команду, проверять работу коллег и принимать ключевые технические решения.",
@@ -77,19 +75,46 @@
       "salary": "от 1200 BYN",
       "location": "Витебск",
       "companyId": 2,
-      "createdAt": "2026-06-06T20:31:17.644Z",
+      "updatedAt": "2026-06-07T13:43:33.834Z",
       "id": 4
+    },
+    {
+      "title": "Junior Python Backend",
+      "description": "Занание Python, FastAPI/Django, PostgreSQL, Docker, Алгоритмы Структур Данных, умение работать в Linux; Опыт работы: полгода.",
+      "salary": "от 1200",
+      "location": "Витебск",
+      "companyId": 3,
+      "createdAt": "2026-06-07T13:01:58.205Z",
+      "id": 5
+    },
+    {
+      "title": "Middle Java Bacend",
+      "description": "Maven, Java, PostgreSQL, Алгоритмы Структур Данных, умение работать в Linux; Опыт работы: полгода.",
+      "salary": "от 4000 BYN",
+      "location": "Минск",
+      "companyId": 3,
+      "createdAt": "2026-06-07T13:03:17.044Z",
+      "id": 6
     }
   ],
   "resumes": [
     {
+      "title": "Senior Backend Developer",
+      "skills": "GO-lang, Java, JS, Python, C#",
+      "experience": "6 лет",
+      "userId": 6,
+      "updatedAt": "2026-06-07T13:11:41.708Z",
+      "createdAt": "2026-06-07T13:11:41.708Z",
+      "id": 2
+    },
+    {
       "title": "QA Trainee",
       "skills": "JIRA, Java, JS, TypeScript, Техники тест-дизайна",
-      "experience": "3 года",
+      "experience": "пет-проекты",
       "userId": 1,
-      "updatedAt": "2026-06-06T23:13:56.680Z",
-      "createdAt": "2026-06-06T20:10:33.189Z",
-      "id": 1
+      "updatedAt": "2026-06-07T14:17:27.564Z",
+      "createdAt": "2026-06-07T14:17:07.989Z",
+      "id": 3
     }
   ],
   "applications": [
@@ -107,21 +132,11 @@
       "type": "vacancy_application",
       "vacancyId": 1,
       "resumeId": null,
-      "seekerId": 1,
-      "companyId": 2,
-      "status": "new",
-      "createdAt": "2026-06-06T19:42:04.916Z",
-      "id": 2
-    },
-    {
-      "type": "vacancy_application",
-      "vacancyId": 1,
-      "resumeId": null,
       "seekerId": 6,
       "companyId": 2,
       "status": "new",
       "createdAt": "2026-06-06T19:45:01.959Z",
-      "id": 3
+      "id": 2
     },
     {
       "type": "vacancy_application",
@@ -131,7 +146,7 @@
       "companyId": 3,
       "status": "new",
       "createdAt": "2026-06-06T19:45:30.169Z",
-      "id": 4
+      "id": 3
     },
     {
       "type": "resume_invite",
@@ -140,7 +155,7 @@
       "companyId": 4,
       "status": "sent",
       "createdAt": "2026-06-06T20:11:30.020Z",
-      "id": 5
+      "id": 4
     },
     {
       "type": "vacancy_application",
@@ -150,7 +165,7 @@
       "companyId": 5,
       "status": "new",
       "createdAt": "2026-06-06T22:03:18.037Z",
-      "id": 6
+      "id": 5
     },
     {
       "type": "vacancy_application",
@@ -160,27 +175,47 @@
       "companyId": 2,
       "status": "new",
       "createdAt": "2026-06-06T23:18:12.707Z",
+      "id": 6
+    },
+    {
+      "type": "vacancy_application",
+      "vacancyId": 2,
+      "resumeId": null,
+      "seekerId": 7,
+      "companyId": 4,
+      "status": "new",
+      "createdAt": "2026-06-07T11:02:25.187Z",
       "id": 7
+    },
+    {
+      "type": "resume_invite",
+      "resumeId": 1,
+      "seekerId": 1,
+      "companyId": 3,
+      "status": "sent",
+      "createdAt": "2026-06-07T12:33:29.351Z",
+      "id": 8
+    },
+    {
+      "type": "vacancy_application",
+      "vacancyId": 5,
+      "resumeId": 2,
+      "seekerId": 6,
+      "companyId": 3,
+      "status": "new",
+      "createdAt": "2026-06-07T13:13:36.907Z",
+      "id": 9
     }
   ],
   "reviews": [
     {
-      "companyId": 2,
+      "companyId": 4,
       "authorId": 6,
       "userId": 6,
-      "rating": 3,
-      "text": "Прикольная компания",
-      "createdAt": "2026-06-06T19:45:17.596Z",
-      "id": 2
-    },
-    {
-      "companyId": 3,
-      "authorId": 6,
-      "userId": 6,
-      "rating": 4,
-      "text": "Теперь я здесь главный)))",
-      "createdAt": "2026-06-06T19:45:55.222Z",
-      "id": 3
+      "rating": 5,
+      "text": "Прекрасные штат сотрудников. Здесь вы найдёте прекрасных коллег по работе. Все процессы настроены идеально.",
+      "createdAt": "2026-06-07T13:13:27.254Z",
+      "id": 1
     }
   ]
 }
