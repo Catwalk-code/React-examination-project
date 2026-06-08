@@ -1181,21 +1181,6 @@ const handleSaveResume = async (event) => {
         })
       }
       
-      //удаляем приглашения от этой компании
-      const companyInvites = applications.filter(
-        app => app.type === 'resume_invite' && app.companyId === userId
-      )
-      
-      for (const invite of companyInvites) {
-        await fetch(`${API_URL}/applications/${invite.id}`, {
-          method: 'DELETE',
-          headers: { 
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-          }
-        })
-      }
-      
       await loadData()
       toast.success('Вакансия удалена')
     } catch {
