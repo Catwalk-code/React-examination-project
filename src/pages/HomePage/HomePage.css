@@ -821,7 +821,6 @@
   font-size: 12px;
 }
 
-/*адаптивность*/
 @media (max-width: 1024px) {
   .dashboard-layout {
     flex-direction: column;
@@ -946,8 +945,11 @@
 }
 
 .currency-symbol {
-  width: 10px;
-  height: 10px;
+  width: 10px !important;
+  height: 10px !important;
+  min-width: 10px;
+  min-height: 10px;
+  flex-shrink: 0; 
   vertical-align: middle;
   margin: 0;
   display: inline-block;
@@ -962,16 +964,16 @@
 
 @media (max-width: 1024px) {
   .dashboard-layout {
-    flex-direction: column; /* Сайдбар встает над основным контентом */
+    flex-direction: column; 
     padding: 16px;
   }
 
   .dashboard-sidebar {
-    width: 100%; /* Сайдбар занимает всю ширину */
+    width: 100%; 
   }
 
   .dashboard-grid {
-    grid-template-columns: 1fr; /* Две колонки дашборда превращаются в одну */
+    grid-template-columns: 1fr; 
     gap: 16px;
   }
 }
