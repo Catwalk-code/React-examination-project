@@ -141,20 +141,6 @@
   min-width: 0;
 }
 
-/*bento-grid для статистики*/
-.stats-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 24px;
-}
-
-.stats-grid-main,
-.stats-grid-side {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
 /*карточки статистики*/
 .stat-card {
   background: white;
@@ -465,7 +451,7 @@
   text-align: center;
 }
 
-/* Шапка с иконками */
+/*шапка с иконками */
 .vacancy-card-header {
   display: flex;
   justify-content: space-between;
