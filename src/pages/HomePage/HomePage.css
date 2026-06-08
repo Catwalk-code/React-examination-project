@@ -959,3 +959,19 @@
   height: 10px;
   margin-left: 0;
 }
+
+@media (max-width: 1024px) {
+  .dashboard-layout {
+    flex-direction: column; /* Сайдбар встает над основным контентом */
+    padding: 16px;
+  }
+
+  .dashboard-sidebar {
+    width: 100%; /* Сайдбар занимает всю ширину */
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr; /* Две колонки дашборда превращаются в одну */
+    gap: 16px;
+  }
+}

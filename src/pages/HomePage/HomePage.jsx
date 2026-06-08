@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import { Rate } from 'antd'
 import './HomePage.css'
 import CurrencySymbol from "../../components/CurrencySymbol/CurrencySymbol";
-
+import Footer from '../../components/Footer/Footer'
 
 const API_URL = 'http://localhost:4000'
 
@@ -1324,73 +1324,79 @@ const handleSaveResume = async (event) => {
   }
 
   return (
-    <div className="dashboard-layout">
-      {role === 'seeker' && (
-        <SeekerSidebar
-          user={user}
-          ownResume={ownResume}
-          applicationsCount={myApplicationsCount}
-          invitationsCount={myInvitationsCount}
-        />
-      )}
-      {role === 'company' && (
-        <CompanySidebar
-          user={user}
-          vacanciesCount={myVacanciesCount}
-          applicationsCount={incomingApplicationsCount}
-        />
-      )}
-
-      <main className="dashboard-content">
-        {role === 'company' && (
-          <CompanyDashboard
-          userId={userId}
-          vacancyForm={vacancyForm}
-          setVacancyForm={setVacancyForm}
-          handleCreateVacancy={handleCreateVacancy}
-          handleDeleteVacancy={handleDeleteVacancy}
-          vacancies={vacancies}
-          resumes={resumes}
-          usersById={usersById}
-          inviteCandidate={inviteCandidate}
-          incomingApplications={applications.filter(
-            (app) => app.type === 'vacancy_application' && 
-            vacancies.filter((v) => v.companyId === userId).map((v) => v.id).includes(app.vacancyId)
-          )}
-          editingVacancyId={editingVacancyId}
-          startEditVacancy={startEditVacancy}
-          cancelEditVacancy={cancelEditVacancy}
-        />
-        )}
-
-        {role === 'seeker' && (
-          <SeekerDashboard
+    <>
+      <div className="dashboard-layout">
+        {role === 'company' ? (
+          <CompanySidebar
+            user={user}
+            vacanciesCount={myVacanciesCount}
+            applicationsCount={incomingApplicationsCount}
+          />
+        ) : (
+          <SeekerSidebar
+            user={user}
             ownResume={ownResume}
-            resumeForm={resumeForm}
-            setResumeForm={setResumeForm}
-            handleSaveResume={handleSaveResume}
-            handleDeleteResume={handleDeleteResume}
-            vacancies={vacancies}
-            resumes={resumes}
-            usersById={usersById}
-            applyToVacancy={applyToVacancy}
-            applications={applications}
-            userId={userId}
-            companyList={companyList}
-            reviewForm={reviewForm}
-            setReviewForm={setReviewForm}
-            submitReview={submitReview}
-            hasAppliedToCompany={hasAppliedToCompany}
-            reviews={reviews}
-            editingReviewId={editingReviewId}
-            editReviewForm={editReviewForm}
-            setEditReviewForm={setEditReviewForm}
-            cancelEditReview={cancelEditReview}
-            saveEditReview={saveEditReview}
+            applicationsCount={myApplicationsCount}
+            invitationsCount={myInvitationsCount}
           />
         )}
-      </main>
-    </div>
+
+        <main className="dashboard-content">
+          {loading && <MessageState>Загрузка данных...</MessageState>}
+          {error && <ErrorState error={error} onRetry={loadData} />}
+          
+          {!loading && !error && role === 'company' && (
+            <CompanyDashboard
+              userId={userId}
+              vacancyForm={vacancyForm}
+              setVacancyForm={setVacancyForm}
+              handleCreateVacancy={handleCreateVacancy}
+              handleDeleteVacancy={handleDeleteVacancy}
+              vacancies={vacancies}
+              resumes={resumes}
+              usersById={usersById}
+              inviteCandidate={inviteCandidate}
+              incomingApplications={applications.filter(
+                (app) => app.type === 'vacancy_application' && 
+                vacancies.filter((v) => v.companyId === userId).map((v) => v.id).includes(app.vacancyId)
+              )}
+              editingVacancyId={editingVacancyId}
+              startEditVacancy={startEditVacancy}
+              cancelEditVacancy={cancelEditVacancy}
+            />
+          )}
+
+          {!loading && !error && role === 'seeker' && (
+            <SeekerDashboard
+              ownResume={ownResume}
+              resumeForm={resumeForm}
+              setResumeForm={setResumeForm}
+              handleSaveResume={handleSaveResume}
+              handleDeleteResume={handleDeleteResume}
+              vacancies={vacancies}
+              resumes={resumes}
+              usersById={usersById}
+              applyToVacancy={applyToVacancy}
+              applications={applications}
+              userId={userId}
+              companyList={companyList}
+              reviewForm={reviewForm}
+              setReviewForm={setReviewForm}
+              submitReview={submitReview}
+              hasAppliedToCompany={hasAppliedToCompany}
+              reviews={reviews}
+              editingReviewId={editingReviewId}
+              editReviewForm={editReviewForm}
+              setEditReviewForm={setEditReviewForm}
+              cancelEditReview={cancelEditReview}
+              saveEditReview={saveEditReview}
+            />
+          )}
+        </main>
+      </div>
+
+      <Footer />
+    </>
   )
 }
 
