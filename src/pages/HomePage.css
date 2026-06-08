@@ -159,53 +159,19 @@
   border: none;
 }
 
-.stat-card--resume {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.stat-card-content {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.stat-card-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: var(--secondary-container);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.stat-card-icon .material-symbols-outlined {
-  font-size: 32px;
-  color: var(--on-secondary-container);
-}
-
-.stat-card-title {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0 0 4px 0;
-}
-
 .stat-card-subtitle {
   font-size: 14px;
   color: var(--on-surface-variant);
   margin: 0;
 }
 
-.stat-card--primary .stat-card-subtitle {
+.stat-card--primary  {
   color: rgba(255, 255, 255, 0.8);
 }
 
-.stat-card-actions {
-  display: flex;
-  gap: 12px;
+.material-symbols-outlined{
+  font-size: 32px;
+  color: var(--on-secondary-container);
 }
 
 .stat-card-label {
@@ -279,20 +245,6 @@
   font-weight: 600;
 }
 
-.section-link {
-  color: var(--primary);
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.section-link:hover {
-  text-decoration: underline;
-}
-
 /*формы в дашборде*/
 .dashboard-form {
   display: flex;
@@ -334,35 +286,6 @@
 
 .form-actions button {
   flex: 1; 
-}
-
-/*табы для откликов/приглашений*/
-.tabs {
-  display: flex;
-  gap: 24px;
-  border-bottom: 1px solid var(--border-subtle);
-  margin-bottom: 20px;
-}
-
-.tab {
-  background: none;
-  border: none;
-  padding: 12px 0;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--on-surface-variant);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s;
-}
-
-.tab:hover {
-  color: var(--on-surface);
-}
-
-.tab--active {
-  color: var(--primary);
-  border-bottom-color: var(--primary);
 }
 
 /*карточки откликов*/
@@ -808,7 +731,7 @@
 
 /*кнопка удаления отзыва */
 .review-actions .btn-danger,
-.home-page__item .btn-danger {
+.btn-danger {
   background: #1a1a1a;
   color: white;
   border: none;
@@ -824,19 +747,19 @@
 }
 
 .review-actions .btn-danger:hover,
-.home-page__item .btn-danger:hover {
+.btn-danger:hover {
   background: #333;
 }
 
 .review-actions .btn-danger .material-symbols-outlined,
-.home-page__item .btn-danger .material-symbols-outlined {
+.btn-danger .material-symbols-outlined {
   font-size: 20px;
   color: white;
 }
 
 /*кнопка редактирования отзыва*/
 .review-actions .btn-outline,
-.home-page__item .btn-outline {
+.btn-outline {
   background: transparent;
   color: var(--primary);
   border: 2px solid var(--primary);
@@ -853,14 +776,14 @@
 }
 
 .review-actions .btn-outline:hover,
-.home-page__item .btn-outline:hover {
+.btn-outline:hover {
   background: var(--primary);
   color: white;
   box-shadow: 0 8px 30px rgba(23, 37, 42, 0.1);
 }
 
 .review-actions .btn-outline .material-symbols-outlined,
-.home-page__item .btn-outline .material-symbols-outlined {
+.btn-outline .material-symbols-outlined {
   font-size: 20px;
 }
 
@@ -874,29 +797,6 @@
 .rating-input label {
   font-weight: 500;
   font-size: 14px;
-}
-
-/*модальное окно редактирования отзыва*/
-.edit-review-modal {
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
-  border: 2px solid var(--primary);
-  box-shadow: 0 8px 30px rgba(23, 37, 42, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.edit-review-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.edit-review-header h3 {
-  margin: 0;
-  font-size: 18px;
 }
 
 /*toast подтверждения*/
@@ -933,10 +833,6 @@
   }
   
   .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .stats-grid {
     grid-template-columns: 1fr;
   }
   

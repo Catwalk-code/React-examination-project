@@ -257,6 +257,26 @@
       "status": "sent",
       "createdAt": "2026-06-07T14:34:22.668Z",
       "id": 11
+    },
+    {
+      "type": "vacancy_application",
+      "vacancyId": 5,
+      "resumeId": 3,
+      "seekerId": 1,
+      "companyId": 3,
+      "status": "new",
+      "createdAt": "2026-06-08T11:47:14.641Z",
+      "id": 12
+    },
+    {
+      "type": "vacancy_application",
+      "vacancyId": 8,
+      "resumeId": 3,
+      "seekerId": 1,
+      "companyId": 3,
+      "status": "new",
+      "createdAt": "2026-06-08T16:51:25.585Z",
+      "id": 13
     }
   ],
   "reviews": [
