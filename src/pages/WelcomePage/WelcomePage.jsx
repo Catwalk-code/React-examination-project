@@ -75,7 +75,7 @@ function WelcomePage() {
                   <span>Отслеживайте статус ваших откликов в режиме реального времени.</span>
                 </li>
               </ul>
-              <Link to="/login" className="btn-primary--welcome btn-full">Загрузить резюме</Link>
+              <Link to="/login" className="btn-outline btn-full">Загрузить резюме</Link>
             </div>
 
             {/*карточка для работодателей*/}
@@ -98,7 +98,7 @@ function WelcomePage() {
                   <span>Инструменты бренда работодателя для демонстрации культуры компании.</span>
                 </li>
               </ul>
-              <Link to="/login" className="btn-outline btn-full">Разместить вакансию</Link>
+              <Link to="/login" className="btn-primary--welcome btn-full">Разместить вакансию</Link>
             </div>
           </div>
         </section>
