@@ -278,7 +278,6 @@ function CompanyDashboard({
               className="form-input"
               type="number"
               min="0"
-              step="100"
               placeholder="Зарплата (необязательно)"
               value={vacancyForm.salary}
               onChange={(e) => {
