@@ -168,7 +168,7 @@
   color: var(--on-surface-variant);
 }
 
-/*hero изображение*/
+/*изображение*/
 .hero-image {
   position: relative;
   display: none;
@@ -531,6 +531,11 @@
 
 .btn-outline-white:active {
   transform: translateY(1px);
+}
+
+.currency-symbol {
+  transform: translateY(-1px);
+  display: inline-block;
 }
 
 @media (max-width: 1024px) {

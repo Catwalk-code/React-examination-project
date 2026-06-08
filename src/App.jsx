@@ -14,7 +14,7 @@ function App() {
     <>
       <Header />
       <Routes>
-        {/* Если залогинен, то редирект на главную, иначе - лендинг */}
+        {/*если залогинен, то показывает главную, иначе лендинг */}
         <Route 
           path="/" 
           element={user ? <Navigate to="/home" /> : <WelcomePage />} 

@@ -1,6 +1,6 @@
 @import './LoginPage.css';
 
-/* Дополнительные стили для select (выпадающий список) */
+/*дополнительные стили для выпадающего списка*/
 .form-select {
   width: 100%;
   padding: 12px;
@@ -46,7 +46,7 @@
   border-color: var(--color-accent);
 }
 
-/* Стили для option внутри select */
+/*стили для выбора внутри выпадающего списка*/
 .form-select option {
   padding: 10px;
   background-color: var(--color-white);
