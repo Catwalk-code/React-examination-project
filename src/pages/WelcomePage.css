@@ -44,18 +44,6 @@
   vertical-align: middle;
 }
 
-.btn-text {
-  color: var(--on-surface-variant);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 600;
-  transition: color 0.2s;
-}
-
-.btn-text:hover {
-  color: var(--primary);
-}
-
 .btn-primary--welcome {
   background: var(--primary-container);
   color: var(--on-primary);
@@ -163,12 +151,6 @@
   max-width: 500px;
 }
 
-.popular-tags {
-  font-size: 12px;
-  color: var(--on-surface-variant);
-}
-
-/*изображение*/
 .hero-image {
   position: relative;
   display: none;
@@ -337,18 +319,6 @@
   text-align: center;
   max-width: var(--container-max);
   margin: 0 auto 48px;
-}
-
-.vacancies-header h2 {
-  font-size: 32px;
-  font-weight: 700;
-  margin: 0 0 8px 0;
-}
-
-.vacancies-header p {
-  font-size: 16px;
-  color: var(--on-surface-variant);
-  margin: 0;
 }
 
 .vacancies-grid {
@@ -573,10 +543,6 @@
     padding-right: 24px;
   }
   
-  .nav-center {
-    display: none;
-  }
-
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
