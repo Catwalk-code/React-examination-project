@@ -1,4 +1,6 @@
 .welcome-footer {
+  border-radius: 6px 6px 0 0;
+  box-shadow: 0 -14px 14px rgba(43, 122, 120, 0.15);
   background: var(--surface-container-low);
   border-top: 1px solid var(--border-subtle);
   padding: 48px 120px 24px;
