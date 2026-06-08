@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import useAuthStore from '../stores/authStore'
+import useAuthStore from '../../stores/authStore'
 import toast from 'react-hot-toast'
 import { Rate } from 'antd'
 import './HomePage.css'
-import CurrencySymbol from '../pages/CurrencySymbol'
+import CurrencySymbol from "../../components/CurrencySymbol/CurrencySymbol";
 
 
 const API_URL = 'http://localhost:4000'

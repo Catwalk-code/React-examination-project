@@ -1,4 +1,4 @@
-import rubleIcon from '../assets/bel_ruble.png'
+import rubleIcon from '../../assets/bel_ruble.png'
 
 function CurrencySymbol() {
   return (

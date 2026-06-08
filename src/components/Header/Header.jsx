@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-import useAuthStore from '../stores/authStore'
+import useAuthStore from '../../stores/authStore'
 import './Header.css'
 
 function Header() {

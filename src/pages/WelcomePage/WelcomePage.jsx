@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import './WelcomePage.css'
-import Footer from '../pages/Footer'
-import CurrencySymbol from './CurrencySymbol'
+import Footer from '../../components/Footer/Footer'
+import CurrencySymbol from '../../components/CurrencySymbol/CurrencySymbol'
 
 function WelcomePage() {
   return (
