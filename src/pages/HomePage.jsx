@@ -194,32 +194,37 @@ function InvitationCard({resume, company }) {
 function VacancyCard({ vacancy, company, onApply }) {
   return (
     <div className="vacancy-card">
-      <div className="vacancy-card-header">
-        <div className="vacancy-card-icon">
-          <span className="material-symbols-outlined">work</span>
-        </div>
-        <button className="icon-button">
-          <span className="material-symbols-outlined">bookmark</span>
-        </button>
-      </div>
-      <h3 className="vacancy-card-title">{vacancy.title}</h3>
-      <p className="vacancy-card-company">{company?.name || 'Компания'}</p>
-      <div className="vacancy-card-tags">
-        <span className="vacancy-tag">{vacancy.location || 'Не указано'}</span>
-        <span className="vacancy-tag vacancy-tag--salary">
-        {vacancy.salary ? (
-          <>
-             {vacancy.salary} <CurrencySymbol />
-          </>
-        ) : (
-          'з/п не указана'
-        )}
-      </span>
-      </div>
-      <button className="btn-outline btn-full" onClick={() => onApply(vacancy)}>
-        Быстрый отклик
-      </button>
+  <div className="vacancy-card-header">
+    <div className="vacancy-card-icon">
+      <span className="material-symbols-outlined">work</span>
     </div>
+    <button className="icon-button">
+      <span className="material-symbols-outlined">bookmark</span>
+    </button>
+  </div>
+  
+  {/* Новый контейнер с фиксированной высотой */}
+  <div className="vacancy-card-info">
+    <h3 className="vacancy-card-title">{vacancy.title}</h3>
+    <p className="vacancy-card-company">{company?.name || 'Компания'}</p>
+  </div>
+  
+  <div className="vacancy-card-tags">
+    <span className="vacancy-tag">{vacancy.location || 'Не указано'}</span>
+    <span className="vacancy-tag vacancy-tag--salary">
+      {vacancy.salary ? (
+        <>
+          {vacancy.salary} <CurrencySymbol />
+        </>
+      ) : (
+        'з/п не указана'
+      )}
+    </span>
+  </div>
+  <button className="btn-outline btn-full" onClick={() => onApply(vacancy)}>
+    Быстрый отклик
+  </button>
+</div>
   )
 }
 
