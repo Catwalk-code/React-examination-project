@@ -203,7 +203,6 @@ function VacancyCard({ vacancy, company, onApply }) {
     </button>
   </div>
   
-  {/* Новый контейнер с фиксированной высотой */}
   <div className="vacancy-card-info">
     <h3 className="vacancy-card-title">{vacancy.title}</h3>
     <p className="vacancy-card-company">{company?.name || 'Компания'}</p>
@@ -222,7 +221,7 @@ function VacancyCard({ vacancy, company, onApply }) {
     </span>
   </div>
   <button className="btn-outline btn-full" onClick={() => onApply(vacancy)}>
-    Быстрый отклик
+    Cделать отклик
   </button>
 </div>
   )
