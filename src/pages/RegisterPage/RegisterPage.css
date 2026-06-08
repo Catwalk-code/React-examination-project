@@ -1,4 +1,4 @@
-@import './LoginPage.css';
+@import '../LoginPage/LoginPage.css';
 
 /*дополнительные стили для выпадающего списка*/
 .form-select {

@@ -1,10 +1,10 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import useAuthStore from './stores/authStore'
-import WelcomePage from './pages/WelcomePage'
-import LoginPage from './pages/LoginPage'
-import RegisterPage from './pages/RegisterPage'
-import Header from './pages/Header'
-import HomePage from './pages/HomePage'
+import WelcomePage from './pages/WelcomePage/WelcomePage'
+import LoginPage from './pages/LoginPage/LoginPage'
+import RegisterPage from './pages/RegisterPage/RegisterPage'
+import Header from './components/Header/Header'
+import HomePage from './pages/HomePage/HomePage'
 
 
 function App() {
