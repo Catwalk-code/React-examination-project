@@ -13,12 +13,10 @@ function Header() {
 
   return (
     <header className="header">
-      {/* Лого */}
       <Link to="/" className="header-logo">
         findjob.by
       </Link>
 
-      {/* Навигация */}
       <nav className="header-nav">
         {user ? (
           <>

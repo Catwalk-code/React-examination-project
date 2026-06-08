@@ -3,6 +3,8 @@ import useAuthStore from '../stores/authStore'
 import toast from 'react-hot-toast'
 import { Rate } from 'antd'
 import './HomePage.css'
+import CurrencySymbol from '../pages/CurrencySymbol'
+
 
 const API_URL = 'http://localhost:4000'
 
@@ -58,11 +60,11 @@ function SeekerSidebar({ user, ownResume, applicationsCount, invitationsCount })
           <div className="profile-progress-header">
             <span className="text-label-sm">Заполненность профиля</span>
             <span className="text-label-sm text-primary">
-              {ownResume ? '85%' : '0%'}
+              {ownResume ? '100%' : '0%'}
             </span>
           </div>
           <div className="progress-bar">
-            <div className="progress-bar-fill" style={{ width: ownResume ? '85%' : '0%' }}></div>
+            <div className="progress-bar-fill" style={{ width: ownResume ? '100%' : '0%' }}></div>
           </div>
         </div>
       </div>
@@ -165,7 +167,7 @@ function ApplicationCard({ application, vacancy, company }) {
   )
 }
 
-//карточка приглашения от компании - показывает должность из резюме
+//карточка приглашения от компании (показывает должность из резюме)
 function InvitationCard({resume, company }) {
   return (
     <div className="application-card">
@@ -205,8 +207,14 @@ function VacancyCard({ vacancy, company, onApply }) {
       <div className="vacancy-card-tags">
         <span className="vacancy-tag">{vacancy.location || 'Не указано'}</span>
         <span className="vacancy-tag vacancy-tag--salary">
-          {vacancy.salary || 'Зарплата не указана'}
-        </span>
+        {vacancy.salary ? (
+          <>
+             {vacancy.salary} <CurrencySymbol />
+          </>
+        ) : (
+          'з/п не указана'
+        )}
+      </span>
       </div>
       <button className="btn-outline btn-full" onClick={() => onApply(vacancy)}>
         Быстрый отклик
@@ -236,7 +244,6 @@ function CompanyDashboard({
   return (
     <div className="dashboard-grid">
       <div className="dashboard-main">
-        {/*форма создания вакансии*/}
         {/*форма создания/редактирования вакансии*/}
         <section className="dashboard-section">
           <div className="section-header">
@@ -264,12 +271,20 @@ function CompanyDashboard({
                 onChange={(e) => setVacancyForm((prev) => ({ ...prev, location: e.target.value }))}
               />
               <input
-                className="form-input"
-                required
-                placeholder="Зарплата"
-                value={vacancyForm.salary}
-                onChange={(e) => setVacancyForm((prev) => ({ ...prev, salary: e.target.value }))}
-              />
+              className="form-input"
+              type="number"
+              min="0"
+              step="100"
+              placeholder="Зарплата (необязательно)"
+              value={vacancyForm.salary}
+              onChange={(e) => {
+                const value = e.target.value
+                if (value === '' || (Number(value) >= 0 && !isNaN(Number(value)))) {
+                  setVacancyForm((prev) => ({ ...prev, salary: value }))
+                }
+              }}
+              onWheel={(e) => e.target.blur()}
+            />
             </div>
             <textarea
               className="form-input"
@@ -323,8 +338,14 @@ function CompanyDashboard({
                 <span className="material-symbols-outlined">location_on</span>
                 {vacancy.location}
                 <span className="material-symbols-outlined">payments</span>
-                {vacancy.salary}
-              </div>
+                {vacancy.salary ? (
+                <>
+                  {vacancy.salary} <CurrencySymbol />
+                </>
+                ) : (
+                  'з/п не указана'
+                )}
+                </div>
             </div>
             <div className="list-item-actions">
               <button
@@ -551,7 +572,7 @@ function SeekerDashboard({
           )}
         </section>
 
-        {/*рекомендованные вакансии*/}
+        {/*список вакансий для клиента*/}
         <section className="dashboard-section">
           <div className="section-header">
             <h2 className="section-title">Список всех вакансий</h2>
@@ -891,6 +912,16 @@ function HomePage() {
 
   const handleCreateVacancy = async (event) => {
   event.preventDefault()
+  
+  //валидация зарплаты
+  if (vacancyForm.salary !== '') {
+  const salary = Number(vacancyForm.salary)
+  if (isNaN(salary) || salary < 0) {
+    toast.error('Зарплата должна быть неотрицательным числом')
+    return
+  }
+}
+  
   try {
     if (editingVacancyId) {
       //режим редактирования
@@ -1168,7 +1199,7 @@ const cancelEditVacancy = () => {
         }
       })
       
-      //204 No Content это нормальный ответ для DELETE, не считаем ошибкой
+      //ошибка 204 No Content это нормальный ответ для DELETE, не считаем ошибкой
       if (!response.ok && response.status !== 204) {
         const data = await response.json().catch(() => ({}))
         throw new Error(data.error || 'Не удалось удалить отзыв')

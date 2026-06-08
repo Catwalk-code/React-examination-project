@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom'
 import './WelcomePage.css'
 import Footer from '../pages/Footer'
+import CurrencySymbol from './CurrencySymbol'
 
 function WelcomePage() {
   return (
     <div className="welcome-page">
       <main>
-        {/*Hero секция с поиском*/}
+        {/*приветствие*/}
         <section className="hero-section">
           <div className="hero-content">
             <h1 className="hero-title">
@@ -29,7 +30,7 @@ function WelcomePage() {
           </div>
         </section>
 
-        {/*Статистика*/}
+        {/*статистика*/}
         <section className="stats-section">
           <div className="stats-grid">
             <div className="stat-item">
@@ -51,7 +52,7 @@ function WelcomePage() {
           </div>
         </section>
 
-        {/*Преимущества для соискателей и работодателей*/}
+        {/*преимущества для соискателей и работодателей*/}
         <section className="features-section">
           <div className="features-grid">
             {/*карточка для соискателей*/}
@@ -102,76 +103,69 @@ function WelcomePage() {
           </div>
         </section>
 
-        {/*Последние вакансии*/}
+        {/*последние вакансии*/}
         <section className="vacancies-section">
-          <div className="vacancies-header">
-            <div>
-              <h2>Последние вакансии</h2>
-              <p>Новые возможности, опубликованные за последние 24 часа</p>
-            </div>
-          </div>
-
           <div className="vacancies-grid">
-            {/*вакансия 1*/}
-            <div className="vacancy-card">
-              <div className="vacancy-card-header">
-                <div className="vacancy-logo vacancy-logo--t">T</div>
-                <span className="vacancy-badge">Полная занятость</span>
-              </div>
-              <h3>Старший продуктовый дизайнер</h3>
-              <p className="vacancy-company">Fresh Design</p>
-              <div className="vacancy-meta">
-                <span className="material-symbols-outlined">location_on</span>
-                Минск
-                <span className="material-symbols-outlined">payments</span>
-                от 2500 BYN
-              </div>
-              <Link to="/login" className="btn-outline btn-full vacancy-apply-btn">
-                Откликнуться
-              </Link>
+          {/*вакансия 1*/}
+          <div className="vacancy-card">
+            <div className="vacancy-card-header">
+              <div className="vacancy-logo vacancy-logo--t">T</div>
+              <span className="vacancy-badge">Полная занятость</span>
             </div>
-
-            {/*вакансия 2*/}
-            <div className="vacancy-card">
-              <div className="vacancy-card-header">
-                <div className="vacancy-logo vacancy-logo--d">D</div>
-                <span className="vacancy-badge">Удаленно</span>
-              </div>
-              <h3>Ведущий бэкенд-разработчик</h3>
-              <p className="vacancy-company">DataFlow Systems</p>
-              <div className="vacancy-meta">
-                <span className="material-symbols-outlined">location_on</span>
-                Удаленно
-                <span className="material-symbols-outlined">payments</span>
-                от 6500 BYN
-              </div>
-              <Link to="/login" className="btn-outline btn-full vacancy-apply-btn">
-                Откликнуться
-              </Link>
+            <h3>Старший продуктовый дизайнер</h3>
+            <p className="vacancy-company">Fresh Design</p>
+            <div className="vacancy-meta">
+              <span className="material-symbols-outlined">location_on</span>
+              Минск
+              <span className="material-symbols-outlined">payments</span>
+              от 2500 <CurrencySymbol size={14} />
             </div>
-
-            {/*вакансия 3*/}
-            <div className="vacancy-card">
-              <div className="vacancy-card-header">
-                <div className="vacancy-logo vacancy-logo--g">G</div>
-                <span className="vacancy-badge">Гибрид</span>
-              </div>
-              <h3>Специалист по маркетингу</h3>
-              <p className="vacancy-company">GreenGlobal</p>
-              <div className="vacancy-meta">
-                <span className="material-symbols-outlined">location_on</span>
-                Гомель
-                <span className="material-symbols-outlined">payments</span>
-                от 1200 BYN
-              </div>
-              <Link to="/login" className="btn-outline btn-full vacancy-apply-btn">
-                Откликнуться
-              </Link>
-            </div>
+            <Link to="/login" className="btn-outline btn-full vacancy-apply-btn">
+              Откликнуться
+            </Link>
           </div>
+
+          {/*вакансия 2*/}
+          <div className="vacancy-card">
+            <div className="vacancy-card-header">
+              <div className="vacancy-logo vacancy-logo--d">D</div>
+              <span className="vacancy-badge">Удаленно</span>
+            </div>
+            <h3>Ведущий бэкенд-разработчик</h3>
+            <p className="vacancy-company">DataFlow Systems</p>
+            <div className="vacancy-meta">
+              <span className="material-symbols-outlined">location_on</span>
+              Удаленно
+              <span className="material-symbols-outlined">payments</span>
+              от 6500 <CurrencySymbol size={14} />
+            </div>
+            <Link to="/login" className="btn-outline btn-full vacancy-apply-btn">
+              Откликнуться
+            </Link>
+          </div>
+
+          {/*вакансия 3*/}
+          <div className="vacancy-card">
+            <div className="vacancy-card-header">
+              <div className="vacancy-logo vacancy-logo--g">G</div>
+              <span className="vacancy-badge">Гибрид</span>
+            </div>
+            <h3>Специалист по маркетингу</h3>
+            <p className="vacancy-company">GreenGlobal</p>
+            <div className="vacancy-meta">
+              <span className="material-symbols-outlined">location_on</span>
+              Гомель
+              <span className="material-symbols-outlined">payments</span>
+              от 1200 <CurrencySymbol size={14} />
+            </div>
+            <Link to="/login" className="btn-outline btn-full vacancy-apply-btn">
+              Откликнуться
+            </Link>
+          </div>
+        </div>
         </section>
 
-        {/*CTA секция*/}
+        {/*секция призыва к действию*/}
         <section className="cta-section">
           <div className="cta-content">
             <div className="cta-pattern"></div>

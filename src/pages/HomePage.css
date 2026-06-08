@@ -1,4 +1,4 @@
-/*основной layout дашборда с боковой панелью*/
+/*основная панель управления*/
 .dashboard-layout {
   display: flex;
   gap: 24px;
@@ -132,7 +132,7 @@
   transition: width 0.3s;
 }
 
-/*основной контент дашборда*/
+/*основной контент панели*/
 .dashboard-content {
   flex: 1;
   display: flex;
@@ -426,7 +426,6 @@
   margin: 0;
 }
 
-/*статус-бейджи*/
 .status-badge {
   padding: 4px 12px;
   border-radius: 12px;
@@ -446,7 +445,6 @@
   width: 130.183px;
 }
 
-/*сетка вакансий*/
 .vacancies-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -476,7 +474,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%; /* растягивает на всю ширину */
+  width: 100%;
   margin-bottom: 16px;
 }
 
@@ -512,7 +510,7 @@
 .vacancy-card-tags {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* центрирует теги */
+  justify-content: center;
   gap: 8px;
   margin-bottom: 24px;
   width: 100%;
@@ -530,7 +528,6 @@
 .vacancy-tag--salary {
   display: flex;
   align-items: center;
-  gap: 4px;
 }
 
 /*кнопка отклика*/
@@ -608,7 +605,6 @@
   font-size: 14px;
 }
 
-/*кнопки*/
 .btn-primary--home-page {
   background: var(--primary);
   color: white;
@@ -986,7 +982,7 @@
   resize: none;
 }
 
-/*кнопки в форме редактирования отзыва - одинаковый размер*/
+/*кнопки в форме редактирования отзыва*/
 .review-edit-form .form-actions {
   display: flex;
   gap: 12px;
@@ -996,7 +992,7 @@
 
 .review-edit-form .btn-primary--home-page,
 .review-edit-form .btn-outline--reviews {
-  flex: 1; /* обе кнопки занимают равную ширину */
+  flex: 1;
   min-width: 140px;
   height: 48px;
   padding: 12px 24px;
@@ -1051,7 +1047,22 @@
   justify-content: center;
 }
 
-/*форма редактирования - подсветка*/
+/*форма редактирования (подсветка)*/
 .dashboard-section:has(.section-title) .dashboard-form {
   transition: all 0.3s;
+}
+
+.currency-symbol {
+  width: 10px;
+  height: 10px;
+  vertical-align: middle;
+  margin: 0;
+  display: inline-block;
+  transform: translateY(-1px);
+}
+
+.vacancy-tag--salary .currency-symbol {
+  width: 10px;
+  height: 10px;
+  margin-left: 4px;
 }
