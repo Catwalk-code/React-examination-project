@@ -977,35 +977,39 @@ const cancelEditVacancy = () => {
   setVacancyForm({ title: '', description: '', salary: '', location: '' })
 }
 
-  const handleSaveResume = async (event) => {
-    event.preventDefault()
+const handleSaveResume = async (event) => {
+  event.preventDefault()
+  try {
     const payload = {
       ...resumeForm,
-      userId,
-      updatedAt: new Date().toISOString()
+      userId: userId
     }
-
-    try {
-      if (ownResume) {
-        await fetchWithAuth(`/resumes/${ownResume.id}`, {
-          method: 'PUT',
-          body: JSON.stringify({ ...ownResume, ...payload })
+    
+    if (ownResume) {
+      await fetchWithAuth(`/resumes/${ownResume.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          ...payload,
+          updatedAt: new Date().toISOString()
         })
-      } else {
-        await fetchWithAuth('/resumes', {
-          method: 'POST',
-          body: JSON.stringify({
-            ...payload,
-            createdAt: new Date().toISOString()
-          })
+      })
+      toast.success('Резюме обновлено')
+    } else {
+      await fetchWithAuth('/resumes', {
+        method: 'POST',
+        body: JSON.stringify({
+          ...payload,
+          createdAt: new Date().toISOString()
         })
-      }
-      await loadData()
-      toast.success(ownResume ? 'Резюме обновлено' : 'Резюме создано')
-    } catch (err) {
-      toast.error(err.message)
+      })
+      toast.success('Резюме сохранено')
     }
+    
+    await loadData()
+  } catch (err) {
+    toast.error(err.message)
   }
+}
 
   const applyToVacancy = async (vacancy) => {
     if (!ownResume) {
@@ -1153,6 +1157,7 @@ const cancelEditVacancy = () => {
   const handleDeleteVacancy = (vacancyId) => {
   confirmAction('Удалить вакансию?', async () => {
     try {
+      // Удаляем вакансию
       await fetch(`${API_URL}/vacancies/${vacancyId}`, {
         method: 'DELETE',
         headers: { 
@@ -1161,11 +1166,39 @@ const cancelEditVacancy = () => {
         }
       })
       
-      //в любом случае обновляем данные
+      //удаляем отклики на эту вакансию
+      const relatedApplications = applications.filter(
+        app => app.vacancyId === vacancyId
+      )
+      
+      for (const app of relatedApplications) {
+        await fetch(`${API_URL}/applications/${app.id}`, {
+          method: 'DELETE',
+          headers: { 
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          }
+        })
+      }
+      
+      //удаляем приглашения от этой компании
+      const companyInvites = applications.filter(
+        app => app.type === 'resume_invite' && app.companyId === userId
+      )
+      
+      for (const invite of companyInvites) {
+        await fetch(`${API_URL}/applications/${invite.id}`, {
+          method: 'DELETE',
+          headers: { 
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          }
+        })
+      }
+      
       await loadData()
       toast.success('Вакансия удалена')
-    } catch{
-      //ошибка только если fetch реально упал (нет сети, сервер недоступен)
+    } catch {
       toast.error('Не удалось связаться с сервером')
     }
   })
@@ -1173,9 +1206,26 @@ const cancelEditVacancy = () => {
 
   const handleDeleteResume = () => {
   if (!ownResume) return
+  
   confirmAction('Удалить резюме?', async () => {
     try {
-      await fetch(`${API_URL}/resumes/${ownResume.id}`, {
+      //сначала удаляем все отклики, связанные с этим резюме
+      const relatedApplications = applications.filter(
+        app => app.resumeId === ownResume.id
+      )
+      
+      for (const app of relatedApplications) {
+        await fetch(`${API_URL}/applications/${app.id}`, {
+          method: 'DELETE',
+          headers: { 
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          }
+        })
+      }
+      
+      //теперь удаляем само резюме
+      const response = await fetch(`${API_URL}/resumes/${ownResume.id}`, {
         method: 'DELETE',
         headers: { 
           'Authorization': 'Bearer ' + token,
@@ -1183,9 +1233,14 @@ const cancelEditVacancy = () => {
         }
       })
       
-      setResumeForm({ title: '', skills: '', experience: '' })
-      await loadData()
-      toast.success('Резюме удалено')
+      if (response.ok || response.status === 204) {
+        setResumeForm({ title: '', skills: '', experience: '' })
+        await loadData()
+        toast.success('Резюме удалено')
+      } else {
+        const errorData = await response.json().catch(() => ({}))
+        toast.error(errorData.error || 'Не удалось удалить резюме')
+      }
     } catch {
       toast.error('Не удалось связаться с сервером')
     }
