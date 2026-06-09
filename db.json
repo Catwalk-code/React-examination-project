@@ -151,7 +151,28 @@
       "id": 3
     }
   ],
-  "applications": [],
+  "applications": [
+    {
+      "type": "vacancy_application",
+      "vacancyId": 4,
+      "resumeId": 3,
+      "seekerId": 1,
+      "companyId": 2,
+      "status": "new",
+      "createdAt": "2026-06-09T18:09:22.207Z",
+      "id": 1
+    },
+    {
+      "type": "vacancy_application",
+      "vacancyId": 5,
+      "resumeId": 3,
+      "seekerId": 1,
+      "companyId": 3,
+      "status": "new",
+      "createdAt": "2026-06-09T18:09:27.280Z",
+      "id": 2
+    }
+  ],
   "reviews": [
     {
       "companyId": 4,

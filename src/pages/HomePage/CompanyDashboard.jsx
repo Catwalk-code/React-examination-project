@@ -55,7 +55,7 @@ export function CompanyDashboard({
               onChange={(e) => {
               const value = e.target.value.trim()
               
-              if (value === '' || (Number(value) > 0 && !isNaN(Number(value)))) {
+              if (value === '' || (Number(value) >= 0 && !isNaN(Number(value)))) {
                 setVacancyForm((prev) => ({ ...prev, salary: value }))
               }
             }}

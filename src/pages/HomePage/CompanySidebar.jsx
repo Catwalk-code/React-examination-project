@@ -1,4 +1,3 @@
-//боковая панель навигации для компании
 export function CompanySidebar({ user, vacanciesCount, applicationsCount }) {
   return (
     <aside className="dashboard-sidebar">
@@ -25,7 +24,7 @@ export function CompanySidebar({ user, vacanciesCount, applicationsCount }) {
       <div className="profile-mini-card">
         <div className="profile-mini-header--company">
           <div className="profile-avatar profile-avatar--company">
-            {user?.name?.charAt(0)?.toUpperCase() || 'C'}
+            {user?.name?.charAt(0) || 'C'}
           </div>
           <div>
             <p className="profile-name">{user?.name || 'Компания'}</p>

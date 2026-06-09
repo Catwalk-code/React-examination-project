@@ -1,4 +1,3 @@
-//боковая панель навигации для соискателя
 export function SeekerSidebar({ user, ownResume, applicationsCount, invitationsCount }) {
   return (
     <aside className="dashboard-sidebar">
