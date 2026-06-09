@@ -42,9 +42,14 @@ function RegisterPage() {
   }
 
   const handleNameChange = (e) => {
-    const value = e.target.value
+  const value = e.target.value
+  
+  if (role === 'seeker') {
     setName(capitalizeWords(value))
+  } else {
+    setName(value)
   }
+}
 
   return (
     <div className="auth-page">
