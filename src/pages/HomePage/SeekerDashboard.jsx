@@ -26,7 +26,7 @@ function InvitationCard({resume, company }) {
   return (
     <div className="application-card">
       <div className="application-card-icon application-card-icon--invite">
-        {resume?.title?.charAt(0)?.toUpperCase() || company?.name?.charAt(0) || '?'}
+        {resume?.title?.charAt(0) || company?.name?.charAt(0) || '?'}
       </div>
       <div className="application-card-content">
         <h4 className="application-card-title">
@@ -62,7 +62,7 @@ function ApplicationCard({ application, vacancy, company }) {
       <div className="application-card-content">
         <h4 className="application-card-title">{vacancy?.title || 'Вакансия'}</h4>
         <p className="application-card-subtitle">
-          {company?.name || 'Компания'} • Отклик отправлен
+          {company?.name || 'Компания'} | Отклик отправлен
         </p>
       </div>
       <span className={`status-badge ${statusClass}`}>{statusText}</span>
@@ -72,6 +72,7 @@ function ApplicationCard({ application, vacancy, company }) {
     </div>
   )
 }
+
 //карточка вакансии для списка доступных
 function VacancyCard({ vacancy, company, onApply }) {
   return (
@@ -108,8 +109,6 @@ function VacancyCard({ vacancy, company, onApply }) {
 </div>
   )
 }
-
-
 
 export function SeekerDashboard({
   ownResume,
