@@ -8,7 +8,6 @@ function WelcomePage() {
   return (
     <div className="welcome-page">
       <main>
-        {/*приветствие*/}
         <section className="hero-section">
           <div className="hero-content">
             <h1 className="hero-title">
@@ -31,7 +30,6 @@ function WelcomePage() {
           </div>
         </section>
 
-        {/*статистика*/}
         <section className="stats-section">
           <div className="stats-grid">
             <div className="stat-item">
@@ -106,6 +104,12 @@ function WelcomePage() {
 
         {/*последние вакансии*/}
         <section className="vacancies-section">
+          <div className="vacancies-header">
+            <div>
+              <h2>Последние вакансии</h2>
+              <p>Новые возможности, опубликованные за последние 24 часа</p>
+              </div>
+            </div>
           <div className="vacancies-grid">
           {/*вакансия 1*/}
           <div className="vacancy-card">
