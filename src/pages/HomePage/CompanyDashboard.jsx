@@ -1,6 +1,5 @@
 import CurrencySymbol from "../../components/CurrencySymbol/CurrencySymbol";
 
-//панель компании с формами и списками
 export function CompanyDashboard({
   userId,
   vacancyForm,
@@ -54,11 +53,12 @@ export function CompanyDashboard({
               placeholder="Зарплата (необязательно)"
               value={vacancyForm.salary}
               onChange={(e) => {
-                const value = e.target.value
-                if (value === '' || (Number(value) >= 0 && !isNaN(Number(value)))) {
-                  setVacancyForm((prev) => ({ ...prev, salary: value }))
-                }
-              }}
+              const value = e.target.value.trim()
+              
+              if (value === '' || (Number(value) > 0 && !isNaN(Number(value)))) {
+                setVacancyForm((prev) => ({ ...prev, salary: value }))
+              }
+            }}
               onWheel={(e) => e.target.blur()}
             />
             </div>

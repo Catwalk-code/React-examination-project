@@ -6,7 +6,7 @@ import Footer from '../../components/Footer/Footer'
 import { CompanySidebar } from './CompanySidebar'
 import { SeekerSidebar } from './SeekerSidebar'
 import { CompanyDashboard } from './CompanyDashboard'
-import { SeekerDashboard } from './SeekerDashboard' 
+import { SeekerDashboard } from './SeekerDashboard'  
 
 const API_URL = 'http://localhost:4000'
 
@@ -182,11 +182,11 @@ function HomePage() {
   //валидация зарплаты
   if (vacancyForm.salary !== '') {
   const salary = Number(vacancyForm.salary)
-  if (isNaN(salary) || salary < 0) {
-    toast.error('Зарплата должна быть неотрицательным числом')
+  if (isNaN(salary) || salary <= 0) {
+    toast.error('Зарплата должна быть больше 0')
     return
   }
-}
+  }
   
   try {
     if (editingVacancyId) {
