@@ -1,56 +1,19 @@
 import { Rate } from 'antd'
 import CurrencySymbol from "../../components/CurrencySymbol/CurrencySymbol";
 
-//карточка вакансии для списка доступных
-function VacancyCard({ vacancy, company, onApply }) {
-  return (
-    <div className="vacancy-card">
-  <div className="vacancy-card-header">
-    <div className="vacancy-card-icon">
-      <span className="material-symbols-outlined">work</span>
-    </div>
-    <button className="icon-button">
-      <span className="material-symbols-outlined">bookmark</span>
-    </button>
-  </div>
-  
-  <div className="vacancy-card-info">
-    <h3 className="vacancy-card-title">{vacancy.title}</h3>
-    <p className="vacancy-card-company">{company?.name || 'Компания'}</p>
-  </div>
-  
-  <div className="vacancy-card-tags">
-    <span className="vacancy-tag">{vacancy.location || 'Не указано'}</span>
-    <span className="vacancy-tag vacancy-tag--salary">
-      {vacancy.salary ? (
-        <>
-          {vacancy.salary} <CurrencySymbol />
-        </>
-      ) : (
-        'з/п не указана'
-      )}
-    </span>
-  </div>
-  <button className="btn-outline btn-full" onClick={() => onApply(vacancy)}>
-    Cделать отклик
-  </button>
-</div>
-  )
-}
-
 //компонент действий с отзывом (редактирование/удаление)
-function ReviewActions({ review }) {
+function ReviewActions({ review, onEdit, onDelete }) {
   return (
     <div className="review-actions">
       <button 
         className="btn-sm btn-outline"
-        onClick={() => window.dispatchEvent(new CustomEvent('editReview', { detail: review }))}
+        onClick={() => onEdit(review)}
       >
         <span className="material-symbols-outlined">edit</span>
       </button>
       <button 
         className="btn-sm btn-danger"
-        onClick={() => window.dispatchEvent(new CustomEvent('deleteReview', { detail: review.id }))}
+        onClick={() => onDelete(review.id)}
       >
         <span className="material-symbols-outlined">delete</span>
       </button>
@@ -63,7 +26,7 @@ function InvitationCard({resume, company }) {
   return (
     <div className="application-card">
       <div className="application-card-icon application-card-icon--invite">
-        {resume?.title?.charAt(0)?.toUpperCase() || company?.name?.charAt(0)?.toUpperCase() || '?'}
+        {resume?.title?.charAt(0)?.toUpperCase() || company?.name?.charAt(0) || '?'}
       </div>
       <div className="application-card-content">
         <h4 className="application-card-title">
@@ -109,8 +72,45 @@ function ApplicationCard({ application, vacancy, company }) {
     </div>
   )
 }
+//карточка вакансии для списка доступных
+function VacancyCard({ vacancy, company, onApply }) {
+  return (
+    <div className="vacancy-card">
+  <div className="vacancy-card-header">
+    <div className="vacancy-card-icon">
+      <span className="material-symbols-outlined">work</span>
+    </div>
+    <button className="icon-button">
+      <span className="material-symbols-outlined">bookmark</span>
+    </button>
+  </div>
+  
+  <div className="vacancy-card-info">
+    <h3 className="vacancy-card-title">{vacancy.title}</h3>
+    <p className="vacancy-card-company">{company?.name || 'Компания'}</p>
+  </div>
+  
+  <div className="vacancy-card-tags">
+    <span className="vacancy-tag">{vacancy.location || 'Не указано'}</span>
+    <span className="vacancy-tag vacancy-tag--salary">
+      {vacancy.salary ? (
+        <>
+          {vacancy.salary} <CurrencySymbol />
+        </>
+      ) : (
+        'з/п не указана'
+      )}
+    </span>
+  </div>
+  <button className="btn-outline btn-full" onClick={() => onApply(vacancy)}>
+    Cделать отклик
+  </button>
+</div>
+  )
+}
 
-//панель соискателя с формами и списками
+
+
 export function SeekerDashboard({
   ownResume,
   resumeForm,
@@ -133,7 +133,9 @@ export function SeekerDashboard({
   editReviewForm,
   setEditReviewForm,
   cancelEditReview,
-  saveEditReview
+  saveEditReview,
+  startEditReview,
+  handleDeleteReview 
 }) {
   //фильтруем отклики и приглашения текущего пользователя
   const myApplications = applications.filter(
@@ -399,7 +401,11 @@ export function SeekerDashboard({
                           — {usersById[review.authorId]?.name || 'Пользователь'}
                         </small>
                         {review.authorId === userId && (
-                          <ReviewActions review={review} />
+                          <ReviewActions 
+                          review={review}
+                          onEdit={startEditReview}
+                          onDelete={handleDeleteReview}
+                        />
                         )}
                       </div>
                     </>
