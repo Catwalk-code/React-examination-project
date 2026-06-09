@@ -317,6 +317,18 @@
   margin: 0 auto 48px;
 }
 
+.vacancies-header h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+}
+
+.vacancies-header p {
+  font-size: 16px;
+  color: var(--on-surface-variant);
+  margin: 0;
+}
+
 .vacancies-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr) !important;
