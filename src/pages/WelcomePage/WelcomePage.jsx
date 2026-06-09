@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import './WelcomePage.css'
 import Footer from '../../components/Footer/Footer'
 import CurrencySymbol from '../../components/CurrencySymbol/CurrencySymbol'
+import heroImage from '../../assets/heroImage.jpg'
 
 function WelcomePage() {
   return (
@@ -23,7 +24,7 @@ function WelcomePage() {
           <div className="hero-image">
             <div className="hero-image-bg"></div>
             <img 
-              src="src/assets/woman-thinking-at-work.jpg"
+              src={heroImage}
               alt="Профессионал за работой"
               className="hero-img"
             />
