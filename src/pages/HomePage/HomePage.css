@@ -453,9 +453,13 @@
   transition: all 0.2s;
 }
 
-.vacancy-apply-btn:hover {
+.hp-vacancy-apply-btn:hover {
   opacity: 0.9;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.hp-vacancy-apply-btn:active {
+  transform: translateY(1px);
 }
 
 /*списковые элементы*/

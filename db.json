@@ -152,46 +152,7 @@
     }
   ],
   "applications": [
-    {
-      "type": "vacancy_application",
-      "vacancyId": 4,
-      "resumeId": 3,
-      "seekerId": 1,
-      "companyId": 2,
-      "status": "new",
-      "createdAt": "2026-06-10T11:48:33.424Z",
-      "id": 1
-    },
-    {
-      "type": "vacancy_application",
-      "vacancyId": 2,
-      "resumeId": 3,
-      "seekerId": 1,
-      "companyId": 4,
-      "status": "new",
-      "createdAt": "2026-06-10T11:48:33.926Z",
-      "id": 2
-    },
-    {
-      "type": "vacancy_application",
-      "vacancyId": 6,
-      "resumeId": 3,
-      "seekerId": 1,
-      "companyId": 3,
-      "status": "new",
-      "createdAt": "2026-06-10T11:48:34.951Z",
-      "id": 3
-    },
-    {
-      "type": "vacancy_application",
-      "vacancyId": 5,
-      "resumeId": 3,
-      "seekerId": 1,
-      "companyId": 3,
-      "status": "new",
-      "createdAt": "2026-06-10T11:48:34.600Z",
-      "id": 4
-    }
+    
   ],
   "reviews": [
     {
