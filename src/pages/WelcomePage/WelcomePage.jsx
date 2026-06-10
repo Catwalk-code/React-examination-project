@@ -117,7 +117,7 @@ function WelcomePage() {
               <div className="vacancy-logo vacancy-logo--t">T</div>
               <span className="vacancy-badge">Полная занятость</span>
             </div>
-            <h3>Старший продуктовый дизайнер</h3>
+            <h3>Product Designer</h3>
             <p className="vacancy-company">Fresh Design</p>
             <div className="vacancy-meta">
               <span className="material-symbols-outlined">location_on</span>
@@ -136,7 +136,7 @@ function WelcomePage() {
               <div className="vacancy-logo vacancy-logo--d">D</div>
               <span className="vacancy-badge">Удаленно</span>
             </div>
-            <h3>Ведущий бэкенд-разработчик</h3>
+            <h3>Senior Backend Developer</h3>
             <p className="vacancy-company">DataFlow Systems</p>
             <div className="vacancy-meta">
               <span className="material-symbols-outlined">location_on</span>
@@ -155,7 +155,7 @@ function WelcomePage() {
               <div className="vacancy-logo vacancy-logo--g">G</div>
               <span className="vacancy-badge">Гибрид</span>
             </div>
-            <h3>Специалист по маркетингу</h3>
+            <h3>Marketing specialist</h3>
             <p className="vacancy-company">GreenGlobal</p>
             <div className="vacancy-meta">
               <span className="material-symbols-outlined">location_on</span>
