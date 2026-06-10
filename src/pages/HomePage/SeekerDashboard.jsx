@@ -396,40 +396,49 @@ export function SeekerDashboard({
                   ) : (
                     
                       <>
-                  <div className="review-card-header">
-                    <h4 className="review-card-company">
-                      {usersById[review.companyId]?.name || 'Компания'}
-                    </h4>
-                    <Rate value={review.rating} disabled style={{ fontSize: '14px' }} />
-                  </div>
-                  <p className="review-card-text">"{review.text}"</p>
- 
-                  <small className="review-card-author">
-                    — {usersById[review.authorId]?.name || 'Пользователь'}
-                  </small>
+                    <p className="review-card-text">"{review.text}"</p>
 
-                  <div className="review-card-footer">
-                    {review.authorId === userId && (
-                      <ReviewActions 
-                        review={review}
-                        onEdit={startEditReview}
-                        onDelete={handleDeleteReview}
-                      />
-                    )}
-                  </div>
+                    <small className="review-card-author">
+                      — {usersById[review.authorId]?.name || 'Пользователь'}
+                    </small>
 
-                  <small className="review-card-date">
-                    {review.createdAt 
-                      ? new Date(review.createdAt).toLocaleString('ru-RU', {
+                    <small className="review-card-date">
+                      {(() => {
+                        const dateToShow = review.updatedAt || review.createdAt
+                        if (!dateToShow) return 'Дата неизвестна'
+                        
+                        return new Date(dateToShow).toLocaleString('ru-RU', {
                           day: '2-digit',
                           month: 'long',
                           year: 'numeric',
                           hour: '2-digit',
                           minute: '2-digit'
                         })
-                      : 'Дата неизвестна'}
-                  </small>
-                </>
+                      })()}
+                    </small>
+
+                    {review.updatedAt && (
+                      <small className="review-card-edited">
+                        Отредактировано {new Date(review.updatedAt).toLocaleString('ru-RU', {
+                          day: '2-digit',
+                          month: 'long',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </small>
+                    )}
+
+                    <div className="review-card-footer">
+                      {review.authorId === userId && (
+                        <ReviewActions 
+                          review={review}
+                          onEdit={startEditReview}
+                          onDelete={handleDeleteReview}
+                        />
+                      )}
+                    </div>
+                  </>
                   )}
                 </article>
               ))}

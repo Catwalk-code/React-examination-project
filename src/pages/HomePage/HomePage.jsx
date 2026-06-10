@@ -312,17 +312,13 @@ const handleSaveResume = async (event) => {
   }
 
   const hasAppliedToCompany = (companyId) => {
-    const companyVacancyIds = vacancies
-      .filter((v) => v.companyId === companyId)
-      .map((v) => v.id)
-    
-    return applications.some(
-      (app) =>
-        app.type === 'vacancy_application' &&
-        app.seekerId === userId &&
-        companyVacancyIds.includes(app.vacancyId)
-    )
-  }
+  return applications.some(
+    (app) =>
+      app.seekerId === userId &&
+      app.companyId === companyId &&
+      (app.type === 'vacancy_application' || app.type === 'resume_invite')
+  )
+}
 
   const inviteCandidate = async (resume) => {
     const alreadyInvited = applications.some(
@@ -540,26 +536,27 @@ const handleSaveResume = async (event) => {
   }
 
   const saveEditReview = async (reviewId) => {
-    const originalReview = reviews.find((r) => r.id === reviewId)
-    if (!originalReview) return
+  const originalReview = reviews.find((r) => r.id === reviewId)
+  if (!originalReview) return
 
-    try {
-      await fetchWithAuth(`/reviews/${reviewId}`, {
-        method: 'PUT',
-        body: JSON.stringify({
-          ...originalReview,
-          rating: Number(editReviewForm.rating),
-          text: editReviewForm.text,
-          userId: userId
-        })
+  try {
+    await fetchWithAuth(`/reviews/${reviewId}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        ...originalReview,
+        rating: Number(editReviewForm.rating),
+        text: editReviewForm.text,
+        userId: userId,
+        updatedAt: new Date().toISOString()
       })
-      await loadData()
-      setEditingReviewId(null)
-      toast.success('Отзыв обновлён')
-    } catch (err) {
-      toast.error(err.message)
-    }
+    })
+    await loadData()
+    setEditingReviewId(null)
+    toast.success('Отзыв обновлён')
+  } catch (err) {
+    toast.error(err.message)
   }
+}
 
   useEffect(() => {
     const handleEdit = (e) => startEditReview(e.detail)

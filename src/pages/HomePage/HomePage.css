@@ -422,13 +422,16 @@
 }
 
 .hp-vacancy-card-salary-col {
-  flex: 0 0 18%;
+  align-items: center;
 }
 
 .hp-vacancy-salary-badge {
+  display: inline-block;
+  height: 36px;
+  width: 93px;
   background: rgba(43, 122, 120, 0.1);
   color: var(--primary);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   padding: 6px 12px;
   border-radius: 6px;
@@ -442,6 +445,7 @@
 }
 
 .hp-vacancy-apply-btn {
+  font-size: 14px;
   height: 36px;
   padding: 0 16px;
   border: 1px solid var(--color-secondary);
@@ -690,6 +694,8 @@
 .review-card {
   padding-bottom: 16px;
   border-bottom: 1px solid var(--border-subtle);
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .review-card:last-child {
@@ -714,8 +720,11 @@
   font-size: 14px;
   color: var(--on-surface-variant);
   font-style: italic;
-  margin: 0 0 8px 0;
+  margin: 0 0 4px 0;
   line-height: 1.5;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;  
 }
 
 .review-card-author {
@@ -724,14 +733,15 @@
   color: var(--outline);
   font-style: italic;
   text-align: center;  
-  margin: 8px 0;
+  margin:0;
 }
 
 .review-card-footer {
   display: flex;
-  justify-content: flex-end;
+  width: 50%;
+  justify-content: center;  
   align-items: center;
-  margin-top: 4px;
+  margin: 8px auto 4px;     
 }
 
 .review-card-date {
@@ -739,11 +749,28 @@
   font-size: 12px;
   color: var(--outline);
   font-style: italic;
+  text-align: center;   
 }
+
+.review-card-edited {
+  display: block;
+  font-size: 11px;
+  color: var(--on-surface-variant);
+  font-style: italic;
+  opacity: 0.8;
+  text-align: center;
+}
+
 
 .review-actions {
   display: flex;
-  gap: 4px;
+  gap: 8px;
+  width: 100%;              
+  justify-content: center;  
+}
+
+.review-actions button {
+  flex: 1;
 }
 
 /*кнопка удаления отзыва */
@@ -968,7 +995,7 @@
   vertical-align: middle;
   margin: 0;
   display: inline-block;
-  transform: translateY(-1px);
+  transform: translateY(-15%);
 }
 
 .vacancy-tag--salary .currency-symbol {
