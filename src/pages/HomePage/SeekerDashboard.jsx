@@ -75,39 +75,47 @@ function ApplicationCard({ application, vacancy, company }) {
 
 //карточка вакансии для списка доступных
 function VacancyCard({ vacancy, company, onApply }) {
+  const getInitials = (name) => {
+    if (!name) return 'ВК';
+    return name.split(' ').map(word => word[0]).join('').substring(0, 2).toUpperCase();
+  };
+
   return (
-    <div className="vacancy-card">
-  <div className="vacancy-card-header">
-    <div className="vacancy-card-icon">
-      <span className="material-symbols-outlined">work</span>
+    <div className="hp-vacancy-card-horizontal">
+      <div className="hp-vacancy-card-avatar">
+        {getInitials(company?.name)}
+      </div>
+      
+      <div className="hp-vacancy-card-title-col">
+        <h4 className="hp-vacancy-card-title-text" title={vacancy.title}>
+          {vacancy.title}
+        </h4>
+      </div>
+      
+      <div className="hp-vacancy-card-company-col">
+        <span className="hp-vacancy-card-company-name">{company?.name || 'Компания'}</span>
+        <span className="hp-vacancy-card-location">{vacancy.location || 'Не указано'}</span>
+      </div>
+      
+      <div className="hp-vacancy-card-salary-col">
+        <span className="hp-vacancy-salary-badge">
+          {vacancy.salary ? (
+            <>
+              {vacancy.salary} <CurrencySymbol />
+            </>
+          ) : (
+            'з/п не указана'
+          )}
+        </span>
+      </div>
+      
+      <div className="hp-vacancy-card-actions-col">
+        <button className="hp-vacancy-apply-btn" onClick={() => onApply(vacancy)}>
+          Отклик
+        </button>
+      </div>
     </div>
-    <button className="icon-button">
-      <span className="material-symbols-outlined">bookmark</span>
-    </button>
-  </div>
-  
-  <div className="vacancy-card-info">
-    <h3 className="vacancy-card-title">{vacancy.title}</h3>
-    <p className="vacancy-card-company">{company?.name || 'Компания'}</p>
-  </div>
-  
-  <div className="vacancy-card-tags">
-    <span className="vacancy-tag">{vacancy.location || 'Не указано'}</span>
-    <span className="vacancy-tag vacancy-tag--salary">
-      {vacancy.salary ? (
-        <>
-          {vacancy.salary} <CurrencySymbol />
-        </>
-      ) : (
-        'з/п не указана'
-      )}
-    </span>
-  </div>
-  <button className="btn-outline btn-full" onClick={() => onApply(vacancy)}>
-    Cделать отклик
-  </button>
-</div>
-  )
+  );
 }
 
 export function SeekerDashboard({
@@ -254,7 +262,7 @@ export function SeekerDashboard({
           <div className="section-header">
             <h2 className="section-title">Список всех вакансий</h2>
           </div>
-          <div className="vacancies-grid">
+          <div className="hp-vacancies-grid">
             {vacancies.map((vacancy) => (
               <VacancyCard
                 key={vacancy.id}
@@ -386,28 +394,42 @@ export function SeekerDashboard({
                       </div>
                     </div>
                   ) : (
-                    /*обычное отображение отзыва*/
-                    <>
-                      <div className="review-card-header">
-                        <h4 className="review-card-company">
-                          {usersById[review.companyId]?.name || 'Компания'}
-                        </h4>
-                        <Rate value={review.rating} disabled style={{ fontSize: '14px' }} />
-                      </div>
-                      <p className="review-card-text">"{review.text}"</p>
-                      <div className="review-card-footer">
-                        <small className="review-card-author">
-                          — {usersById[review.authorId]?.name || 'Пользователь'}
-                        </small>
-                        {review.authorId === userId && (
-                          <ReviewActions 
-                          review={review}
-                          onEdit={startEditReview}
-                          onDelete={handleDeleteReview}
-                        />
-                        )}
-                      </div>
-                    </>
+                    
+                      <>
+                  <div className="review-card-header">
+                    <h4 className="review-card-company">
+                      {usersById[review.companyId]?.name || 'Компания'}
+                    </h4>
+                    <Rate value={review.rating} disabled style={{ fontSize: '14px' }} />
+                  </div>
+                  <p className="review-card-text">"{review.text}"</p>
+ 
+                  <small className="review-card-author">
+                    — {usersById[review.authorId]?.name || 'Пользователь'}
+                  </small>
+
+                  <div className="review-card-footer">
+                    {review.authorId === userId && (
+                      <ReviewActions 
+                        review={review}
+                        onEdit={startEditReview}
+                        onDelete={handleDeleteReview}
+                      />
+                    )}
+                  </div>
+
+                  <small className="review-card-date">
+                    {review.createdAt 
+                      ? new Date(review.createdAt).toLocaleString('ru-RU', {
+                          day: '2-digit',
+                          month: 'long',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })
+                      : 'Дата неизвестна'}
+                  </small>
+                </>
                   )}
                 </article>
               ))}
