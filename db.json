@@ -152,7 +152,64 @@
     }
   ],
   "applications": [
-    
+    {
+      "type": "vacancy_application",
+      "vacancyId": 9,
+      "resumeId": 3,
+      "seekerId": 1,
+      "companyId": 8,
+      "status": "new",
+      "createdAt": "2026-06-10T21:11:15.813Z",
+      "id": 1
+    },
+    {
+      "type": "vacancy_application",
+      "vacancyId": 2,
+      "resumeId": 3,
+      "seekerId": 1,
+      "companyId": 4,
+      "status": "new",
+      "createdAt": "2026-06-10T21:12:19.138Z",
+      "id": 2
+    },
+    {
+      "type": "resume_invite",
+      "resumeId": 2,
+      "seekerId": 6,
+      "companyId": 2,
+      "status": "sent",
+      "createdAt": "2026-06-10T22:23:12.212Z",
+      "id": 3
+    },
+    {
+      "type": "vacancy_application",
+      "vacancyId": 2,
+      "resumeId": 2,
+      "seekerId": 6,
+      "companyId": 4,
+      "status": "new",
+      "createdAt": "2026-06-10T22:23:40.728Z",
+      "id": 4
+    },
+    {
+      "type": "vacancy_application",
+      "vacancyId": 7,
+      "resumeId": 2,
+      "seekerId": 6,
+      "companyId": 5,
+      "status": "new",
+      "createdAt": "2026-06-10T22:29:25.190Z",
+      "id": 5
+    },
+    {
+      "type": "resume_invite",
+      "resumeId": 2,
+      "seekerId": 6,
+      "companyId": 3,
+      "status": "sent",
+      "createdAt": "2026-06-10T22:30:14.965Z",
+      "id": 6
+    }
   ],
   "reviews": [
     {
@@ -160,9 +217,19 @@
       "authorId": 6,
       "userId": 6,
       "rating": 5,
-      "text": "Прекрасные штат сотрудников. Здесь вы найдёте прекрасных коллег по работе. Все процессы настроены идеально.",
+      "text": "Прекрасные штат сотрудников. Здесь вы найдёте прекрасных коллег. Все процессы настроены идеально.",
       "createdAt": "2026-06-07T13:13:27.254Z",
       "id": 1
+    },
+    {
+      "companyId": 4,
+      "authorId": 1,
+      "userId": 1,
+      "rating": 4,
+      "text": "джькрежьржькцельтиуц4ьерльи3ерь3л45ьри6356иог356ио5445инр435ри354рм536р45и6о",
+      "createdAt": "2026-06-10T21:12:31.724Z",
+      "id": 2,
+      "updatedAt": "2026-06-10T21:53:41.311Z"
     }
   ]
 }
