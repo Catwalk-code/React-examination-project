@@ -446,6 +446,7 @@
 
 .hp-vacancy-apply-btn {
   font-size: 14px;
+  width: 93px;
   height: 36px;
   padding: 0 16px;
   border: 1px solid var(--color-secondary);
