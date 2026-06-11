@@ -77,13 +77,13 @@ function ApplicationCard({ application, vacancy, company }) {
 function VacancyCard({ vacancy, company, onApply }) {
   const getInitials = (name) => {
     if (!name) return 'ВК';
-    return name.split(' ').map(word => word[0]).join('').substring(0, 2).toUpperCase();
+    return name.split(' ').map(word => word[0]).join('').substring(0, 1).toUpperCase();
   };
 
   return (
     <div className="hp-vacancy-card-horizontal">
       <div className="hp-vacancy-card-avatar">
-        {getInitials(company?.name)}
+        {getInitials(vacancy?.title)}
       </div>
       
       <div className="hp-vacancy-card-title-col">
