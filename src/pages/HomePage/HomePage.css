@@ -1022,3 +1022,64 @@
     gap: 16px;
   }
 }
+
+@media (max-width: 768px) {
+  .dashboard-layout {
+    padding: 12px;
+    gap: 16px;
+  }
+
+  .dashboard-section,
+  .stat-card {
+    padding: 16px;
+  }
+
+  .section-header {
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .application-card,
+  .list-item {
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .hp-vacancy-card-horizontal {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 12px;
+    justify-items: start;
+  }
+
+  .hp-vacancy-card-actions-col {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .hp-vacancy-apply-btn {
+    width: 100%;
+  }
+
+  .review-card-header,
+  .review-card-footer {
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    margin: 8px 0 4px;
+  }
+
+  .review-actions {
+    justify-content: flex-start;
+  }
+}

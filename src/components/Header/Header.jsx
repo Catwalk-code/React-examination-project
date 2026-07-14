@@ -14,7 +14,7 @@ function Header() {
   return (
     <header className="header">
       <Link to="/" className="header-logo">
-        findjob.by
+        AtomPath
       </Link>
 
       <nav className="header-nav">
