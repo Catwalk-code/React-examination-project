@@ -5,13 +5,22 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "server": "json-server-auth db.json --port 4000",
+    "server": "node server.js",
+    "db:migrate": "node db/migrate.js",
+    "db:import": "node db/import-from-json.js",
+    "server:json": "json-server-auth db.json --port 4000",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
     "antd": "^6.4.3",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.12.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-hot-toast": "^2.6.0",

@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# локальные настройки подключения к PostgreSQL
+.env
+.env.local
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
