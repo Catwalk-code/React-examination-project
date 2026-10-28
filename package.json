@@ -6,13 +6,14 @@
   "scripts": {
     "dev": "vite",
     "server": "node src/server/index.js",
-    "db:create": "psql -U postgres -f db/create.sql",
+    "db:create": "node -e \"import('dotenv/config').then(()=>import('./scripts/db-create.mjs'))\"",
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "pg:local": "node scripts/pg-server.mjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.1",
@@ -30,7 +31,7 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
-    "@electric-sql/pglite": "^0.2.13",
+    "@electric-sql/pglite": "^0.5.10",
     "@electric-sql/pglite-socket": "^0.2.13",
     "@eslint/js": "^10.0.1",
     "@types/react": "^19.2.14",

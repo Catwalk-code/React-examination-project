@@ -1,7 +1,8 @@
 // Скрипт заполнения базы данных тестовыми данными (prisma db seed).
 // Prisma 7 работает через driver-адаптер pg — клиент обязательно создаётся с adapter.
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '@prisma/client';
+import pkg from '@prisma/client';
+const { PrismaClient } = pkg;
 import bcrypt from 'bcryptjs';
 import 'dotenv/config';
 

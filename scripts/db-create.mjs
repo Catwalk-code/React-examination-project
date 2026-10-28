@@ -12,26 +12,30 @@ const adminUrl = `${target.protocol}//${target.username}:${target.password}@${ta
 
 const sql = readFileSync(new URL('../db/create.sql', import.meta.url), 'utf8');
 
+// pg.Client выполняет по одному запросу за вызов query(),
+// поэтому разбиваем скрипт на отдельные инструкции.
+const statements = sql
+  .split(';')
+  .map((s) => s.trim())
+  .filter(Boolean);
+
 const client = new pg.Client({ connectionString: adminUrl });
 await client.connect();
 try {
-  const exists = await client.query('SELECT 1 FROM pg_database WHERE datname = $1', [dbName]);
-  if (exists.rowCount === 0) {
-    await client.query(`CREATE DATABASE ${JSON.stringify(dbName).replace(/"/g, '"')}`);
-    console.log(`База данных "${dbName}" создана.`);
-  } else {
-    console.log(`База данных "${dbName}" уже существует.`);
+  for (const stmt of statements) {
+    try {
+      await client.query(stmt);
+      console.log(`Выполнено: ${stmt.replace(/\s+/g, ' ')}`);
+    } catch (e) {
+      // Идемпотентность: если база уже существует (42P04) — не ошибка.
+      if (e.code === '42P04') {
+        console.log(`База данных "${dbName}" уже существует — пропускаем.`);
+      } else {
+        throw e;
+      }
+    }
   }
 } finally {
   await client.end();
 }
-
-// Выполняем сам SQL-скрипт уже внутри созданной БД (идемпотентно: CREATE IF NOT EXISTS).
-const db = new pg.Client({ connectionString: url });
-await db.connect();
-try {
-  await db.query(sql);
-  console.log('Скрипт db/create.sql выполнен.');
-} finally {
-  await db.end();
-}
+console.log('Скрипт db/create.sql выполнен.');
