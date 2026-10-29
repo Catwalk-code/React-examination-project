@@ -1,5 +1,4 @@
 // Скрипт заполнения базы данных тестовыми данными (prisma db seed).
-// Prisma 7 работает через driver-адаптер pg — клиент обязательно создаётся с adapter.
 import { PrismaPg } from '@prisma/adapter-pg';
 import pkg from '@prisma/client';
 const { PrismaClient } = pkg;
@@ -13,7 +12,7 @@ const prisma = new PrismaClient({
 async function main() {
   console.log('Очистка таблиц...');
   // Порядок удаления важен из-за внешних ключей (каскадное удаление не отключено,
-  // но удаляем явно «сверху вниз» для наглядности и сброса счётчиков).
+  // но удаляем явно сверху вниз для наглядности и сброса счётчиков)
   await prisma.review.deleteMany();
   await prisma.response.deleteMany();
   await prisma.resume.deleteMany();
