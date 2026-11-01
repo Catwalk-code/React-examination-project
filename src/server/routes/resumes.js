@@ -10,8 +10,34 @@ async function getApplicant(req) {
   return prisma.applicant.findUnique({ where: { userId: req.user.id } });
 }
 
-// GET /resume/ — список резюме текущего соискателя (applicant)
-router.get('/', authorize('applicant'), async (req, res) => {
+// GET /resume/ — публичный список резюме в формате, понятном фронтенду.
+// Каждое резюме дополняется полями userId/companyId/name, чтобы карточки
+// на странице «Главная» корректно отображали автора и его отклики.
+router.get('/', async (_req, res) => {
+  const resumes = await prisma.resume.findMany({
+    include: {
+      applicant: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          user: { select: { id: true, email: true } },
+        },
+      },
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+  res.json(
+    resumes.map((r) => ({
+      ...r,
+      userId: r.applicant?.user?.id ?? null,
+      name: `${r.applicant?.firstName || ''} ${r.applicant?.lastName || ''}`.trim() || 'Соискатель',
+    }))
+  );
+});
+
+// GET /resume/my — список резюме текущего соискателя (applicant)
+router.get('/my', authorize('applicant'), async (req, res) => {
   const applicant = await getApplicant(req);
   if (!applicant) return res.status(404).json({ error: 'Профиль соискателя не найден' });
   const resumes = await prisma.resume.findMany({
@@ -42,7 +68,10 @@ router.get('/:id', authorize('applicant', 'company', 'admin'), async (req, res) 
 router.post('/', authorize('applicant'), async (req, res) => {
   const applicant = await getApplicant(req);
   if (!applicant) return res.status(404).json({ error: 'Профиль соискателя не найден' });
-  const { title, skills, experience, isPrimary } = req.body || {};
+  // фронтенд может присылать title/skills/experience либо поля «старого» формата (desiredPosition и т.п.)
+  const title = req.body.title || req.body.desiredPosition;
+  const skills = req.body.skills || req.body.keySkills;
+  const experience = req.body.experience || req.body.workExperience;
   if (!title || !skills || !experience) {
     return res.status(400).json({ error: 'Заполните обязательные поля' });
   }
@@ -52,7 +81,7 @@ router.post('/', authorize('applicant'), async (req, res) => {
       title,
       skills,
       experience,
-      isPrimary: Boolean(isPrimary),
+      isPrimary: Boolean(req.body.isPrimary ?? true),
     },
   });
   res.status(201).json(resume);

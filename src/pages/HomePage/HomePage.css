@@ -426,9 +426,15 @@
 }
 
 .hp-vacancy-salary-badge {
-  display: inline-block;
-  height: 36px;
-  width: 93px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 36px;
+  /* ширина не фиксированная — бейдж растягивается под содержимое,
+     чтобы надпись «з/п не указана» целиком помещалась в прямоугольник */
+  width: auto;
+  max-width: 100%;
   background: rgba(43, 122, 120, 0.1);
   color: var(--primary);
   font-size: 15px;
