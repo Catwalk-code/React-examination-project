@@ -175,7 +175,7 @@ function WelcomePage() {
           <div className="cta-content">
             <div className="cta-pattern"></div>
             <h2>Готовы изменить свою карьеру?</h2>
-            <p>Присоединяйтесь к тысячам профессионалов, которые нашли работу своей мечты на findjob.by. Ваша следующая возможность — всего в одном клике.</p>
+            <p>Присоединяйтесь к тысячам профессионалов, которые нашли работу своей мечты на AtomPath. Ваша следующая возможность — всего в одном клике.</p>
             <div className="cta-buttons">
               <Link to="/register" className="btn-white">Создать аккаунт</Link>
               <Link to="/login" className="btn-outline-white">Войти</Link>
