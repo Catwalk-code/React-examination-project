@@ -59,7 +59,23 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, {
       expiresIn: '8h',
     });
-    res.json({ token, user: { id: user.id, email: user.email, role: user.role } });
+    const userProfile =
+      user.role === 'company'
+        ? await prisma.company.findUnique({
+            where: { userId: user.id },
+            select: { name: true },
+          })
+        : await prisma.applicant.findUnique({
+            where: { userId: user.id },
+            select: { firstName: true, lastName: true },
+          });
+
+    const name =
+      user.role === 'company'
+        ? userProfile?.name
+        : [userProfile?.firstName, userProfile?.lastName].filter(Boolean).join(' ') || user.email;
+
+    res.json({ token, user: { id: user.id, email: user.email, role: user.role, name } });
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: 'Внутренняя ошибка сервера' });

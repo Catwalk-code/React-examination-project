@@ -59,10 +59,10 @@ async function main() {
   const techCorp = await prisma.company.create({
     data: {
       userId: techUser.id,
-      name: 'Techsolutions Inc.',
-      description: 'Разработка корпоративного ПО и интеграционных решений.',
-      website: 'https://techsolutions.example.com',
-      address: 'г. Москва, ул. Тверская, 12',
+      name: 'Techsolutions',
+      description: 'Разработка корпоративного ПО и интеграционных решений на Node.js.',
+      website: 'https://techsolutions.by',
+      address: 'г. Минск, пр. Независимости, 95',
     },
   });
   const dataflowCorp = await prisma.company.create({
@@ -70,8 +70,8 @@ async function main() {
       userId: dataflowUser.id,
       name: 'Dataflow Systems',
       description: 'Аналитика больших данных, построение DWH и BI-систем.',
-      website: 'https://dataflow.example.com',
-      address: 'г. Санкт-Петербург, Невский пр., 20',
+      website: 'https://dataflow.by',
+      address: 'г. Брест, ул. Московская, 164',
     },
   });
   const greenCorp = await prisma.company.create({
@@ -79,8 +79,8 @@ async function main() {
       userId: greenUser.id,
       name: 'Greenglobal',
       description: 'Энергоэффективные технологии и «зелёная» энергетика.',
-      website: 'https://greenglobal.example.com',
-      address: 'г. Казань, ул. Баумана, 5',
+      website: 'https://greenglobal.by',
+      address: 'г. Гродно, пр. Конституции, 4',
     },
   });
 
@@ -144,10 +144,10 @@ async function main() {
     data: {
       companyId: techCorp.id,
       title: 'Backend-разработчик',
-      description: 'Разработка REST API и микросервисов на Node.js.',
-      salaryFrom: 150000,
-      salaryTo: 220000,
-      location: 'Москва',
+      description: 'Разработка REST API и микросервисов на Node.js. Зарплата в белорусских рублях (BYN).',
+      salaryFrom: 4000,
+      salaryTo: 6500,
+      location: 'Минск',
       isRemote: true,
     },
   });
@@ -155,10 +155,10 @@ async function main() {
     data: {
       companyId: dataflowCorp.id,
       title: 'Аналитик данных',
-      description: 'Построение отчётов, витрин данных и дашбордов.',
-      salaryFrom: 120000,
-      salaryTo: 170000,
-      location: 'Санкт-Петербург',
+      description: 'Построение отчётов, витрин данных и BI-систем. Оплата в BYN.',
+      salaryFrom: 3500,
+      salaryTo: 5500,
+      location: 'Брест',
       isRemote: false,
     },
   });
@@ -166,11 +166,22 @@ async function main() {
     data: {
       companyId: greenCorp.id,
       title: 'Инженер по энергоэффективности',
-      description: 'Аудит и оптимизация потребления энергии на производствах.',
-      salaryFrom: 100000,
-      salaryTo: 150000,
-      location: 'Казань',
+      description: 'Аудит и оптимизация энергопотребления. З/п в бел. рублях (BYN).',
+      salaryFrom: 3000,
+      salaryTo: 4500,
+      location: 'Гродно',
       isRemote: false,
+    },
+  });
+  const vacFrontend = await prisma.vacancy.create({
+    data: {
+      companyId: techCorp.id,
+      title: 'Frontend-разработчик (React)',
+      description: 'Разработка SPA на React. Зарплата в BYN.',
+      salaryFrom: 3500,
+      salaryTo: 5500,
+      location: 'Минск',
+      isRemote: true,
     },
   });
 
