@@ -5,13 +5,25 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "server": "json-server-auth db.json --port 4000",
+    "server": "node src/server/index.js",
+    "db:create": "node -e \"import('dotenv/config').then(()=>import('./scripts/db-create.mjs'))\"",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "pg:local": "node scripts/pg-server.mjs"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.10.1",
+    "@prisma/client": "^7.10.1",
     "antd": "^6.4.3",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^18.0.8",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.23.1",
+    "prisma": "^7.10.1",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-hot-toast": "^2.6.0",
@@ -19,6 +31,8 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.10",
+    "@electric-sql/pglite-socket": "^0.2.13",
     "@eslint/js": "^10.0.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -26,7 +40,7 @@
     "eslint": "^10.3.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
-    "express": "^4.19.2",
+    "express": "^4.22.3",
     "globals": "^17.6.0",
     "json-server": "^0.17.4",
     "json-server-auth": "^2.1.0",
