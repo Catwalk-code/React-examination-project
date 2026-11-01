@@ -1,0 +1,235 @@
+{
+  "users": [
+    {
+      "email": "ivanov@email.com",
+      "password": "$2a$10$mx7K1NAopBbdWKKRtqP94OyPz.uq2oQbNaibTqCp7lY4UfrsiLZEC",
+      "name": "Иванов Иван Иванович",
+      "role": "seeker",
+      "id": 1
+    },
+    {
+      "email": "example@example.com",
+      "password": "$2a$10$yLdtE9axtaDiPuGMe3zj3.wkc3AW1UiSNpEfoY8WF5ns9e6cCuYhC",
+      "name": "Example",
+      "role": "company",
+      "id": 2
+    },
+    {
+      "email": "techsolutionsinc@email.com",
+      "password": "$2a$10$Vimzmbjyk274o881kyoyjOP8U.030ubLWcJxipvfY2tK7DtkyTIgW",
+      "name": "Techsolutions Inc.",
+      "role": "company",
+      "id": 3
+    },
+    {
+      "email": "dataflowsystems@email.com",
+      "password": "$2a$10$Mgr6DQm8VY55mJ5XL7/hHuPSq6N8JuETeERcqSUPj3GSWXS3saFT6",
+      "name": "Dataflow Systems",
+      "role": "company",
+      "id": 4
+    },
+    {
+      "email": "greenglobal@email.com",
+      "password": "$2a$10$K8VVlPmk/diJ2fCbePcHc.c8JdX03tDSSFVnXRpcTACm.og8QscoG",
+      "name": "Greenglobal",
+      "role": "company",
+      "id": 5
+    },
+    {
+      "email": "gena@email.com",
+      "password": "$2a$10$CIEsfPU5afV7k6Q8JJnfQOAAkPn1djAg0HhFWPRUrWDmrEUP4VchG",
+      "name": "Жирафов Геннадий Петрович",
+      "role": "seeker",
+      "id": 6
+    },
+    {
+      "email": "empty@email.com",
+      "password": "$2a$10$3K9NHRiSO7tdUm47vYoyi.1BcaAeovgiRffMU83VN0AA/laFoidbm",
+      "name": "Пустов Пуст Пустович",
+      "role": "seeker",
+      "id": 7
+    },
+    {
+      "email": "freshdesign@email.com",
+      "password": "$2a$10$Lt1SqwYWcn2Qb1z5ziMUaOP9em8uMGW50Eghm56vE3SJOyWkbA43W",
+      "name": "Fresh Design",
+      "role": "company",
+      "id": 8
+    }
+  ],
+  "vacancies": [
+    {
+      "title": "Senior Backend Developer",
+      "description": "Нужен опытный разработчик, который умеет создавать надежные и быстрые серверные системы и писать понятный код. Также важно, чтобы ты мог направлять команду, проверять работу коллег и принимать ключевые технические решения.",
+      "salary": "от 6500 ",
+      "location": "Удаленно",
+      "companyId": 4,
+      "createdAt": "2026-06-06T14:16:31.237Z",
+      "id": 2
+    },
+    {
+      "title": "Senior Angular Developer",
+      "description": "Требования: знать JS, Angular, HTML, CSS. Иметь 6 лет коммерческого опыта.",
+      "salary": "от 1200",
+      "location": "Витебск",
+      "companyId": 2,
+      "updatedAt": "2026-06-07T13:43:33.834Z",
+      "id": 4
+    },
+    {
+      "title": "Junior Python Backend",
+      "description": "Занание Python, FastAPI/Django, PostgreSQL, Docker, Алгоритмы Структур Данных, умение работать в Linux; Опыт работы: полгода.",
+      "salary": "от 1200",
+      "location": "Витебск",
+      "companyId": 3,
+      "createdAt": "2026-06-07T13:01:58.205Z",
+      "id": 5
+    },
+    {
+      "title": "Middle Java Bacend",
+      "description": "Maven, Java, PostgreSQL, Алгоритмы Структур Данных, умение работать в Linux; Опыт работы: полгода.",
+      "salary": "от 4000",
+      "location": "Минск",
+      "companyId": 3,
+      "createdAt": "2026-06-07T13:03:17.044Z",
+      "id": 6
+    },
+    {
+      "title": "Marketer",
+      "description": "Придумывать промо-ролики, флаеры, рекламы на билдборды;\nОпыт работы: 1 год. ",
+      "salary": "от 1200",
+      "location": "Гомель",
+      "companyId": 5,
+      "createdAt": "2026-06-07T14:32:04.031Z",
+      "id": 7
+    },
+    {
+      "title": "Product Disigner",
+      "description": "Ищем опытного дизайнера, который умеет создавать удобные интерфейсы, опираясь на исследования и реальные потребности пользователей. Также важно уметь вести проекты от идеи до запуска.",
+      "salary": "от 2500",
+      "location": "Гомель",
+      "companyId": 3,
+      "createdAt": "2026-06-07T14:33:49.904Z",
+      "id": 8
+    },
+    {
+      "title": "Product Disigner",
+      "description": "Ищем опытного дизайнера, который умеет создавать удобные интерфейсы, опираясь на исследования и реальные потребности пользователей. Также важно уметь вести проекты от идеи до запуска.",
+      "salary": "от 2500",
+      "location": "Гомель",
+      "companyId": 8,
+      "createdAt": "2026-06-07T14:37:00.427Z",
+      "id": 9
+    },
+    {
+      "title": "Senior React Developer",
+      "description": "JS, React, HTML, CSS;\nОпыт работы: 4 года.",
+      "salary": "7000",
+      "location": "Минск",
+      "companyId": 2,
+      "updatedAt": "2026-06-08T10:02:54.651Z",
+      "id": 10
+    }
+  ],
+  "resumes": [
+    {
+      "title": "Senior Backend Developer",
+      "skills": "GO-lang, Java, JS, Python, C#",
+      "experience": "6 лет",
+      "userId": 6,
+      "updatedAt": "2026-06-07T13:11:41.708Z",
+      "createdAt": "2026-06-07T13:11:41.708Z",
+      "id": 2
+    },
+    {
+      "title": "QA Trainee",
+      "skills": "JIRA, Java, JS, TypeScript, Техники тест-дизайна",
+      "experience": "пет-проекты, курсы",
+      "userId": 1,
+      "updatedAt": "2026-06-07T20:15:57.424Z",
+      "createdAt": "2026-06-07T14:17:07.989Z",
+      "id": 3
+    }
+  ],
+  "applications": [
+    {
+      "type": "vacancy_application",
+      "vacancyId": 9,
+      "resumeId": 3,
+      "seekerId": 1,
+      "companyId": 8,
+      "status": "new",
+      "createdAt": "2026-06-10T21:11:15.813Z",
+      "id": 1
+    },
+    {
+      "type": "vacancy_application",
+      "vacancyId": 2,
+      "resumeId": 3,
+      "seekerId": 1,
+      "companyId": 4,
+      "status": "new",
+      "createdAt": "2026-06-10T21:12:19.138Z",
+      "id": 2
+    },
+    {
+      "type": "resume_invite",
+      "resumeId": 2,
+      "seekerId": 6,
+      "companyId": 2,
+      "status": "sent",
+      "createdAt": "2026-06-10T22:23:12.212Z",
+      "id": 3
+    },
+    {
+      "type": "vacancy_application",
+      "vacancyId": 2,
+      "resumeId": 2,
+      "seekerId": 6,
+      "companyId": 4,
+      "status": "new",
+      "createdAt": "2026-06-10T22:23:40.728Z",
+      "id": 4
+    },
+    {
+      "type": "vacancy_application",
+      "vacancyId": 7,
+      "resumeId": 2,
+      "seekerId": 6,
+      "companyId": 5,
+      "status": "new",
+      "createdAt": "2026-06-10T22:29:25.190Z",
+      "id": 5
+    },
+    {
+      "type": "resume_invite",
+      "resumeId": 2,
+      "seekerId": 6,
+      "companyId": 3,
+      "status": "sent",
+      "createdAt": "2026-06-10T22:30:14.965Z",
+      "id": 6
+    }
+  ],
+  "reviews": [
+    {
+      "companyId": 4,
+      "authorId": 6,
+      "userId": 6,
+      "rating": 5,
+      "text": "Прекрасные штат сотрудников. Здесь вы найдёте прекрасных коллег. Все процессы настроены идеально.",
+      "createdAt": "2026-06-07T13:13:27.254Z",
+      "id": 1
+    },
+    {
+      "companyId": 4,
+      "authorId": 1,
+      "userId": 1,
+      "rating": 4,
+      "text": "джькрежьржькцельтиуц4ьерльи3ерь3л45ьри6356иог356ио5445инр435ри354рм536р45и6о",
+      "createdAt": "2026-06-10T21:12:31.724Z",
+      "id": 2,
+      "updatedAt": "2026-06-10T21:53:41.311Z"
+    }
+  ]
+}

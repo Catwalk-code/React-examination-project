@@ -1,0 +1,5 @@
+
+> examination-project@0.0.0 server
+> node src/server/index.js
+
+FindJob API запущен: http://localhost:4000
