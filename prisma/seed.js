@@ -1,4 +1,6 @@
 // Скрипт заполнения базы данных тестовыми данными (prisma db seed).
+// Prisma 7 работает через driver-адаптер pg — клиент обязательно создаётся с adapter.
+// Все тестовые данные — белорусские (компании, соискатели, города, телефоны +375).
 import { PrismaPg } from '@prisma/adapter-pg';
 import pkg from '@prisma/client';
 const { PrismaClient } = pkg;
@@ -12,7 +14,7 @@ const prisma = new PrismaClient({
 async function main() {
   console.log('Очистка таблиц...');
   // Порядок удаления важен из-за внешних ключей (каскадное удаление не отключено,
-  // но удаляем явно сверху вниз для наглядности и сброса счётчиков)
+  // но удаляем явно «сверху вниз» для наглядности и сброса счётчиков).
   await prisma.review.deleteMany();
   await prisma.response.deleteMany();
   await prisma.resume.deleteMany();
@@ -32,55 +34,55 @@ async function main() {
   const hash = (pwd) => bcrypt.hashSync(pwd, 10);
 
   const admin = await prisma.user.create({
-    data: { email: 'admin@findjob.ru', passhash: hash('admin123'), role: 'admin' },
+    data: { email: 'admin@findjob.by', passhash: hash('admin123'), role: 'admin' },
   });
 
-  const techUser = await prisma.user.create({
-    data: { email: 'techsolutionsinc@email.com', passhash: hash('company123'), role: 'company' },
+  const pandaUser = await prisma.user.create({
+    data: { email: 'hr@panda.by', passhash: hash('company123'), role: 'company' },
   });
-  const dataflowUser = await prisma.user.create({
-    data: { email: 'dataflowsystems@email.com', passhash: hash('company123'), role: 'company' },
+  const epamUser = await prisma.user.create({
+    data: { email: 'hr.epam@by.example', passhash: hash('company123'), role: 'company' },
   });
-  const greenUser = await prisma.user.create({
-    data: { email: 'greenglobal@email.com', passhash: hash('company123'), role: 'company' },
+  const belitaUser = await prisma.user.create({
+    data: { email: 'kadry@belita.by', passhash: hash('company123'), role: 'company' },
   });
 
   const ivanovUser = await prisma.user.create({
-    data: { email: 'ivanov@email.com', passhash: hash('seeker123'), role: 'applicant' },
+    data: { email: 'ivan.kruhlaetski@email.by', passhash: hash('seeker123'), role: 'applicant' },
   });
   const girafovUser = await prisma.user.create({
-    data: { email: 'gena@email.com', passhash: hash('seeker123'), role: 'applicant' },
+    data: { email: 'gena.sakolowski@email.by', passhash: hash('seeker123'), role: 'applicant' },
   });
   const pustovUser = await prisma.user.create({
-    data: { email: 'empty@email.com', passhash: hash('seeker123'), role: 'applicant' },
+    data: { email: 'anna.pustavoi@email.by', passhash: hash('seeker123'), role: 'applicant' },
   });
 
   console.log('Создание компаний...');
   const techCorp = await prisma.company.create({
     data: {
-      userId: techUser.id,
-      name: 'Techsolutions',
-      description: 'Разработка корпоративного ПО и интеграционных решений на Node.js.',
-      website: 'https://techsolutions.by',
-      address: 'г. Минск, пр. Независимости, 95',
+      userId: pandaUser.id,
+      name: 'Панда Девелопмент',
+      description: 'Разработка корпоративного ПО и веб-сервисов, Минск.',
+      website: 'https://pandadev.by',
+      address: 'г. Минск, пр-т Независимости, 58',
     },
   });
   const dataflowCorp = await prisma.company.create({
     data: {
-      userId: dataflowUser.id,
-      name: 'Dataflow Systems',
-      description: 'Аналитика больших данных, построение DWH и BI-систем.',
-      website: 'https://dataflow.by',
-      address: 'г. Брест, ул. Московская, 164',
+      userId: epamUser.id,
+      name: 'ЭПАМ Систез',
+      description: 'Аутсорс-разработка, аналитика больших данных и BI-системы.',
+      website: 'https://devexp.by',
+      address: 'г. Минск, ул. Козлова, 15',
     },
   });
   const greenCorp = await prisma.company.create({
     data: {
-      userId: greenUser.id,
-      name: 'Greenglobal',
-      description: 'Энергоэффективные технологии и «зелёная» энергетика.',
-      website: 'https://greenglobal.by',
-      address: 'г. Гродно, пр. Конституции, 4',
+      userId: belitaUser.id,
+      name: 'Белита',
+      description: 'Производство косметики и бытовой химии, Бобруйск.',
+      website: 'https://belita.by',
+      address: 'г. Бобруйск, ул. Советская, 64',
     },
   });
 
@@ -89,24 +91,24 @@ async function main() {
     data: {
       userId: ivanovUser.id,
       firstName: 'Иван',
-      lastName: 'Иванов',
-      phone: '+7 900 123-45-67',
+      lastName: 'Круглецкий',
+      phone: '+375 29 123-45-67',
     },
   });
   const girafov = await prisma.applicant.create({
     data: {
       userId: girafovUser.id,
       firstName: 'Геннадий',
-      lastName: 'Жирафов',
-      phone: '+7 901 234-56-78',
+      lastName: 'Соколовский',
+      phone: '+375 33 234-56-78',
     },
   });
   const pustov = await prisma.applicant.create({
     data: {
       userId: pustovUser.id,
-      firstName: 'Пуст',
-      lastName: 'Пустов',
-      phone: '+7 902 345-67-89',
+      firstName: 'Анна',
+      lastName: 'Пустовойтова',
+      phone: '+375 44 345-67-89',
     },
   });
 
@@ -117,7 +119,7 @@ async function main() {
       isPrimary: true,
       title: 'Backend-разработчик (Node.js)',
       skills: 'Node.js, Express, PostgreSQL, Docker',
-      experience: '3 года в разработке микросервисов для финтеха.',
+      experience: '3 года в разработке микросервисов для финтеха, Минск.',
     },
   });
   const resumeGirafovAnalyst = await prisma.resume.create({
@@ -126,7 +128,7 @@ async function main() {
       isPrimary: true,
       title: 'Аналитик данных',
       skills: 'SQL, Python, Power BI, Excel',
-      experience: '2 года подготовки отчётности и дашбордов в ритейле.',
+      experience: '2 года подготовки отчётности и дашбордов в ритейле, Гомель.',
     },
   });
   const resumePustovJunior = await prisma.resume.create({
@@ -135,7 +137,7 @@ async function main() {
       isPrimary: true,
       title: 'Junior QA-инженер',
       skills: 'Тест-кейсы, Postman, основы автотестов',
-      experience: 'Учебные проекты, прохождение курса по ручному тестированию.',
+      experience: 'Учебные проекты, прохождение курса по ручному тестированию в БГУИР.',
     },
   });
 
@@ -144,9 +146,9 @@ async function main() {
     data: {
       companyId: techCorp.id,
       title: 'Backend-разработчик',
-      description: 'Разработка REST API и микросервисов на Node.js. Зарплата в белорусских рублях (BYN).',
-      salaryFrom: 4000,
-      salaryTo: 6500,
+      description: 'Разработка REST API и микросервисов на Node.js.',
+      salaryFrom: 4500,
+      salaryTo: 6800,
       location: 'Минск',
       isRemote: true,
     },
@@ -155,9 +157,9 @@ async function main() {
     data: {
       companyId: dataflowCorp.id,
       title: 'Аналитик данных',
-      description: 'Построение отчётов, витрин данных и BI-систем. Оплата в BYN.',
+      description: 'Построение отчётов, витрин данных и дашбордов.',
       salaryFrom: 3500,
-      salaryTo: 5500,
+      salaryTo: 5200,
       location: 'Брест',
       isRemote: false,
     },
@@ -166,22 +168,11 @@ async function main() {
     data: {
       companyId: greenCorp.id,
       title: 'Инженер по энергоэффективности',
-      description: 'Аудит и оптимизация энергопотребления. З/п в бел. рублях (BYN).',
-      salaryFrom: 3000,
-      salaryTo: 4500,
-      location: 'Гродно',
+      description: 'Аудит и оптимизация потребления энергии на производствах.',
+      salaryFrom: 2800,
+      salaryTo: 4000,
+      location: 'Бобруйск',
       isRemote: false,
-    },
-  });
-  const vacFrontend = await prisma.vacancy.create({
-    data: {
-      companyId: techCorp.id,
-      title: 'Frontend-разработчик (React)',
-      description: 'Разработка SPA на React. Зарплата в BYN.',
-      salaryFrom: 3500,
-      salaryTo: 5500,
-      location: 'Минск',
-      isRemote: true,
     },
   });
 
@@ -192,7 +183,7 @@ async function main() {
       applicantId: ivanov.id,
       resumeId: resumeIvanovBackend.id,
       status: 'interview',
-      coverLetter: 'Опытный backend-разработчик, буду рад присоединиться к команде.',
+      coverLetter: 'Досведчаны backend-распрацошчык, буду рад далучыцца да каманды.',
     },
   });
   await prisma.response.create({
@@ -201,7 +192,7 @@ async function main() {
       applicantId: girafov.id,
       resumeId: resumeGirafovAnalyst.id,
       status: 'viewed',
-      coverLetter: 'Имею опыт работы с большими данными и BI-инструментами.',
+      coverLetter: 'Маю вопыт працы з вялікімі данымі і BI-інструментамі.',
     },
   });
   await prisma.response.create({
@@ -210,7 +201,7 @@ async function main() {
       applicantId: pustov.id,
       resumeId: resumePustovJunior.id,
       status: 'new',
-      coverLetter: 'Готов развиваться в сфере энергетики, быстро учусь.',
+      coverLetter: 'Гатовая развівацца ў сферы энергетыкі, хутка вучуся.',
     },
   });
 
@@ -220,7 +211,7 @@ async function main() {
       companyId: techCorp.id,
       seekerId: ivanov.id,
       rating: 5,
-      comment: 'Отличная компания: адекватное руководство, белая зарплата.',
+      comment: 'Выдатная кампанія: сумленнае кіраўніцтва, белая зарплата.',
     },
   });
   await prisma.review.create({
@@ -228,7 +219,7 @@ async function main() {
       companyId: dataflowCorp.id,
       seekerId: girafov.id,
       rating: 4,
-      comment: 'Интересные задачи по аналитике, но иногда задерживают ревью.',
+      comment: 'Цікавыя задачы па аналітыцы, але часам затрымліваюць рэвію.',
     },
   });
   await prisma.review.create({
@@ -236,7 +227,7 @@ async function main() {
       companyId: greenCorp.id,
       seekerId: pustov.id,
       rating: 3,
-      comment: 'Неплохой коллектив, но процессы онбординга сыроваты.',
+      comment: 'Нядрэнны калектыў, але працэсы онбордынгу сыраватыя.',
     },
   });
 

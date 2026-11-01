@@ -27,7 +27,7 @@ function ErrorState({ error, onRetry }) {
 //главный компонент страницы
 function HomePage() {
   const { user, token } = useAuthStore()
-  const role = user?.role || 'applicant'
+  const role = user?.role || 'seeker'
   const userId = user?.id ?? null
 
   const [vacancies, setVacancies] = useState([])
@@ -125,8 +125,8 @@ function HomePage() {
   try {
     //загружаем каждый ресурс отдельно, чтобы ошибка одного не блокировала другие
     const [vacanciesRes, resumesRes, appsRes, reviewsRes, usersRes] = await Promise.all([
-      fetch(`${API_URL}/vacancy`).catch(() => null),
-      fetch(`${API_URL}/resume`).catch(() => null),
+      fetch(`${API_URL}/vacancies`).catch(() => null),
+      fetch(`${API_URL}/resumes`).catch(() => null),
       fetch(`${API_URL}/applications`, {
         headers: token ? { Authorization: 'Bearer ' + token } : {}
       }).catch(() => null),
@@ -191,30 +191,24 @@ function HomePage() {
   try {
     if (editingVacancyId) {
       //режим редактирования
-      await fetchWithAuth(`/vacancy/${editingVacancyId}`, {
+      await fetchWithAuth(`/vacancies/${editingVacancyId}`, {
         method: 'PUT',
         body: JSON.stringify({
-          title: vacancyForm.title,
-          description: vacancyForm.description,
-          location: vacancyForm.location,
-          salaryFrom: Number(vacancyForm.salary) || 0,
-          salaryTo: Number(vacancyForm.salary) || 0,
-          isActive: true
+          ...vacancyForm,
+          companyId: userId,
+          updatedAt: new Date().toISOString()
         })
       })
       setEditingVacancyId(null)
       toast.success('Вакансия обновлена')
     } else {
       //режим создания
-      await fetchWithAuth('/vacancy', {
+      await fetchWithAuth('/vacancies', {
         method: 'POST',
         body: JSON.stringify({
-          title: vacancyForm.title,
-          description: vacancyForm.description,
-          location: vacancyForm.location,
-          salaryFrom: Number(vacancyForm.salary) || 0,
-          salaryTo: Number(vacancyForm.salary) || 0,
-          isRemote: false
+          ...vacancyForm,
+          companyId: userId,
+          createdAt: new Date().toISOString()
         })
       })
       toast.success('Вакансия опубликована')
@@ -254,7 +248,7 @@ const handleSaveResume = async (event) => {
     }
     
     if (ownResume) {
-      await fetchWithAuth(`/resume/${ownResume.id}`, {
+      await fetchWithAuth(`/resumes/${ownResume.id}`, {
         method: 'PUT',
         body: JSON.stringify({
           ...payload,
@@ -263,7 +257,7 @@ const handleSaveResume = async (event) => {
       })
       toast.success('Резюме обновлено')
     } else {
-      await fetchWithAuth('/resume', {
+      await fetchWithAuth('/resumes', {
         method: 'POST',
         body: JSON.stringify({
           ...payload,
@@ -422,7 +416,7 @@ const handleSaveResume = async (event) => {
   confirmAction('Удалить вакансию?', async () => {
     try {
       // Удаляем вакансию
-      await fetch(`${API_URL}/vacancy/${vacancyId}`, {
+      await fetch(`${API_URL}/vacancies/${vacancyId}`, {
         method: 'DELETE',
         headers: { 
           'Authorization': 'Bearer ' + token,
@@ -474,7 +468,7 @@ const handleSaveResume = async (event) => {
       }
       
       //теперь удаляем само резюме
-      const response = await fetch(`${API_URL}/resume/${ownResume.id}`, {
+      const response = await fetch(`${API_URL}/resumes/${ownResume.id}`, {
         method: 'DELETE',
         headers: { 
           'Authorization': 'Bearer ' + token,
@@ -632,7 +626,7 @@ const handleSaveResume = async (event) => {
             />
           )}
 
-          {!loading && !error && role === 'applicant' && (
+          {!loading && !error && role === 'seeker' && (
             <SeekerDashboard
               ownResume={ownResume}
               resumeForm={resumeForm}

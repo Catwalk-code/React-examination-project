@@ -14,21 +14,17 @@ function RegisterPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
-  const [role, setRole] = useState('applicant')
+  const [role, setRole] = useState('seeker')
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     
     try {
-      // Расщепляем ФИО на firstName/lastName и передаём phone
-      const [firstName = '', lastName = '', ...rest] = name.split(' ')
-      const phone = '+' + Math.floor(1e10 + Math.random() * 9e9).toString()
-
-      const response = await fetch('http://localhost:4000/auth/register', {
+      const response = await fetch('http://localhost:4000/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, firstName, lastName, phone, role })
+        body: JSON.stringify({ email, password, name, role })
       })
       
       const data = await response.json()
@@ -48,7 +44,7 @@ function RegisterPage() {
   const handleNameChange = (e) => {
   const value = e.target.value
   
-  if (role === 'applicant') {
+  if (role === 'seeker') {
     setName(capitalizeWords(value))
   } else {
     setName(value)
@@ -99,7 +95,7 @@ function RegisterPage() {
             onChange={(e) => setRole(e.target.value)}
             required
           >
-            <option value="applicant">Соискатель</option>
+            <option value="seeker">Соискатель</option>
             <option value="company">Компания</option>
           </select>
         </div>

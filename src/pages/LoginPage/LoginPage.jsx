@@ -14,7 +14,7 @@ function LoginPage() {
     e.preventDefault()
     
     try {
-      const response = await fetch('http://localhost:4000/auth/login', {
+      const response = await fetch('http://localhost:4000/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -23,7 +23,7 @@ function LoginPage() {
       const data = await response.json()
       
       if (response.ok) {
-        login(data.user, data.token)
+        login(data.user, data.accessToken)
         toast.success('Добро пожаловать!')
         navigate('/home')
       } else {
