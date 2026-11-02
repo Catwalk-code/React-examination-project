@@ -14,7 +14,7 @@ function LoginPage() {
     e.preventDefault()
     
     try {
-      const response = await fetch('http://localhost:4000/login', {
+      const response = await fetch('http://localhost:4000/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -28,7 +28,7 @@ function LoginPage() {
         navigate('/home')
       } else {
         toast.error('Введены неверные данные')
-    }
+      }
     } catch (error) {
       console.error('Ошибка при входе:', error)
       toast.error('Ошибка соединения с сервером: ' + error.message)

@@ -176,14 +176,14 @@ async function main() {
     },
   });
 
-  console.log('Создание откликов...');
+ console.log('Создание откликов...');
   await prisma.response.create({
     data: {
       vacancyId: vacDev.id,
       applicantId: ivanov.id,
       resumeId: resumeIvanovBackend.id,
       status: 'interview',
-      coverLetter: 'Досведчаны backend-распрацошчык, буду рад далучыцца да каманды.',
+      coverLetter: 'Опытный backend-разработчик, буду рад присоединиться к команде.',
     },
   });
   await prisma.response.create({
@@ -192,7 +192,7 @@ async function main() {
       applicantId: girafov.id,
       resumeId: resumeGirafovAnalyst.id,
       status: 'viewed',
-      coverLetter: 'Маю вопыт працы з вялікімі данымі і BI-інструментамі.',
+      coverLetter: 'Имею опыт работы с большими данными и BI-инструментами.',
     },
   });
   await prisma.response.create({
@@ -201,7 +201,7 @@ async function main() {
       applicantId: pustov.id,
       resumeId: resumePustovJunior.id,
       status: 'new',
-      coverLetter: 'Гатовая развівацца ў сферы энергетыкі, хутка вучуся.',
+      coverLetter: 'Готова развиваться в сфере энергетики, быстро учусь.',
     },
   });
 
@@ -211,7 +211,7 @@ async function main() {
       companyId: techCorp.id,
       seekerId: ivanov.id,
       rating: 5,
-      comment: 'Выдатная кампанія: сумленнае кіраўніцтва, белая зарплата.',
+      comment: 'Отличная компания: честное руководство, белая зарплата.',
     },
   });
   await prisma.review.create({
@@ -219,7 +219,7 @@ async function main() {
       companyId: dataflowCorp.id,
       seekerId: girafov.id,
       rating: 4,
-      comment: 'Цікавыя задачы па аналітыцы, але часам затрымліваюць рэвію.',
+      comment: 'Интересные задачи по аналитике, но иногда затягивают с ревью.',
     },
   });
   await prisma.review.create({
@@ -227,7 +227,7 @@ async function main() {
       companyId: greenCorp.id,
       seekerId: pustov.id,
       rating: 3,
-      comment: 'Нядрэнны калектыў, але працэсы онбордынгу сыраватыя.',
+      comment: 'Неплохой коллектив, но процессы онбординга сыроваты.',
     },
   });
 
