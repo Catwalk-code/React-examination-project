@@ -40,6 +40,32 @@ router.get('/profile', authenticate, async (req, res) => {
   res.json(user);
 });
 
+// POST /user/applicant-profile — создать профиль соискателя для текущего
+// пользователя (нужен аккаунтам, созданным до миграции на Prisma: у них есть
+// роль applicant, но нет записи в таблице applicants, из-за чего невозможно
+// создать резюме или откликнуться на вакансию).
+router.post('/applicant-profile', authenticate, authorize('applicant'), async (req, res) => {
+  try {
+    const existing = await prisma.applicant.findUnique({ where: { userId: req.user.id } });
+    if (existing) return res.json(existing);
+
+    const parts = String(req.body?.name || '').trim().split(/\s+/).filter(Boolean);
+    const applicant = await prisma.applicant.create({
+      data: {
+        userId: req.user.id,
+        firstName: req.body?.firstName || parts[0] || '',
+        lastName: req.body?.lastName || parts.slice(1).join(' ') || '',
+        phone: req.body?.phone || '',
+      },
+    });
+    res.status(201).json(applicant);
+  } catch (e) {
+    if (e?.code === 'P2002') return res.json({ ok: true }); // гонка — профиль уже создан
+    console.error(e);
+    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+  }
+});
+
 // GET /user/ — список всех пользователей (admin)
 router.get('/', authorize('admin'), async (_req, res) => {
   const users = await prisma.user.findMany({

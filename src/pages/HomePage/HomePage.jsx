@@ -27,7 +27,10 @@ function ErrorState({ error, onRetry }) {
 //главный компонент страницы
 function HomePage() {
   const { user, token } = useAuthStore()
-  const role = user?.role || 'seeker'
+  // БД использует роль 'applicant', фронтенд исторически — 'seeker'; приводим к одному значению,
+  // иначе соискатель не попадает ни в SeekerDashboard, ни в CompanyDashboard (виден только сайдбар).
+  const rawRole = user?.role || 'applicant'
+  const role = rawRole === 'company' ? 'company' : 'applicant'
   const userId = user?.id ?? null
 
   const [vacancies, setVacancies] = useState([])
@@ -117,6 +120,24 @@ function HomePage() {
     }
 
     return response
+  }
+
+  //сохранение резюме: сначала пробуем создать, если сервер не находит профиль
+  //соискателя (старые аккаунты до миграции на Prisma) — создаём его и повторяем попытку
+  const createResumeWithFallback = async (payload) => {
+    try {
+      await fetchWithAuth('/resumes', { method: 'POST', body: JSON.stringify(payload) })
+    } catch (err) {
+      if (String(err.message).includes('Профиль соискателя не найден')) {
+        await fetchWithAuth('/user/applicant-profile', {
+          method: 'POST',
+          body: JSON.stringify({ name: user?.name || '' })
+        })
+        await fetchWithAuth('/resumes', { method: 'POST', body: JSON.stringify(payload) })
+      } else {
+        throw err
+      }
+    }
   }
 
   const loadData = useCallback(async () => {
@@ -257,13 +278,7 @@ const handleSaveResume = async (event) => {
       })
       toast.success('Резюме обновлено')
     } else {
-      await fetchWithAuth('/resumes', {
-        method: 'POST',
-        body: JSON.stringify({
-          ...payload,
-          createdAt: new Date().toISOString()
-        })
-      })
+      await createResumeWithFallback(payload)
       toast.success('Резюме сохранено')
     }
     
@@ -292,18 +307,34 @@ const handleSaveResume = async (event) => {
     }
 
     try {
-      await fetchWithAuth('/applications', {
-        method: 'POST',
-        body: JSON.stringify({
-          type: 'vacancy_application',
-          vacancyId: vacancy.id,
-          resumeId: ownResume?.id || null,
-          seekerId: userId,
-          companyId: vacancy.companyId,
-          status: 'new',
-          createdAt: new Date().toISOString()
+      const postApplication = () =>
+        fetchWithAuth('/applications', {
+          method: 'POST',
+          body: JSON.stringify({
+            type: 'vacancy_application',
+            vacancyId: vacancy.id,
+            resumeId: ownResume?.id || null,
+            seekerId: userId,
+            companyId: vacancy.companyId,
+            status: 'new',
+            createdAt: new Date().toISOString()
+          })
         })
-      })
+
+      try {
+        await postApplication()
+      } catch (err) {
+        //если у старого аккаунта нет профиля соискателя — создаём его и повторяем попытку
+        if (String(err.message).includes('Профиль соискателя не найден')) {
+          await fetchWithAuth('/user/applicant-profile', {
+            method: 'POST',
+            body: JSON.stringify({ name: user?.name || '' })
+          })
+          await postApplication()
+        } else {
+          throw err
+        }
+      }
       await loadData()
       toast.success('Отклик отправлен')
     } catch (err) {
@@ -365,17 +396,33 @@ const handleSaveResume = async (event) => {
     }
     
     try {
-      await fetchWithAuth('/reviews', {
-        method: 'POST',
-        body: JSON.stringify({
-          companyId: Number(reviewForm.companyId),
-          authorId: userId,
-          userId: userId,
-          rating: Number(reviewForm.rating),
-          text: reviewForm.text,
-          createdAt: new Date().toISOString()
+      const postReview = () =>
+        fetchWithAuth('/reviews', {
+          method: 'POST',
+          body: JSON.stringify({
+            companyId: Number(reviewForm.companyId),
+            authorId: userId,
+            userId: userId,
+            rating: Number(reviewForm.rating),
+            text: reviewForm.text,
+            createdAt: new Date().toISOString()
+          })
         })
-      })
+
+      try {
+        await postReview()
+      } catch (err) {
+        //для старых аккаунтов без профиля соискателя — создаём профиль и повторяем
+        if (String(err.message).includes('Профиль соискателя не найден')) {
+          await fetchWithAuth('/user/applicant-profile', {
+            method: 'POST',
+            body: JSON.stringify({ name: user?.name || '' })
+          })
+          await postReview()
+        } else {
+          throw err
+        }
+      }
       setReviewForm((prev) => ({ ...prev, rating: 5, text: '' }))
       await loadData()
       toast.success('Отзыв опубликован')
@@ -626,7 +673,7 @@ const handleSaveResume = async (event) => {
             />
           )}
 
-          {!loading && !error && role === 'seeker' && (
+          {!loading && !error && role === 'applicant' && (
             <SeekerDashboard
               ownResume={ownResume}
               resumeForm={resumeForm}
