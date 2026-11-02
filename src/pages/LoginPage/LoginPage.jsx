@@ -23,7 +23,9 @@ function LoginPage() {
       const data = await response.json()
       
       if (response.ok) {
-        login(data.user, data.accessToken)
+        // сервер возвращает поле token, а не accessToken — иначе токен не сохранялся
+        // и все защищённые запросы от соискателя падали с 401
+        login(data.user, data.token || data.accessToken)
         toast.success('Добро пожаловать!')
         navigate('/home')
       } else {
