@@ -4,3 +4,4 @@ pgdata/
 .env
 db.json
 notes/
+.aider*
