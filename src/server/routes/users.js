@@ -1,14 +1,36 @@
-// Управление пользователями: /user/*
+// Управление пользователями: /user/* (+ алиасы для фронтенда)
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../db.js';
 import { authenticate, authorize } from '../middleware/auth.js';
 
 const router = Router();
-router.use(authenticate);
+
+// Публичный список компаний (работодателей) в формате фронтенда:
+// { id, name, role: 'company' } — используется для сайдбара и формы отзыва.
+router.get('/companies', async (_req, res) => {
+  try {
+    const companies = await prisma.company.findMany({
+      include: { user: { select: { id: true, email: true } } },
+      orderBy: { name: 'asc' },
+    });
+    res.json(
+      companies.map((c) => ({
+        id: c.userId,          // фронтенд связывает данные по id пользователя
+        companyId: c.id,
+        name: c.name,
+        email: c.user.email,
+        role: 'company',
+      }))
+    );
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+  }
+});
 
 // GET /user/profile — профиль текущего пользователя (applicant, company, admin)
-router.get('/profile', async (req, res) => {
+router.get('/profile', authenticate, async (req, res) => {
   const user = await prisma.user.findUnique({
     where: { id: req.user.id },
     include: { company: true, applicant: { include: { resumes: true } } },
@@ -44,6 +66,8 @@ router.post('/', authorize('admin'), async (req, res) => {
     if (!email || !password || !['applicant', 'company', 'admin'].includes(role)) {
       return res.status(400).json({ error: 'Некорректные данные' });
     }
+    const exists = await prisma.user.findUnique({ where: { email } });
+    if (exists) return res.status(409).json({ error: 'Email уже занят' });
     const user = await prisma.user.create({
       data: { email, passhash: bcrypt.hashSync(password, 10), role },
     });
@@ -57,7 +81,7 @@ router.post('/', authorize('admin'), async (req, res) => {
 });
 
 // PUT /user/:id — изменение пользователя (admin или сам пользователь)
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticate, async (req, res) => {
   const id = Number(req.params.id);
   const isAdmin = req.user.role === 'admin';
   if (!isAdmin && req.user.id !== id) {

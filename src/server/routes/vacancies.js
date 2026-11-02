@@ -20,12 +20,17 @@ function toFrontendVacancy(v) {
 
 // GET /vacancy/ — список активных вакансий (публичный)
 router.get('/', async (_req, res) => {
-  const vacancies = await prisma.vacancy.findMany({
-    where: { isActive: true },
-    include: { company: { select: { id: true, name: true, address: true, userId: true } } },
-    orderBy: { createdAt: 'desc' },
-  });
-  res.json(vacancies.map(toFrontendVacancy));
+  try {
+    const vacancies = await prisma.vacancy.findMany({
+      where: { isActive: true },
+      include: { company: { select: { id: true, name: true, address: true, userId: true } } },
+      orderBy: { createdAt: 'desc' },
+    });
+    res.json(vacancies.map(toFrontendVacancy));
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+  }
 });
 
 // GET /vacancy/:id — просмотр вакансии (публичный)
