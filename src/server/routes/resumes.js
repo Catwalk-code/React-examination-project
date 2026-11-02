@@ -14,26 +14,34 @@ async function getApplicant(req) {
 // Каждое резюме дополняется полями userId/companyId/name, чтобы карточки
 // на странице «Главная» корректно отображали автора и его отклики.
 router.get('/', async (_req, res) => {
-  const resumes = await prisma.resume.findMany({
-    include: {
-      applicant: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          user: { select: { id: true, email: true } },
+  try {
+    const resumes = await prisma.resume.findMany({
+      include: {
+        applicant: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            user: { select: { id: true, email: true, name: true } },
+          },
         },
       },
-    },
-    orderBy: { createdAt: 'desc' },
-  });
-  res.json(
-    resumes.map((r) => ({
-      ...r,
-      userId: r.applicant?.user?.id ?? null,
-      name: `${r.applicant?.firstName || ''} ${r.applicant?.lastName || ''}`.trim() || 'Соискатель',
-    }))
-  );
+      orderBy: { createdAt: 'desc' },
+    });
+    res.json(
+      resumes.map((r) => ({
+        ...r,
+        userId: r.applicant?.user?.id ?? null,
+        name:
+          `${r.applicant?.firstName || ''} ${r.applicant?.lastName || ''}`.trim() ||
+          r.applicant?.user?.name ||
+          'Соискатель',
+      }))
+    );
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+  }
 });
 
 // GET /resume/my — список резюме текущего соискателя (applicant)

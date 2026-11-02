@@ -649,7 +649,8 @@ const handleSaveResume = async (event) => {
               editReviewForm={editReviewForm}
               setEditReviewForm={setEditReviewForm}
               cancelEditReview={cancelEditReview}
-              saveEditReview={saveEditReview}startEditReview={startEditReview}
+              saveEditReview={saveEditReview}
+              startEditReview={startEditReview}
               handleDeleteReview={handleDeleteReview}
             />
           )}

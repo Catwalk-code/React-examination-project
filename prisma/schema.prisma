@@ -1,5 +1,5 @@
 // Prisma 7 — схема базы данных «FindJob» (сервис поиска работы и вакансий).
-// Создание самой БД выполняется нативным SQL-скриптом db/create.sql,
+// Создание БД выполняется нативным SQL-скриптом db/create.sql,
 // все таблицы создаются/изменяются только через миграции Prisma.
 
 generator client {
@@ -33,10 +33,12 @@ model User {
   email     String   @unique @db.VarChar(255)
   passhash  String   @db.VarChar(255)
   role      Role
+  name      String?  @db.VarChar(255)
   createdAt DateTime @default(now()) @map("created_at")
 
-  company   Company?
-  applicant Applicant?
+  company       Company?
+  applicant     Applicant?
+  invitedAs     Invite[]     @relation("InvitedUser")
 
   @@map("users")
 }
@@ -53,6 +55,7 @@ model Company {
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   vacancies Vacancy[]
   reviews   Review[]
+  invites   Invite[]
 
   @@map("companies")
 }
@@ -85,6 +88,7 @@ model Resume {
 
   applicant Applicant  @relation(fields: [applicantId], references: [id], onDelete: Cascade)
   responses Response[]
+  invites   Invite[]
 
   @@map("resumes")
 }
@@ -124,6 +128,24 @@ model Response {
 
   @@unique([vacancyId, applicantId])
   @@map("responses")
+}
+
+// Приглашение компании на кандидата (отправляется по резюме)
+model Invite {
+  id             Int            @id @default(autoincrement())
+  companyId      Int            @map("company_id")
+  resumeId       Int            @map("resume_id")
+  inviteeUserId  Int            @map("invitee_user_id")
+  status         ResponseStatus @default(interview)
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @default(now()) @updatedAt @map("updated_at")
+
+  company     Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  resume      Resume  @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  inviteeUser User    @relation("InvitedUser", fields: [inviteeUserId], references: [id], onDelete: Cascade)
+
+  @@unique([companyId, resumeId])
+  @@map("invites")
 }
 
 model Review {
