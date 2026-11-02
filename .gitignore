@@ -3,3 +3,4 @@ pgdata/
 *.log
 .env
 db.json
+notes/
