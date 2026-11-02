@@ -1,6 +1,1 @@
-node_modules/
-pgdata/
-*.log
-.env
-db.json
-notes/
+dist/
