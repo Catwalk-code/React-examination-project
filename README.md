@@ -59,3 +59,30 @@ Backend реализован на NestJS с контроллерами, серв
 
 Тестовые аккаунты после seed: `admin@findjob.ru/admin123`,
 `techsolutionsinc@email.com/company123`, `ivanov@email.com/seeker123` (см. API.md).
+
+## Отправка приветственного письма через RabbitMQ
+
+При успешной регистрации основной NestJS API публикует сообщение в очередь
+`email.registration`. Отдельный сервис `email-service` читает очередь и отправляет письмо через SMTP.
+
+Для локального запуска нужны Docker и Node.js:
+
+```bash
+docker compose up -d rabbitmq mailhog
+npm install
+npm run server
+npm run email:service
+```
+
+Зарегистрируйте пользователя через Swagger `http://localhost:4000/swagger` или страницу
+`http://localhost:5173/register`. Затем откройте тестовый почтовый ящик на
+`http://localhost:8025`.
+
+RabbitMQ Management доступен на `http://localhost:15672` (логин и пароль: `guest` / `guest`).
+Основные настройки задаются в `.env`:
+
+- `RABBITMQ_URL` — адрес брокера;
+- `RABBITMQ_EMAIL_QUEUE` — имя очереди;
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE` — параметры SMTP-сервера;
+- `SMTP_USER`, `SMTP_PASS` — авторизация SMTP при необходимости;
+- `EMAIL_FROM` — адрес отправителя.

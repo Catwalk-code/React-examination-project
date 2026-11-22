@@ -8,11 +8,14 @@ describe('AuthService', () => {
     findByEmail: vi.fn(),
     create: vi.fn(),
   };
+  const emailProducer = {
+    publishRegistrationEmail: vi.fn().mockResolvedValue(undefined),
+  };
   let service: AuthService;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    service = new AuthService(repository as never);
+    service = new AuthService(repository as never, emailProducer as never);
   });
 
   it('registers an applicant and returns a token without exposing the password hash', async () => {
@@ -46,6 +49,15 @@ describe('AuthService', () => {
     expect(result.user).not.toHaveProperty('passhash');
     expect(result.user.email).toBe('anna@example.com');
     expect(result.token).toEqual(expect.any(String));
+    expect(emailProducer.publishRegistrationEmail).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: 'anna@example.com',
+        name: 'Anna Smith',
+        role: 'applicant',
+        userId: 1,
+        registeredAt: expect.any(String),
+      }),
+    );
   });
 
   it('rejects invalid registration data and duplicate emails', async () => {

@@ -3,10 +3,11 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { AuthRepository } from './auth.repository';
 import { JWT_SECRET } from '../common/auth';
+import { EmailProducer } from '../email/email.producer';
 
 @Injectable()
 export class AuthService {
-  constructor(private repo: AuthRepository) {}
+  constructor(private repo: AuthRepository, private emailProducer: EmailProducer) {}
 
   private token(user: any) {
     return jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '8h' });
@@ -33,6 +34,13 @@ export class AuthService {
         : { applicant: { create: { firstName: fName, lastName: lName, phone: phone || '' } } }),
     });
     const { passhash, ...safeUser } = user as any;
+    await this.emailProducer.publishRegistrationEmail({
+      to: user.email,
+      name: name || companyName || '',
+      role,
+      userId: user.id,
+      registeredAt: new Date().toISOString(),
+    });
     return { token: this.token(user), user: safeUser };
   }
 
