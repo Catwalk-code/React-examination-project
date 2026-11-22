@@ -1,11 +1,12 @@
-/* Вспомогательный локальный PostgreSQL-сервер для разработки/проверки в песочнице,
-где нет установленного системного PostgreSQL.
-
-Это сборка PostgreSQL 16. Она нужена только чтобы до проекта мог подключиться
-`prisma migrate dev` / `prisma db seed` / сервер API по обычному DATABASE_URL.
-Никакого SQL для создания таблиц здесь не выполняется - таблицы создаёт Prisma.
-
-// Запуск:  node scripts/pg-server.mjs   (данные лежат в ./pgdata, порт 5432)*/
+// Вспомогательный локальный PostgreSQL-сервер для разработки/проверки в песочнице,
+// где нет установленного системного PostgreSQL.
+//
+// Это WASM-сборка настоящего PostgreSQL 16 (PGlite) + pg wire-протокол из пакета
+// @electric-sql/pglite-socket. Он нужен ТОЛЬКО чтобы до проекта мог подключиться
+// `prisma migrate dev` / `prisma db seed` / сервер API по обычному DATABASE_URL.
+// Никакого SQL для создания таблиц здесь не выполняется — таблицы создаёт Prisma.
+//
+// Запуск:  node scripts/pg-server.mjs   (данные лежат в ./pgdata, порт 5432)
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 

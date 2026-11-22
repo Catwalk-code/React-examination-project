@@ -8,28 +8,38 @@ import { JWT_SECRET } from '../middleware/auth.js';
 const router = Router();
 
 // POST /auth/register — регистрация (публичный)
-// body: { email, password, role: 'applicant'|'company', firstName?, lastName?, phone?, companyName? }
+// body: { email, password, role, name?, firstName?, lastName?, phone?, companyName? }
+// Фронтенд отправляет role: 'seeker' | 'company' и одно поле name;
+// поддерживаем и «старые» значения ('applicant'), и раздельные firstName/lastName.
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, role, firstName, lastName, phone, companyName } = req.body || {};
+    const { email, password, name, firstName, lastName, phone, companyName } = req.body || {};
+    const rawRole = req.body?.role;
+    const role = rawRole === 'seeker' ? 'applicant' : rawRole; // seeker → applicant
     if (!email || !password || !['applicant', 'company'].includes(role)) {
       return res.status(400).json({ error: 'Некорректные данные регистрации' });
     }
     const exists = await prisma.user.findUnique({ where: { email } });
     if (exists) return res.status(409).json({ error: 'Email уже занят' });
 
+    // Разбиваем ФИО соискателя на имя/фамилию для профиля Applicant
+    const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+    const fName = firstName || parts[0] || '';
+    const lName = lastName || parts.slice(1).join(' ') || '';
+
     const user = await prisma.user.create({
       data: {
         email,
+        name: name || companyName || null,
         passhash: bcrypt.hashSync(password, 10),
         role,
         ...(role === 'company'
-          ? { company: { create: { name: companyName || email, address: 'не указан' } } }
+          ? { company: { create: { name: companyName || name || email, address: 'не указан' } } }
           : {
               applicant: {
                 create: {
-                  firstName: firstName || '',
-                  lastName: lastName || '',
+                  firstName: fName,
+                  lastName: lName,
                   phone: phone || '',
                 },
               },

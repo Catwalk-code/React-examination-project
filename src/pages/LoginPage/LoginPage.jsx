@@ -14,7 +14,7 @@ function LoginPage() {
     e.preventDefault()
     
     try {
-      const response = await fetch('http://localhost:4000/login', {
+      const response = await fetch('http://localhost:4000/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -23,12 +23,14 @@ function LoginPage() {
       const data = await response.json()
       
       if (response.ok) {
-        login(data.user, data.accessToken)
+        // сервер возвращает поле token, а не accessToken — иначе токен не сохранялся
+        // и все защищённые запросы от соискателя падали с 401
+        login(data.user, data.token || data.accessToken)
         toast.success('Добро пожаловать!')
         navigate('/home')
       } else {
         toast.error('Введены неверные данные')
-    }
+      }
     } catch (error) {
       console.error('Ошибка при входе:', error)
       toast.error('Ошибка соединения с сервером: ' + error.message)
