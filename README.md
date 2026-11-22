@@ -57,8 +57,8 @@ Backend реализован на NestJS с контроллерами, серв
 
 Описание всех маршрутов API и ролей доступа — в [API.md](./API.md).
 
-Тестовые аккаунты после seed: `admin@findjob.ru/admin123`,
-`techsolutionsinc@email.com/company123`, `ivanov@email.com/seeker123` (см. API.md).
+Тестовые аккаунты после seed: `admin@findjob.by/admin123`,
+`hr.epam@by.example/company123`, `ivan.kruhlaetski@email.by/seeker123` (см. API.md).
 
 ## Отправка приветственного письма через RabbitMQ
 
