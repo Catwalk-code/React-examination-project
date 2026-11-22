@@ -3,6 +3,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthUser, JwtAuthGuard, Roles, RolesGuard } from '../common/auth';
 import { CurrentUser } from '../common/decorators';
 import { ResponseService } from './response.service';
+import { CreateResponseDto, UpdateResponseDto } from '../common/dto';
 
 @ApiTags('response')
 @Controller(['response', 'applications'])
@@ -13,7 +14,7 @@ export class ResponseController {
   @Post()
   @UseGuards(RolesGuard)
   @Roles('applicant')
-  create(@Body() body: any, @CurrentUser() user: AuthUser) { return this.service.create(body, user); }
+  create(@Body() body: CreateResponseDto, @CurrentUser() user: AuthUser) { return this.service.create(body, user); }
   @Get('my')
   @UseGuards(RolesGuard)
   @Roles('applicant')
@@ -23,7 +24,7 @@ export class ResponseController {
   @Roles('company', 'admin')
   list(@CurrentUser() user: AuthUser) { return this.service.list(user); }
   @Put(':id')
-  update(@Param('id') id: string, @Body() body: any, @CurrentUser() user: AuthUser) { return this.service.update(Number(id), body, user); }
+  update(@Param('id') id: string, @Body() body: UpdateResponseDto, @CurrentUser() user: AuthUser) { return this.service.update(Number(id), body, user); }
   @Delete(':id')
   @UseGuards(RolesGuard)
   @Roles('admin')

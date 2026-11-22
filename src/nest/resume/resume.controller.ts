@@ -3,6 +3,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthUser, JwtAuthGuard, Roles, RolesGuard } from '../common/auth';
 import { CurrentUser } from '../common/decorators';
 import { ResumeService } from './resume.service';
+import { CreateResumeDto, UpdateResumeDto } from '../common/dto';
 
 @ApiTags('resume')
 @Controller(['resume', 'resumes'])
@@ -23,12 +24,12 @@ export class ResumeController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('applicant')
-  create(@Body() body: any, @CurrentUser() user: AuthUser) { return this.service.create(body, user); }
+  create(@Body() body: CreateResumeDto, @CurrentUser() user: AuthUser) { return this.service.create(body, user); }
   @Put(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('applicant')
-  update(@Param('id') id: string, @Body() body: any, @CurrentUser() user: AuthUser) { return this.service.update(Number(id), body, user); }
+  update(@Param('id') id: string, @Body() body: UpdateResumeDto, @CurrentUser() user: AuthUser) { return this.service.update(Number(id), body, user); }
   @Delete(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
