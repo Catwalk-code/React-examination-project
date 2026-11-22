@@ -74,7 +74,7 @@ function ApplicationCard({ application, vacancy, company }) {
 }
 
 //карточка вакансии для списка доступных
-function VacancyCard({ vacancy, company, onApply }) {
+export function VacancyCard({ vacancy, company, onApply }) {
   const getInitials = (name) => {
     if (!name) return 'ВК';
     return name.split(' ').map(word => word[0]).join('').substring(0, 1).toUpperCase();
