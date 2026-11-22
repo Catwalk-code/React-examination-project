@@ -43,9 +43,17 @@ npx prisma migrate dev --name init
 npx prisma db seed
 
 # 4. Запуск REST API (проверка соединения: GET /health)
-node src/server/index.js
+npm run server
 curl http://localhost:4000/health   # -> {"status":"ok","database":"connected"}
 ```
+
+## NestJS + Swagger
+
+Backend реализован на NestJS с контроллерами, сервисами и репозиториями Prisma.
+
+- REST API: `http://localhost:4000`
+- Swagger UI: `http://localhost:4000/swagger`
+- JSON OpenAPI: `http://localhost:4000/swagger-json`
 
 Описание всех маршрутов API и ролей доступа — в [API.md](./API.md).
 
