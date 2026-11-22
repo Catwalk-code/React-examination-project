@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "server": "node src/server/index.js",
+    "postinstall": "prisma generate",
+    "server": "prisma generate && node src/server/index.js",
     "db:create": "node -e \"import('dotenv/config').then(()=>import('./scripts/db-create.mjs'))\"",
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",
