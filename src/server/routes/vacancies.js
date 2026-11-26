@@ -1,4 +1,4 @@
-// Вакансии: /vacancy/* (+ алиасы /vacancies для фронтенда)
+// Вакансии: /vacancies/*
 import { Router } from 'express';
 import { prisma } from '../db.js';
 import { authenticate, authorize } from '../middleware/auth.js';
@@ -18,7 +18,7 @@ function toFrontendVacancy(v) {
   };
 }
 
-// GET /vacancy/ — список активных вакансий (публичный)
+// GET /vacancies/ — список активных вакансий (публичный)
 router.get('/', async (_req, res) => {
   try {
     const vacancies = await prisma.vacancy.findMany({
@@ -33,7 +33,7 @@ router.get('/', async (_req, res) => {
   }
 });
 
-// GET /vacancy/:id — просмотр вакансии (публичный)
+// GET /vacancies/:id — просмотр вакансии (публичный)
 router.get('/:id', async (req, res) => {
   const vacancy = await prisma.vacancy.findUnique({
     where: { id: Number(req.params.id) },
@@ -43,7 +43,7 @@ router.get('/:id', async (req, res) => {
   res.json(toFrontendVacancy(vacancy));
 });
 
-// POST /vacancy/ — создание вакансии (company)
+// POST /vacancies/ — создание вакансии (company)
 router.post('/', authenticate, authorize('company'), async (req, res) => {
   const company = await prisma.company.findUnique({ where: { userId: req.user.id } });
   if (!company) return res.status(400).json({ error: 'Профиль компании не найден' });
@@ -68,7 +68,7 @@ router.post('/', authenticate, authorize('company'), async (req, res) => {
   res.status(201).json(toFrontendVacancy(vacancy));
 });
 
-// PUT /vacancy/:id — изменение вакансии (company-владелец или admin)
+// PUT /vacancies/:id — изменение вакансии (company-владелец или admin)
 router.put('/:id', authenticate, authorize('company', 'admin'), async (req, res) => {
   const id = Number(req.params.id);
   const vacancy = await prisma.vacancy.findUnique({ where: { id } });
@@ -97,7 +97,7 @@ router.put('/:id', authenticate, authorize('company', 'admin'), async (req, res)
   res.json(updated);
 });
 
-// DELETE /vacancy/:id — удаление вакансии (company-владелец или admin)
+// DELETE /vacancies/:id — удаление вакансии (company-владелец или admin)
 router.delete('/:id', authenticate, authorize('company', 'admin'), async (req, res) => {
   const id = Number(req.params.id);
   const vacancy = await prisma.vacancy.findUnique({ where: { id } });

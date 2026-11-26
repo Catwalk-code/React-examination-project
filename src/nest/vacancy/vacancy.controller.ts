@@ -6,7 +6,7 @@ import { VacancyService } from './vacancy.service';
 import { CreateVacancyDto, UpdateVacancyDto } from '../common/dto';
 
 @ApiTags('vacancy')
-@Controller(['vacancy', 'vacancies'])
+@Controller('vacancies')
 export class VacancyController {
   constructor(private service: VacancyService) {}
   @Get() list() { return this.service.list(); }
