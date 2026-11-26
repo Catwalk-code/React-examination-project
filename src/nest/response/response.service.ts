@@ -8,6 +8,7 @@ export class ResponseService {
   async create(body: any, user: AuthUser) {
     const applicant = await this.repo.findApplicant(user.id);
     if (!applicant) throw new NotFoundException('Профиль соискателя не найден');
+    if (!body.vacancyId) throw new BadRequestException('Укажите вакансию');
     const vacancy = await this.repo.findVacancy(Number(body.vacancyId));
     const resume = await this.repo.findResume(Number(body.resumeId));
     if (!vacancy || !vacancy.isActive) throw new NotFoundException('Вакансия недоступна');
@@ -16,12 +17,68 @@ export class ResponseService {
     try { return await this.repo.create({ vacancyId: vacancy.id, applicantId: applicant.id, resumeId: resume.id, coverLetter: body.coverLetter || null }); }
     catch (e: any) { if (e.code === 'P2002') throw new ConflictException('Вы уже откликались на эту вакансию'); throw e; }
   }
+  async invite(body: any, user: AuthUser) {
+    if (user.role !== 'company') throw new ForbiddenException('Приглашать могут только компании');
+    const company = await this.repo.findCompanyByUserId(user.id);
+    if (!company) throw new NotFoundException('Профиль компании не найден');
+    if (!body.resumeId) throw new BadRequestException('Укажите резюме');
+    const resume = await this.repo.findResumeWithApplicant(Number(body.resumeId));
+    if (!resume) throw new NotFoundException('Резюме не найдено');
+    if (await this.repo.findExistingInvite(company.id, resume.id)) {
+      throw new ConflictException('Вы уже приглашали этого кандидата');
+    }
+    try {
+      const invite = await this.repo.createInvite({
+        companyId: company.id,
+        resumeId: resume.id,
+        inviteeUserId: resume.applicant.userId,
+        status: 'interview',
+      });
+      return {
+        id: invite.id,
+        type: 'resume_invite',
+        status: invite.status,
+        vacancyId: null,
+        resumeId: invite.resumeId,
+        seekerId: invite.inviteeUserId,
+        companyId: invite.company?.userId ?? null,
+        createdAt: invite.createdAt,
+      };
+    } catch (e: any) {
+      if (e.code === 'P2002') throw new ConflictException('Вы уже приглашали этого кандидата');
+      throw e;
+    }
+  }
   async my(user: AuthUser) {
     const applicant = await this.repo.findApplicant(user.id);
     if (!applicant) throw new NotFoundException('Профиль соискателя не найден');
     return this.repo.findMy(applicant.id);
   }
-  async list(user: AuthUser) { return this.repo.findForCompany(user.id, user.role); }
+  async list(user: AuthUser) {
+    const [responses, invites] = await this.repo.findApplications(user.id, user.role);
+    const responseItems = responses.map((response: any) => ({
+      id: response.id,
+      type: 'vacancy_application',
+      status: response.status,
+      vacancyId: response.vacancyId,
+      resumeId: response.resumeId,
+      seekerId: response.applicant?.user?.id ?? null,
+      companyId: response.vacancy?.company?.userId ?? null,
+      createdAt: response.createdAt,
+    }));
+    const inviteItems = invites.map((invite: any) => ({
+      id: invite.id,
+      type: 'resume_invite',
+      status: invite.status,
+      vacancyId: null,
+      resumeId: invite.resumeId,
+      seekerId: invite.inviteeUserId,
+      companyId: invite.company?.userId ?? null,
+      createdAt: invite.createdAt,
+    }));
+    return [...responseItems, ...inviteItems]
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
   async update(id: number, body: any, user: AuthUser) {
     const found = await this.repo.findById(id);
     if (!found) throw new NotFoundException('Отклик не найден');

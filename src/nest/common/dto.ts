@@ -218,11 +218,17 @@ export class CreateResumeDto {
 export class UpdateResumeDto extends CreateResumeDto {}
 
 export class CreateResponseDto {
-  @ApiProperty({ minimum: 1 })
+  @ApiPropertyOptional({ enum: ['vacancy_application', 'resume_invite'] })
+  @IsOptional()
+  @IsIn(['vacancy_application', 'resume_invite'])
+  type?: 'vacancy_application' | 'resume_invite';
+
+  @ApiPropertyOptional({ minimum: 1 })
+  @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  vacancyId!: number;
+  vacancyId?: number;
 
   @ApiProperty({ minimum: 1 })
   @Type(() => Number)

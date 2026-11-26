@@ -13,15 +13,19 @@ export class ResponseController {
   constructor(private service: ResponseService) {}
   @Post()
   @UseGuards(RolesGuard)
-  @Roles('applicant')
-  create(@Body() body: CreateResponseDto, @CurrentUser() user: AuthUser) { return this.service.create(body, user); }
+  @Roles('applicant', 'company')
+  create(@Body() body: CreateResponseDto, @CurrentUser() user: AuthUser) {
+    return body.type === 'resume_invite'
+      ? this.service.invite(body, user)
+      : this.service.create(body, user);
+  }
   @Get('my')
   @UseGuards(RolesGuard)
   @Roles('applicant')
   my(@CurrentUser() user: AuthUser) { return this.service.my(user); }
   @Get()
   @UseGuards(RolesGuard)
-  @Roles('company', 'admin')
+  @Roles('applicant', 'company', 'admin')
   list(@CurrentUser() user: AuthUser) { return this.service.list(user); }
   @Put(':id')
   update(@Param('id') id: string, @Body() body: UpdateResponseDto, @CurrentUser() user: AuthUser) { return this.service.update(Number(id), body, user); }
