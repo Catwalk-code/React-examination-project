@@ -37,8 +37,6 @@ app.get('/health', async (_req, res) => {
 
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
-app.use('/vacancy', vacancyRouter);
-// Алиасы «старых» путей json-server, на которые ориентируется фронтенд
 app.use('/vacancies', vacancyRouter);
 app.use('/resume', resumeRouter);
 app.use('/resumes', resumeRouter);
