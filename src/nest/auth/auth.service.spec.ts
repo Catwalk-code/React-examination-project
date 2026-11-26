@@ -78,7 +78,9 @@ describe('AuthService', () => {
     repository.findByEmail.mockResolvedValue({
       id: 2,
       email: 'anna@example.com',
-      role: 'company',
+      role: 'applicant',
+      name: null,
+      applicant: { firstName: 'Anna', lastName: 'Smith' },
       passhash: bcrypt.hashSync('password', 10),
     });
 
@@ -90,7 +92,8 @@ describe('AuthService', () => {
     expect(result.user).toEqual({
       id: 2,
       email: 'anna@example.com',
-      role: 'company',
+      role: 'applicant',
+      name: 'Anna Smith',
     });
     expect(result.token).toEqual(expect.any(String));
 

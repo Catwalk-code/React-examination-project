@@ -62,14 +62,26 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body || {};
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({
+      where: { email },
+      include: { applicant: true, company: true },
+    });
     if (!user || !bcrypt.compareSync(password || '', user.passhash)) {
       return res.status(401).json({ error: 'Неверный email или пароль' });
     }
     const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, {
       expiresIn: '8h',
     });
-    res.json({ token, user: { id: user.id, email: user.email, role: user.role } });
+    const applicantName = `${user.applicant?.firstName || ''} ${user.applicant?.lastName || ''}`.trim();
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        name: user.name || applicantName || user.company?.name || undefined,
+      },
+    });
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: 'Внутренняя ошибка сервера' });

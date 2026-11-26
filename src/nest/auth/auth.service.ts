@@ -49,6 +49,16 @@ export class AuthService {
     if (!user || !bcrypt.compareSync(body?.password || '', (user as any).passhash)) {
       throw new UnauthorizedException('Неверный email или пароль');
     }
-    return { token: this.token(user), user: { id: user.id, email: user.email, role: user.role } };
+    const applicant = (user as any).applicant;
+    const applicantName = `${applicant?.firstName || ''} ${applicant?.lastName || ''}`.trim();
+    return {
+      token: this.token(user),
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        name: user.name || applicantName || (user as any).company?.name || undefined,
+      },
+    };
   }
 }

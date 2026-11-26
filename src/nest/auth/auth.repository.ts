@@ -6,7 +6,7 @@ export class AuthRepository {
   constructor(private prisma: PrismaService) {}
 
   findByEmail(email: string) {
-    return this.prisma.user.findUnique({ where: { email } });
+    return this.prisma.user.findUnique({ where: { email }, include: { applicant: true, company: true } });
   }
 
   create(data: any) {

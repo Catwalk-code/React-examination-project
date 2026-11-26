@@ -122,22 +122,12 @@ function HomePage() {
     return response
   }
 
-  //сохранение резюме: сначала пробуем создать, если сервер не находит профиль
-  //соискателя (старые аккаунты до миграции на Prisma) — создаём его и повторяем попытку
-  const createResumeWithFallback = async (payload) => {
-    try {
-      await fetchWithAuth('/resumes', { method: 'POST', body: JSON.stringify(payload) })
-    } catch (err) {
-      if (String(err.message).includes('Профиль соискателя не найден')) {
-        await fetchWithAuth('/user/applicant-profile', {
-          method: 'POST',
-          body: JSON.stringify({ name: user?.name || '' })
-        })
-        await fetchWithAuth('/resumes', { method: 'POST', body: JSON.stringify(payload) })
-      } else {
-        throw err
-      }
-    }
+  const createResume = async (payload) => {
+    await fetchWithAuth('/user/applicant-profile', {
+      method: 'POST',
+      body: JSON.stringify({ name: user?.name || '' })
+    })
+    await fetchWithAuth('/resumes', { method: 'POST', body: JSON.stringify(payload) })
   }
 
   const loadData = useCallback(async () => {
@@ -278,7 +268,7 @@ const handleSaveResume = async (event) => {
       })
       toast.success('Резюме обновлено')
     } else {
-      await createResumeWithFallback(payload)
+      await createResume(payload)
       toast.success('Резюме сохранено')
     }
     
